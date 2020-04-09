@@ -2,7 +2,7 @@ package com.devkproject.movieinfo.model
 
 import com.google.gson.annotations.SerializedName
 
-data class MovieDetail(
+data class TMDBDetail(
     val id: Int,
     val budget: Int,
     val revenue: Int,

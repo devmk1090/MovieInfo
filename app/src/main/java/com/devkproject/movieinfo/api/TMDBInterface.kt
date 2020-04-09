@@ -1,7 +1,7 @@
 package com.devkproject.movieinfo.api
 
-import com.devkproject.movieinfo.model.MovieDetail
-import com.devkproject.movieinfo.model.MovieResponse
+import com.devkproject.movieinfo.model.TMDBDetail
+import com.devkproject.movieinfo.model.TMDBResponse
 import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -15,8 +15,8 @@ import retrofit2.http.Query
 interface TMDBInterface {
 
     @GET("movie/popular")
-    fun getPopularMovie(@Query("page") page: Int): Single<MovieResponse>
+    fun getPopularMovie(@Query("page") page: Int): Single<TMDBResponse>
 
     @GET("movie/{movie_id")
-    fun getMovieDetails(@Path("movie_id") id: Int): Single<MovieDetail>
+    fun getMovieDetails(@Path("movie_id") id: Int): Single<TMDBDetail>
 }
