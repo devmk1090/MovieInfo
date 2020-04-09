@@ -9,5 +9,5 @@ data class MovieResponse (
     @SerializedName("total_results")
     val totalResults: Int,
     @SerializedName("results")
-    val movieList: ArrayList<MovieDetail>
+    val movieList: ArrayList<MovieThumb>
 )
