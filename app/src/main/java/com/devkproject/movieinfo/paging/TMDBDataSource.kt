@@ -12,7 +12,7 @@ import io.reactivex.schedulers.Schedulers
 class TMDBDataSource (private val apiService: TMDBInterface, private val compositeDisposable: CompositeDisposable) : PageKeyedDataSource<Int, TMDBThumb>() {
 
     private val page = FIRST_PAGE
-    val networkState: MutableLiveData<String> = MutableLiveData()
+    private val networkState: MutableLiveData<String> = MutableLiveData()
 
     override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Int, TMDBThumb>) {
         compositeDisposable.add(

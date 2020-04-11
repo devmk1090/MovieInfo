@@ -1,10 +1,9 @@
-package com.devkproject.movieinfo
+package com.devkproject.movieinfo.popularMovie
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.paging.PagedList
 import com.devkproject.movieinfo.model.TMDBThumb
-import com.devkproject.movieinfo.paging.TMDBPagedListRepository
 import io.reactivex.disposables.CompositeDisposable
 
 class MainViewModel (private val tmdbPagedListRepository: TMDBPagedListRepository): ViewModel() {

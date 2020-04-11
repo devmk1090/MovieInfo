@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/search_movie"
+        android:title="검색"
+        android:icon="@drawable/ic_search_black_24dp"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/popular_movie"
+        android:title="인기 영화"
+        />
+    <item
+        android:id="@+id/topRated_movie"
+        android:title="높은 평점순"
+        />
+</menu>
