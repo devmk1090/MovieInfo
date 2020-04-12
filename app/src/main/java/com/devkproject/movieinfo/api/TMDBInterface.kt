@@ -17,6 +17,9 @@ interface TMDBInterface {
     @GET("movie/popular")
     fun getPopularMovie(@Query("page") page: Int): Single<TMDBResponse>
 
-    @GET("movie/{movie_id")
+    @GET("movie/{movie_id}")
     fun getMovieDetails(@Path("movie_id") id: Int): Single<TMDBDetail>
+
+    @GET("movie/top_rated")
+    fun getTopRatedMovie(@Query("page") page: Int): Single<TMDBResponse>
 }

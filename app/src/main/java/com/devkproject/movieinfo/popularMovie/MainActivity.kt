@@ -12,6 +12,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import com.devkproject.movieinfo.R
+import com.devkproject.movieinfo.TMDBTopRatedRepository
+import com.devkproject.movieinfo.TMDBTopRatedViewModel
 import com.devkproject.movieinfo.api.TMDBInterface
 import com.devkproject.movieinfo.api.TMDBClient
 import kotlinx.android.synthetic.main.activity_main.*
@@ -22,9 +24,15 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: MainViewModel
     lateinit var tmdbPagedListRepository: TMDBPagedListRepository
 
+    private lateinit var topRatedViewModel: TMDBTopRatedViewModel
+    lateinit var tmdbTopRatedRepository: TMDBTopRatedRepository
+
     private var first_time : Long = 0
     private var second_time : Long = 0
 
+    companion object {
+        var VIEW_TYPE: Int = 0
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -34,14 +42,6 @@ class MainActivity : AppCompatActivity() {
         supportActionBar!!.setDisplayShowTitleEnabled(true)
 
 
-    }
-
-    private fun getViewModel(): MainViewModel {
-        return ViewModelProviders.of(this, object: ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return MainViewModel(tmdbPagedListRepository) as T
-            }
-        })[MainViewModel::class.java]
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -56,6 +56,7 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
             R.id.popular_movie -> {
+                VIEW_TYPE = 1
                 val apiService: TMDBInterface = TMDBClient.getClient()
                 tmdbPagedListRepository = TMDBPagedListRepository(apiService)
                 viewModel = getViewModel()
@@ -73,7 +74,21 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
             R.id.topRated_movie -> {
+                VIEW_TYPE = 2
+                val apiService: TMDBInterface = TMDBClient.getClient()
+                tmdbTopRatedRepository = TMDBTopRatedRepository(apiService)
+                topRatedViewModel = getTopRatedViewModel()
 
+                val topRatedAdapter = PopularPagedListRVAdapter(this)
+                val gridLayoutManager = GridLayoutManager(this, 3)
+
+                popular_recyclerView.layoutManager = gridLayoutManager
+                popular_recyclerView.setHasFixedSize(true)
+                popular_recyclerView.adapter = topRatedAdapter
+
+                topRatedViewModel.tmdbTopRatedPagedList.observe(this, Observer {
+                    topRatedAdapter.submitList(it)
+                })
                 return true
             }
             else -> {
@@ -85,6 +100,22 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val menuInflater = menuInflater.inflate(R.menu.toolbar_item, menu)
         return super.onCreateOptionsMenu(menu)
+    }
+
+    private fun getViewModel(): MainViewModel {
+        return ViewModelProviders.of(this, object: ViewModelProvider.Factory {
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                return MainViewModel(tmdbPagedListRepository) as T
+            }
+        })[MainViewModel::class.java]
+    }
+
+    private fun getTopRatedViewModel(): TMDBTopRatedViewModel {
+        return ViewModelProviders.of(this, object: ViewModelProvider.Factory {
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                return TMDBTopRatedViewModel(tmdbTopRatedRepository) as T
+            }
+        })[TMDBTopRatedViewModel::class.java]
     }
 
     override fun onBackPressed() {

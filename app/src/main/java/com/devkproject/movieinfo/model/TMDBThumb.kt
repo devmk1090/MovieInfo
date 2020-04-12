@@ -8,5 +8,7 @@ data class TMDBThumb(
     val posterPath: String,
     @SerializedName("release_date")
     val releaseDate: String,
-    val title: String
+    val title: String,
+    @SerializedName("vote_average")
+    val rating: Double
 )
