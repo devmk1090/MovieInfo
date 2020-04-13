@@ -1,17 +1,17 @@
-package com.devkproject.movieinfo.SelectedMovie
+package com.devkproject.movieinfo.selected
 
 import androidx.lifecycle.LiveData
 import com.devkproject.movieinfo.api.TMDBInterface
 import com.devkproject.movieinfo.model.TMDBDetail
-import com.devkproject.movieinfo.paging.TMDBSelectedDataSource
 import io.reactivex.disposables.CompositeDisposable
 
-class SelectedMovieRepository (private val apiService: TMDBInterface) {
+class SelectedRepository (private val apiService: TMDBInterface) {
 
-    lateinit var tmdbSelectedDataSource: TMDBSelectedDataSource
+    lateinit var tmdbSelectedDataSource: SelectedDataSource
 
     fun getSelectedDetails(compositeDisposable: CompositeDisposable, movieId: Int): LiveData<TMDBDetail> {
-        tmdbSelectedDataSource = TMDBSelectedDataSource(apiService, compositeDisposable)
+        tmdbSelectedDataSource =
+            SelectedDataSource(apiService, compositeDisposable)
         tmdbSelectedDataSource.getSelectedMovieDetails(movieId)
 
         return tmdbSelectedDataSource.selectedMovieResponse

@@ -1,4 +1,4 @@
-package com.devkproject.movieinfo.paging
+package com.devkproject.movieinfo.selected
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -9,7 +9,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.lang.Exception
 
-class TMDBSelectedDataSource (private val apiService: TMDBInterface, private val compositeDisposable: CompositeDisposable) {
+class SelectedDataSource (private val apiService: TMDBInterface, private val compositeDisposable: CompositeDisposable) {
 
     private val _selectedMovieResponse = MutableLiveData<TMDBDetail>()
     val selectedMovieResponse: LiveData<TMDBDetail>
@@ -19,18 +19,18 @@ class TMDBSelectedDataSource (private val apiService: TMDBInterface, private val
 
         try {
             compositeDisposable.add(
-                apiService.getMovieDetails(movieId)
+                apiService.getMovieDetails(movieId, "ko")
                     .subscribeOn(Schedulers.io())
                     .subscribe(
                         {
                             _selectedMovieResponse.postValue(it)
                         }, {
-                            Log.e("TMDBSelectedDataSource", it.message)
+                            Log.e("SelectedDataSource", it.message)
                         }
                     )
             )
         } catch (e: Exception) {
-            Log.e("TMDBSelectedDataSource", e.message)
+            Log.e("SelectedDataSource", e.message)
         }
     }
 }

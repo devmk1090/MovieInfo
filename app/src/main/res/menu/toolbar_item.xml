@@ -12,6 +12,10 @@
         />
     <item
         android:id="@+id/topRated_movie"
-        android:title="높은 평점순"
+        android:title="높은 평점"
+        />
+    <item
+        android:id="@+id/upcoming_movie"
+        android:title="개봉 예정"
         />
 </menu>

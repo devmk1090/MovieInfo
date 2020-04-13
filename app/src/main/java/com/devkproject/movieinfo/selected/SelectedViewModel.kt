@@ -1,11 +1,11 @@
-package com.devkproject.movieinfo.SelectedMovie
+package com.devkproject.movieinfo.selected
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.devkproject.movieinfo.model.TMDBDetail
 import io.reactivex.disposables.CompositeDisposable
 
-class SelectedViewModel (private val selectedMovieRepository: SelectedMovieRepository, movieId: Int): ViewModel() {
+class SelectedViewModel (private val selectedMovieRepository: SelectedRepository, movieId: Int): ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
     val selectedMovie: LiveData<TMDBDetail> by lazy {

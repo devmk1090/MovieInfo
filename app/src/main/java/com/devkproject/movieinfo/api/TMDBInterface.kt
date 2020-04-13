@@ -14,12 +14,22 @@ import retrofit2.http.Query
 
 interface TMDBInterface {
 
-    @GET("movie/popular")
-    fun getPopularMovie(@Query("page") page: Int): Single<TMDBResponse>
-
     @GET("movie/{movie_id}")
-    fun getMovieDetails(@Path("movie_id") id: Int): Single<TMDBDetail>
+    fun getMovieDetails(@Path("movie_id") id: Int,
+                        @Query("language") lang: String): Single<TMDBDetail>
+
+    @GET("movie/popular")
+    fun getPopularMovie(@Query("language") lang: String,
+                        @Query("page") page: Int,
+                        @Query("region") region: String): Single<TMDBResponse>
 
     @GET("movie/top_rated")
-    fun getTopRatedMovie(@Query("page") page: Int): Single<TMDBResponse>
+    fun getTopRatedMovie(@Query("language") lang: String,
+                         @Query("page") page: Int,
+                         @Query("region") region: String): Single<TMDBResponse>
+
+    @GET("movie/upcoming")
+    fun getUpcomingMovie(@Query("language") lang: String,
+                         @Query("page") page: Int,
+                         @Query("region") region: String): Single<TMDBResponse>
 }

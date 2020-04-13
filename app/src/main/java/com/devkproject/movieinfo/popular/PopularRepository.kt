@@ -1,4 +1,4 @@
-package com.devkproject.movieinfo.popularMovie
+package com.devkproject.movieinfo.popular
 
 import androidx.lifecycle.LiveData
 import androidx.paging.LivePagedListBuilder
@@ -6,17 +6,16 @@ import androidx.paging.PagedList
 import com.devkproject.movieinfo.api.PER_PAGE
 import com.devkproject.movieinfo.api.TMDBInterface
 import com.devkproject.movieinfo.model.TMDBThumb
-import com.devkproject.movieinfo.paging.TMDBDataSourceFactory
 import io.reactivex.disposables.CompositeDisposable
 
-class TMDBPagedListRepository (private val apiService: TMDBInterface) {
+class PopularRepository (private val apiService: TMDBInterface) {
 
     lateinit var tmdbPagedList: LiveData<PagedList<TMDBThumb>>
-    lateinit var tmdbDataSourceFactory: TMDBDataSourceFactory
+    lateinit var tmdbDataSourceFactory: PopularDataSourceFactory
 
     fun getTMDBPagedList(compositeDisposable: CompositeDisposable) : LiveData<PagedList<TMDBThumb>> {
         tmdbDataSourceFactory =
-            TMDBDataSourceFactory(apiService, compositeDisposable)
+            PopularDataSourceFactory(apiService, compositeDisposable)
 
         val config: PagedList.Config = PagedList.Config.Builder()
             .setEnablePlaceholders(false) //default: true

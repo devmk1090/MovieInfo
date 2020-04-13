@@ -1,4 +1,4 @@
-package com.devkproject.movieinfo.SelectedMovie
+package com.devkproject.movieinfo.selected
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.activity_selected.*
 class SelectedActivity : AppCompatActivity() {
 
     private lateinit var viewModel: SelectedViewModel
-    private lateinit var selectedMovieRepository: SelectedMovieRepository
+    private lateinit var selectedMovieRepository: SelectedRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,7 +25,7 @@ class SelectedActivity : AppCompatActivity() {
 
         val movieId: Int = intent.getIntExtra("id", 1)
         val apiService: TMDBInterface = TMDBClient.getClient()
-        selectedMovieRepository = SelectedMovieRepository(apiService)
+        selectedMovieRepository = SelectedRepository(apiService)
 
         viewModel = getViewModel(movieId)
         viewModel.selectedMovie.observe(this, Observer {

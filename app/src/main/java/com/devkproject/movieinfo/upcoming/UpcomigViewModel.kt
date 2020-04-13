@@ -1,4 +1,4 @@
-package com.devkproject.movieinfo.popularMovie
+package com.devkproject.movieinfo.upcoming
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
@@ -6,15 +6,15 @@ import androidx.paging.PagedList
 import com.devkproject.movieinfo.model.TMDBThumb
 import io.reactivex.disposables.CompositeDisposable
 
-class MainViewModel (private val tmdbPagedListRepository: TMDBPagedListRepository): ViewModel() {
+class UpcomigViewModel (private val upcomingRepository: UpcomingRepository)
+    :ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
 
-    val tmdbPagedList: LiveData<PagedList<TMDBThumb>> by lazy {
-        tmdbPagedListRepository.getTMDBPagedList(compositeDisposable)
+    val upcomingPagedList: LiveData<PagedList<TMDBThumb>> by lazy {
+        upcomingRepository.getUpcomingPagedList(compositeDisposable)
     }
 
-    //메모리 효율을 위한 코드
     override fun onCleared() {
         super.onCleared()
         compositeDisposable.dispose()
