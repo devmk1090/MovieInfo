@@ -4,6 +4,7 @@
     <item
         android:id="@+id/search_movie"
         android:title="검색"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
         android:icon="@drawable/ic_search_black_24dp"
         app:showAsAction="always"/>
     <item

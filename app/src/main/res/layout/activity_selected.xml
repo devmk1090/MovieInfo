@@ -33,9 +33,9 @@
                 <ImageView
                     android:id="@+id/selected_poster_iv"
                     android:layout_gravity="center"
-                    android:scaleType="matrix"
+                    android:scaleType="center"
                     android:layout_width="match_parent"
-                    android:layout_height="500dp"/>
+                    android:layout_height="wrap_content"/>
                 <LinearLayout
                     android:orientation="vertical"
                     android:layout_margin="8dp"

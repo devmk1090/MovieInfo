@@ -19,7 +19,7 @@ class SelectedDataSource (private val apiService: TMDBInterface, private val com
 
         try {
             compositeDisposable.add(
-                apiService.getMovieDetails(movieId, "ko")
+                apiService.getMovieDetails(movieId)
                     .subscribeOn(Schedulers.io())
                     .subscribe(
                         {

@@ -24,6 +24,7 @@ object TMDBClient {
                 .url()
                 .newBuilder()
                 .addQueryParameter("api_key", API_KEY)
+                .addQueryParameter("language", "ko")
                 .build()
             val request: Request = chain.request()
                 .newBuilder()

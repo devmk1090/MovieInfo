@@ -17,7 +17,7 @@ class UpcomingDataSource (private val apiService: TMDBInterface, private val com
 
     override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Int, TMDBThumb>) {
         compositeDisposable.add(
-            apiService.getUpcomingMovie("ko", 1, "kr")
+            apiService.getUpcomingMovie(page, "kr")
                 .subscribeOn(Schedulers.io())
                 .subscribe({
                     callback.onResult(it.movieList, null, page + 1)
@@ -30,7 +30,7 @@ class UpcomingDataSource (private val apiService: TMDBInterface, private val com
 
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, TMDBThumb>) {
         compositeDisposable.add(
-            apiService.getUpcomingMovie("ko", params.key, "kr")
+            apiService.getUpcomingMovie(params.key, "kr")
                 .subscribeOn(Schedulers.io())
                 .subscribe({
                     if (it.totalPages >= params.key) {

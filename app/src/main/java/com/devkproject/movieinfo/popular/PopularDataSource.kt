@@ -16,7 +16,7 @@ class PopularDataSource (private val apiService: TMDBInterface, private val comp
 
     override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Int, TMDBThumb>) {
         compositeDisposable.add(
-        apiService.getPopularMovie("ko", page, "kr")
+        apiService.getPopularMovie(page, "kr")
             .subscribeOn(Schedulers.io())
             .subscribe( {
                 callback.onResult(it.movieList, null, page + 1)
@@ -29,7 +29,7 @@ class PopularDataSource (private val apiService: TMDBInterface, private val comp
 
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, TMDBThumb>) {
         compositeDisposable.add(
-        apiService.getPopularMovie("ko", params.key, "kr")
+        apiService.getPopularMovie(params.key, "kr")
             .subscribeOn(Schedulers.io())
             .subscribe( {
                 if(it.totalPages >= params.key) {

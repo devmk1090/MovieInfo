@@ -17,9 +17,6 @@ import kotlinx.android.synthetic.main.popular_item.view.*
 class PagedListRVAdapter(private val context: Context)
     : PagedListAdapter<TMDBThumb, RecyclerView.ViewHolder>(TMDBDiffCallback()) {
 
-//    val POPULAR_MOVIE = 1
-//    val TOP_RATED_MOVIE = 2
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
         val layoutInflater: LayoutInflater = LayoutInflater.from(parent.context)
@@ -51,19 +48,6 @@ class PagedListRVAdapter(private val context: Context)
             }
         }
     }
-
-//    class TopRatedViewHolder(view: View): RecyclerView.ViewHolder(view) {
-//        fun bind(movie: TMDBThumb?, context: Context) {
-//            itemView.topRated_title.text = movie!!.title
-//            itemView.topRated_releaseDate.text = movie.releaseDate
-//            itemView.topRated_rating.text = movie.rating.toString()
-//
-//            val posterUrl: String = POSTER_URL + movie.posterPath
-//            Glide.with(itemView.context)
-//                .load(posterUrl)
-//                .into(itemView.topRated_image)
-//        }
-//    }
 
     //DiffUtill.Callback 은 추상클래스. 두 목록간의 차이점을 찾고 업데이트 되어야 할 목록을 반환해줌
     //RecyclerView Adapter 에 대한 업데이트를 알리는데 사용됨
