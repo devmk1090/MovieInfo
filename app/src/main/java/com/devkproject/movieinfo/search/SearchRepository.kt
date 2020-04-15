@@ -8,12 +8,12 @@ import com.devkproject.movieinfo.api.TMDBInterface
 import com.devkproject.movieinfo.model.TMDBThumb
 import io.reactivex.disposables.CompositeDisposable
 
-class SearchRepository(private val apiService: TMDBInterface, private val searchQuery: String) {
+class SearchRepository(private val apiService: TMDBInterface) {
 
     lateinit var searchPagedList: LiveData<PagedList<TMDBThumb>>
     lateinit var searchDataSourceFactory: SearchDataSourceFactory
 
-    fun getSearchPagedList(compositeDisposable: CompositeDisposable): LiveData<PagedList<TMDBThumb>> {
+    fun getSearchPagedList(compositeDisposable: CompositeDisposable, searchQuery: String): LiveData<PagedList<TMDBThumb>> {
         searchDataSourceFactory = SearchDataSourceFactory(apiService, compositeDisposable, searchQuery)
 
         val config: PagedList.Config = PagedList.Config.Builder()

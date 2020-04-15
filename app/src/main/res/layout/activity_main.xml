@@ -13,7 +13,7 @@
         android:layout_height="?attr/actionBarSize">
     </androidx.appcompat.widget.Toolbar>
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/popular_recyclerView"
+        android:id="@+id/movie_recyclerView"
         android:layout_below="@+id/main_toolbar"
         android:scrollbars="vertical"
         android:layout_margin="4dp"

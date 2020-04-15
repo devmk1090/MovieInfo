@@ -2,7 +2,9 @@ package com.devkproject.movieinfo.api
 
 import com.devkproject.movieinfo.model.TMDBDetail
 import com.devkproject.movieinfo.model.TMDBResponse
+import io.reactivex.Observable
 import io.reactivex.Single
+import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -33,5 +35,5 @@ interface TMDBInterface {
     @GET("search/movie")
     fun getSearchMovie(@Query("query") query: String,
                        @Query("page") page: Int,
-                       @Query("region") region: String): Single<TMDBResponse>
+                       @Query("region") region: String): Observable<TMDBResponse>
 }

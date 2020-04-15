@@ -4,15 +4,12 @@ import android.app.SearchManager
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.*
 import androidx.recyclerview.widget.GridLayoutManager
 import com.devkproject.movieinfo.toprated.TopRatedRepository
 import com.devkproject.movieinfo.toprated.TopRatedViewModel
@@ -60,9 +57,9 @@ class MainActivity : AppCompatActivity() {
         val upcomingAdapter = PagedListRVAdapter(this)
         val gridLayoutManager = GridLayoutManager(this, 3)
 
-        popular_recyclerView.layoutManager = gridLayoutManager
-        popular_recyclerView.setHasFixedSize(true)
-        popular_recyclerView.adapter = upcomingAdapter
+        movie_recyclerView.layoutManager = gridLayoutManager
+        movie_recyclerView.setHasFixedSize(true)
+        movie_recyclerView.adapter = upcomingAdapter
 
         upcomingViewModel.upcomingPagedList.observe(this, Observer {
             upcomingAdapter.submitList(it)
@@ -83,9 +80,9 @@ class MainActivity : AppCompatActivity() {
                 val mAdapter = PagedListRVAdapter(this)
                 val gridLayoutManager = GridLayoutManager(this, 3)
 
-                popular_recyclerView.layoutManager = gridLayoutManager
-                popular_recyclerView.setHasFixedSize(true)
-                popular_recyclerView.adapter = mAdapter
+                movie_recyclerView.layoutManager = gridLayoutManager
+                movie_recyclerView.setHasFixedSize(true)
+                movie_recyclerView.adapter = mAdapter
 
                 popularViewModel.tmdbPagedList.observe(this, Observer {
                     mAdapter.submitList(it)
@@ -102,9 +99,9 @@ class MainActivity : AppCompatActivity() {
                     PagedListRVAdapter(this)
                 val gridLayoutManager = GridLayoutManager(this, 3)
 
-                popular_recyclerView.layoutManager = gridLayoutManager
-                popular_recyclerView.setHasFixedSize(true)
-                popular_recyclerView.adapter = topRatedAdapter
+                movie_recyclerView.layoutManager = gridLayoutManager
+                movie_recyclerView.setHasFixedSize(true)
+                movie_recyclerView.adapter = topRatedAdapter
 
                 topRatedViewModel.tmdbTopRatedPagedList.observe(this, Observer {
                     topRatedAdapter.submitList(it)
@@ -121,9 +118,9 @@ class MainActivity : AppCompatActivity() {
                 val upcomingAdapter = PagedListRVAdapter(this)
                 val gridLayoutManager = GridLayoutManager(this, 3)
 
-                popular_recyclerView.layoutManager = gridLayoutManager
-                popular_recyclerView.setHasFixedSize(true)
-                popular_recyclerView.adapter = upcomingAdapter
+                movie_recyclerView.layoutManager = gridLayoutManager
+                movie_recyclerView.setHasFixedSize(true)
+                movie_recyclerView.adapter = upcomingAdapter
 
                 upcomingViewModel.upcomingPagedList.observe(this, Observer {
                     upcomingAdapter.submitList(it)
@@ -135,20 +132,28 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-    fun searchTest(query: String) {
+    fun searchQuery(query: String) {
+        Log.e("MainActivity", "searchQuery 확인 : $query")
+        supportActionBar!!.title = query
         val apiService: TMDBInterface = TMDBClient.getClient()
-        searchRepository = SearchRepository(apiService, query)
-        searchViewModel = getSearchViewModel()
+        searchRepository = SearchRepository(apiService)
+        searchViewModel = ViewModelProviders.of(this, object : ViewModelProvider.Factory {
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                return SearchViewModel(searchRepository, query) as T
+            }
+        })[SearchViewModel::class.java]
 
         val searchAdapter = PagedListRVAdapter(this)
         val gridLayoutManager = GridLayoutManager(this, 3)
 
-        popular_recyclerView.layoutManager = gridLayoutManager
-        popular_recyclerView.setHasFixedSize(true)
-        popular_recyclerView.adapter = searchAdapter
+        movie_recyclerView.layoutManager = gridLayoutManager
+        movie_recyclerView.setHasFixedSize(true)
+        movie_recyclerView.adapter = searchAdapter
 
+        searchViewModel.searchPagedList.removeObservers(this)
         searchViewModel.searchPagedList.observe(this, Observer {
             searchAdapter.submitList(it)
+            Log.e("MainActivity", "Observer 확인 : ${it.dataSource}")
         })
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -158,19 +163,17 @@ class MainActivity : AppCompatActivity() {
         val searchView: SearchView? = searchItem?.actionView as SearchView
         searchView!!.setSearchableInfo(searchManager.getSearchableInfo(componentName))
         searchView.maxWidth = Integer.MAX_VALUE
-        searchView.queryHint = "제목을 입력하세요"
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-
             override fun onQueryTextChange(newText: String?): Boolean {
                 return false
             }
             override fun onQueryTextSubmit(query: String?): Boolean {
-                searchTest(query.toString())
+                searchQuery(query.toString())
+                Log.e("MainActivity", "확인 : $query")
                 return false
             }
         })
-
-        return super.onCreateOptionsMenu(menu)
+        return true
     }
 
     private fun getPopularViewModel(): PopularViewModel {
@@ -197,13 +200,13 @@ class MainActivity : AppCompatActivity() {
         })[UpcomigViewModel::class.java]
     }
 
-    private fun getSearchViewModel(): SearchViewModel {
-        return ViewModelProviders.of(this, object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return SearchViewModel(searchRepository) as T
-            }
-        })[SearchViewModel::class.java]
-    }
+//    private fun getSearchViewModel(): SearchViewModel {
+//        return ViewModelProviders.of(this, object : ViewModelProvider.Factory {
+//            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+//                return SearchViewModel(searchRepository, "반지") as T
+//            }
+//        })[SearchViewModel::class.java]
+//
 
     override fun onBackPressed() {
         second_time = System.currentTimeMillis()
@@ -214,3 +217,19 @@ class MainActivity : AppCompatActivity() {
         first_time = System.currentTimeMillis()
     }
 }
+
+//         apiService.getSearchMovie(query, FIRST_PAGE, "kr").enqueue(object : Callback<TMDBResponse> {
+//            override fun onResponse(call: Call<TMDBResponse>, response: Response<TMDBResponse>) {
+//                Log.e("MainActivity", "성공 : ${response.raw()}")
+//                val body = response.body()
+//                val searchAdapter = SearchRVAdapter(body!!.movieList, applicationContext)
+//                val gridLayoutManager = GridLayoutManager(applicationContext,3)
+//
+//                movie_recyclerView.layoutManager = gridLayoutManager
+//                movie_recyclerView.setHasFixedSize(true)
+//                movie_recyclerView.adapter = searchAdapter
+//            }
+//            override fun onFailure(call: Call<TMDBResponse>, t: Throwable) {
+//                Log.e("MainActivity", "실패 : $t")
+//            }
+//        })
