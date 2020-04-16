@@ -9,6 +9,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.GravityCompat
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.GridLayoutManager
 import com.devkproject.movieinfo.toprated.TopRatedRepository
@@ -17,14 +18,16 @@ import com.devkproject.movieinfo.api.TMDBInterface
 import com.devkproject.movieinfo.api.TMDBClient
 import com.devkproject.movieinfo.popular.PopularViewModel
 import com.devkproject.movieinfo.popular.PopularRepository
-import com.devkproject.movieinfo.search.SearchRepository
 import com.devkproject.movieinfo.search.SearchViewModel
 import com.devkproject.movieinfo.upcoming.UpcomigViewModel
 import com.devkproject.movieinfo.upcoming.UpcomingRepository
+import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.main_drawer.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
+    private val apiService: TMDBInterface = TMDBClient.getClient()
 
     private lateinit var popularViewModel: PopularViewModel
     lateinit var tmdbRepository: PopularRepository
@@ -36,21 +39,23 @@ class MainActivity : AppCompatActivity() {
     lateinit var upcomingRepository: UpcomingRepository
 
     private lateinit var searchViewModel: SearchViewModel
-    lateinit var searchRepository: SearchRepository
+    private var searchView: SearchView? = null
 
     private var first_time : Long = 0
     private var second_time : Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.main_drawer)
 
         val toolbar:androidx.appcompat.widget.Toolbar = findViewById(R.id.main_toolbar)
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayShowTitleEnabled(true)
-        toolbar.setNavigationIcon(R.drawable.ic_menu_black_24dp)
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true) //드로어를 꺼낼 홈 버튼 활성화
+        supportActionBar!!.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp) //홈버튼 이미지 변경
 
-        val apiService: TMDBInterface = TMDBClient.getClient()
+        main_drawer_navigationView.setNavigationItemSelectedListener(this)
+
         upcomingRepository = UpcomingRepository(apiService)
         upcomingViewModel = getUpcomingViewModel()
 
@@ -66,32 +71,28 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
-            R.id.search_movie -> {
-                return true
-            }
             R.id.popular_movie -> {
                 supportActionBar!!.title = "인기 영화"
-                val apiService: TMDBInterface = TMDBClient.getClient()
+
                 tmdbRepository = PopularRepository(apiService)
                 popularViewModel = getPopularViewModel()
 
-                val mAdapter = PagedListRVAdapter(this)
+                val popularAdapter = PagedListRVAdapter(this)
                 val gridLayoutManager = GridLayoutManager(this, 3)
 
                 movie_recyclerView.layoutManager = gridLayoutManager
                 movie_recyclerView.setHasFixedSize(true)
-                movie_recyclerView.adapter = mAdapter
+                movie_recyclerView.adapter = popularAdapter
 
                 popularViewModel.tmdbPagedList.observe(this, Observer {
-                    mAdapter.submitList(it)
+                    popularAdapter.submitList(it)
                 })
-                return true
             }
             R.id.topRated_movie -> {
                 supportActionBar!!.title = "높은 평점"
-                val apiService: TMDBInterface = TMDBClient.getClient()
+
                 tmdbTopRatedRepository = TopRatedRepository(apiService)
                 topRatedViewModel = getTopRatedViewModel()
 
@@ -106,12 +107,11 @@ class MainActivity : AppCompatActivity() {
                 topRatedViewModel.tmdbTopRatedPagedList.observe(this, Observer {
                     topRatedAdapter.submitList(it)
                 })
-                return true
             }
 
             R.id.upcoming_movie -> {
                 supportActionBar!!.title = "개봉 예정"
-                val apiService: TMDBInterface = TMDBClient.getClient()
+
                 upcomingRepository = UpcomingRepository(apiService)
                 upcomingViewModel = getUpcomingViewModel()
 
@@ -125,24 +125,28 @@ class MainActivity : AppCompatActivity() {
                 upcomingViewModel.upcomingPagedList.observe(this, Observer {
                     upcomingAdapter.submitList(it)
                 })
-                return true
-            }
-            else -> {
-                return super.onOptionsItemSelected(item)
             }
         }
+        main_drawer.closeDrawer(GravityCompat.START)
+        return true
     }
-    fun searchQuery(query: String) {
-        Log.e("MainActivity", "searchQuery 확인 : $query")
-        supportActionBar!!.title = query
-        val apiService: TMDBInterface = TMDBClient.getClient()
-        searchRepository = SearchRepository(apiService)
-        searchViewModel = ViewModelProviders.of(this, object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return SearchViewModel(searchRepository, query) as T
-            }
-        })[SearchViewModel::class.java]
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            android.R.id.home -> {
+                main_drawer.openDrawer(GravityCompat.START)
+            }
+            R.id.search_movie -> {
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    fun searchQuery(query: String) {
+        supportActionBar!!.title = "검색 : $query"
+
+        searchViewModel = getSearchViewModel()
         val searchAdapter = PagedListRVAdapter(this)
         val gridLayoutManager = GridLayoutManager(this, 3)
 
@@ -150,26 +154,24 @@ class MainActivity : AppCompatActivity() {
         movie_recyclerView.setHasFixedSize(true)
         movie_recyclerView.adapter = searchAdapter
 
-        searchViewModel.searchPagedList.removeObservers(this)
-        searchViewModel.searchPagedList.observe(this, Observer {
+        searchViewModel.searchView(query).observe(this, Observer {
             searchAdapter.submitList(it)
-            Log.e("MainActivity", "Observer 확인 : ${it.dataSource}")
+            Log.e("MainActivity", "Observer 확인 : ${it.config}")
         })
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val menuInflater = menuInflater.inflate(R.menu.toolbar_item, menu)
         val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
         val searchItem: MenuItem? = menu?.findItem(R.id.search_movie)
-        val searchView: SearchView? = searchItem?.actionView as SearchView
+        searchView = searchItem?.actionView as SearchView
         searchView!!.setSearchableInfo(searchManager.getSearchableInfo(componentName))
-        searchView.maxWidth = Integer.MAX_VALUE
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        searchView!!.maxWidth = Integer.MAX_VALUE
+        searchView!!.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextChange(newText: String?): Boolean {
+                searchQuery(newText.toString())
                 return false
             }
             override fun onQueryTextSubmit(query: String?): Boolean {
-                searchQuery(query.toString())
-                Log.e("MainActivity", "확인 : $query")
                 return false
             }
         })
@@ -200,36 +202,28 @@ class MainActivity : AppCompatActivity() {
         })[UpcomigViewModel::class.java]
     }
 
-//    private fun getSearchViewModel(): SearchViewModel {
-//        return ViewModelProviders.of(this, object : ViewModelProvider.Factory {
-//            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-//                return SearchViewModel(searchRepository, "반지") as T
-//            }
-//        })[SearchViewModel::class.java]
-//
+    private fun getSearchViewModel(): SearchViewModel {
+        return ViewModelProviders.of(this, object : ViewModelProvider.Factory {
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                return SearchViewModel(apiService) as T
+            }
+        })[SearchViewModel::class.java]
+    }
 
     override fun onBackPressed() {
-        second_time = System.currentTimeMillis()
-        if(second_time - first_time < 2000) {
-            super.onBackPressed()
-            finishAffinity()
-        } else Toast.makeText(this,"한 번 더 누르면 종료됩니다", Toast.LENGTH_SHORT).show()
-        first_time = System.currentTimeMillis()
+        if(!searchView!!.isIconified) {
+            searchView!!.isIconified = true
+            searchView!!.onActionViewCollapsed()
+        } else if(main_drawer.isDrawerOpen(GravityCompat.START)) {
+            main_drawer.closeDrawer(GravityCompat.START)
+        }
+        else {
+            second_time = System.currentTimeMillis()
+            if(second_time - first_time < 2000) {
+                super.onBackPressed()
+                finishAffinity()
+            } else Toast.makeText(this,"한 번 더 누르면 종료됩니다", Toast.LENGTH_SHORT).show()
+            first_time = System.currentTimeMillis()
+        }
     }
 }
-
-//         apiService.getSearchMovie(query, FIRST_PAGE, "kr").enqueue(object : Callback<TMDBResponse> {
-//            override fun onResponse(call: Call<TMDBResponse>, response: Response<TMDBResponse>) {
-//                Log.e("MainActivity", "성공 : ${response.raw()}")
-//                val body = response.body()
-//                val searchAdapter = SearchRVAdapter(body!!.movieList, applicationContext)
-//                val gridLayoutManager = GridLayoutManager(applicationContext,3)
-//
-//                movie_recyclerView.layoutManager = gridLayoutManager
-//                movie_recyclerView.setHasFixedSize(true)
-//                movie_recyclerView.adapter = searchAdapter
-//            }
-//            override fun onFailure(call: Call<TMDBResponse>, t: Throwable) {
-//                Log.e("MainActivity", "실패 : $t")
-//            }
-//        })

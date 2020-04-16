@@ -7,16 +7,4 @@
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         android:icon="@drawable/ic_search_black_24dp"
         app:showAsAction="always"/>
-    <item
-        android:id="@+id/popular_movie"
-        android:title="인기 영화"
-        />
-    <item
-        android:id="@+id/topRated_movie"
-        android:title="높은 평점"
-        />
-    <item
-        android:id="@+id/upcoming_movie"
-        android:title="개봉 예정"
-        />
 </menu>

@@ -35,5 +35,5 @@ interface TMDBInterface {
     @GET("search/movie")
     fun getSearchMovie(@Query("query") query: String,
                        @Query("page") page: Int,
-                       @Query("region") region: String): Observable<TMDBResponse>
+                       @Query("region") region: String): Single<TMDBResponse>
 }
