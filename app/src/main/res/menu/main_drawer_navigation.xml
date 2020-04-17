@@ -12,4 +12,7 @@
         android:id="@+id/upcoming_movie"
         android:title="개봉 예정"
         />
+    <item
+        android:id="@+id/genre_movie"
+        android:title="장르 검색"/>
 </menu>

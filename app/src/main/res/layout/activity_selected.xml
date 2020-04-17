@@ -56,7 +56,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
                     <TextView
-                        android:text="Movie Innfo"
+                        android:text="정보"
                         android:layout_marginTop="15dp"
                         android:textStyle="bold"
                         android:textSize="14sp"
@@ -67,7 +67,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
                         <TextView
-                            android:text="ReleaseDate : "
+                            android:text="개봉일 : "
                             android:textSize="12sp"
                             android:textStyle="bold"
                             android:layout_marginTop="2dp"
@@ -86,7 +86,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
                         <TextView
-                            android:text="Rating : "
+                            android:text="평점 : "
                             android:layout_marginTop="2dp"
                             android:textSize="12sp"
                             android:textStyle="bold"
@@ -105,7 +105,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
                         <TextView
-                            android:text="Runtime : "
+                            android:text="상영 시간 : "
                             android:textSize="12sp"
                             android:textStyle="bold"
                             android:layout_marginTop="2dp"
@@ -126,14 +126,14 @@
                         <TextView
                             android:textStyle="bold"
                             android:textSize="12sp"
-                            android:text="Budget : "
+                            android:text="제작비 :  "
                             android:layout_marginTop="2dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
                         <TextView
                             android:id="@+id/selected_movie_budget"
                             android:layout_marginTop="2dp"
-                            android:text="130,000"
+                            android:text=""
                             android:textSize="12sp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
@@ -144,7 +144,7 @@
                         android:layout_height="match_parent">
                         <TextView
                             android:layout_marginTop="2dp"
-                            android:text="Revenue : "
+                            android:text="수익 :  "
                             android:textSize="12sp"
                             android:textStyle="bold"
                             android:layout_width="wrap_content"
@@ -152,14 +152,14 @@
                         <TextView
                             android:id="@+id/selected_movie_revenue"
                             android:layout_marginTop="2dp"
-                            android:text="130,000"
+                            android:text=""
                             android:textSize="12sp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
                     </LinearLayout>
                     <TextView
                         android:layout_marginTop="2dp"
-                        android:text="Overview "
+                        android:text="줄거리 "
                         android:textSize="12sp"
                         android:textStyle="bold"
                         android:layout_width="wrap_content"

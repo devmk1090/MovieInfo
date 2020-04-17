@@ -1,7 +1,9 @@
 package com.devkproject.movieinfo.api
 
 import com.devkproject.movieinfo.model.TMDBDetail
+import com.devkproject.movieinfo.model.TMDBGenre
 import com.devkproject.movieinfo.model.TMDBResponse
+import com.devkproject.movieinfo.model.TMDBThumb
 import io.reactivex.Observable
 import io.reactivex.Single
 import retrofit2.Call
@@ -28,12 +30,21 @@ interface TMDBInterface {
                          @Query("region") region: String): Single<TMDBResponse>
 
     @GET("movie/upcoming")
-    fun getUpcomingMovie(
-                         @Query("page") page: Int,
+    fun getUpcomingMovie(@Query("page") page: Int,
                          @Query("region") region: String): Single<TMDBResponse>
 
     @GET("search/movie")
     fun getSearchMovie(@Query("query") query: String,
                        @Query("page") page: Int,
                        @Query("region") region: String): Single<TMDBResponse>
+
+    @GET("genre/movie/list")
+    fun getGenreMovie(): Call<TMDBGenre>
+
+    @GET("discover/movie")
+    fun getGenrePopularMovie(@Query("region") region: String,
+                             @Query("sort_by") sortBy: String,
+                             @Query("include_adult") adult: Boolean,
+                             @Query("page") page: Int,
+                             @Query("with_genres") genreId: String): Single<TMDBResponse>
 }

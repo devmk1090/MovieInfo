@@ -1,7 +1,9 @@
 package com.devkproject.movieinfo
 
+import android.app.AlertDialog
 import android.app.SearchManager
 import android.content.Context
+import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -16,14 +18,21 @@ import com.devkproject.movieinfo.toprated.TopRatedRepository
 import com.devkproject.movieinfo.toprated.TopRatedViewModel
 import com.devkproject.movieinfo.api.TMDBInterface
 import com.devkproject.movieinfo.api.TMDBClient
+import com.devkproject.movieinfo.genre.GenreViewModel
+import com.devkproject.movieinfo.model.TMDBGenre
 import com.devkproject.movieinfo.popular.PopularViewModel
 import com.devkproject.movieinfo.popular.PopularRepository
 import com.devkproject.movieinfo.search.SearchViewModel
 import com.devkproject.movieinfo.upcoming.UpcomigViewModel
 import com.devkproject.movieinfo.upcoming.UpcomingRepository
 import com.google.android.material.navigation.NavigationView
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.main_drawer.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.lang.StringBuilder
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -40,6 +49,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private lateinit var searchViewModel: SearchViewModel
     private var searchView: SearchView? = null
+
+    private lateinit var genreViewModel: GenreViewModel
 
     private var first_time : Long = 0
     private var second_time : Long = 0
@@ -108,7 +119,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     topRatedAdapter.submitList(it)
                 })
             }
-
             R.id.upcoming_movie -> {
                 supportActionBar!!.title = "개봉 예정"
 
@@ -125,6 +135,48 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 upcomingViewModel.upcomingPagedList.observe(this, Observer {
                     upcomingAdapter.submitList(it)
                 })
+            }
+            R.id.genre_movie -> {
+                val items = arrayOf("액션", "모험", "애니메이션", "코미디", "범죄", "다큐멘터리", "드라마",
+                    "가족", "판타지", "SF", "공포", "스릴러", "전쟁", "로맨스")
+                val alertDialog = AlertDialog.Builder(this)
+                    .setTitle("장르 선택")
+                    .setItems(items) { dialog, which ->
+                        when(which) {
+                            0 -> genreId("28", "액션")
+                            1 -> genreId("12", "모험")
+                            2 -> genreId("16", "애니메이션")
+                            3 -> genreId("35", "코미디")
+                            4 -> genreId("80", "범죄")
+                            5 -> genreId("99", "다큐멘터리")
+                            6 -> genreId("18", "드라마")
+                            7 -> genreId("10751", "가족")
+                            8 -> genreId("14", "판타지")
+                            9 -> genreId("878", "SF")
+                            10 -> genreId("27", "공포")
+                            11 -> genreId("53", "스릴러")
+                            12 -> genreId("10752", "전쟁")
+                            13 -> genreId("10749", "로맨스")
+                        }
+                        dialog.dismiss()
+                    }
+                alertDialog.show()
+//                apiService.getGenreMovie().enqueue(object : Callback<TMDBGenre> {
+//                    override fun onResponse(call: Call<TMDBGenre>, response: Response<TMDBGenre>) {
+//                        val body = response.body()
+//                        for (i in body!!.genres) {
+//                            val items: CharSequence
+//                            sb.append(i.name + i.id)
+//                            println(sb.toString())
+//                        }
+//                    }
+//                    override fun onFailure(call: Call<TMDBGenre>, t: Throwable) {
+//                        Log.e("MainActivity", "실패 : ${t.message}")
+//                    }
+//                })
+//                val alertDialog = AlertDialog.Builder(this)
+//                    .setTitle("테스트")
+//                alertDialog.show()
             }
         }
         main_drawer.closeDrawer(GravityCompat.START)
@@ -143,6 +195,21 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return super.onOptionsItemSelected(item)
     }
 
+    private fun genreId(genreId: String, genreName: String) {
+        supportActionBar!!.title = "장르 : $genreName"
+
+        genreViewModel = getGenreViewModel()
+        val genreAdapter = PagedListRVAdapter(this)
+        val gridLayoutManager = GridLayoutManager(this, 3)
+
+        movie_recyclerView.layoutManager = gridLayoutManager
+        movie_recyclerView.setHasFixedSize(true)
+        movie_recyclerView.adapter = genreAdapter
+
+        genreViewModel.getGenreView(genreId).observe(this, Observer {
+            genreAdapter.submitList(it)
+        })
+    }
     fun searchQuery(query: String) {
         supportActionBar!!.title = "검색 : $query"
 
@@ -156,7 +223,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         searchViewModel.searchView(query).observe(this, Observer {
             searchAdapter.submitList(it)
-            Log.e("MainActivity", "Observer 확인 : ${it.config}")
         })
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -208,6 +274,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 return SearchViewModel(apiService) as T
             }
         })[SearchViewModel::class.java]
+    }
+
+    private fun getGenreViewModel(): GenreViewModel {
+        return ViewModelProviders.of(this, object : ViewModelProvider.Factory {
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                return GenreViewModel(apiService) as T
+            }
+        })[GenreViewModel::class.java]
     }
 
     override fun onBackPressed() {

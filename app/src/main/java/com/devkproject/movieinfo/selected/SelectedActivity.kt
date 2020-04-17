@@ -38,6 +38,8 @@ class SelectedActivity : AppCompatActivity() {
         selected_movie_tagline.text = it.tagline
         selected_movie_release.text = it.releaseDate
         selected_movie_rating.text = it.rating.toString()
+        selected_movie_budget.text = it.budget.toString() + " $"
+        selected_movie_revenue.text = it.revenue.toString() + " $"
         selected_movie_overview.text = it.overview
 
         val moviePosterURL: String = POSTER_URL + it.posterPath
