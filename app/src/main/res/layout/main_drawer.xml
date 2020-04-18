@@ -9,14 +9,15 @@
     <include
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        layout="@layout/activity_main"/>
+        layout="@layout/main_content"/>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/main_drawer_navigationView"
         app:headerLayout="@layout/main_drawer_header"
         app:menu="@menu/main_drawer_navigation"
         android:layout_gravity="left"
-        app:itemTextColor="#000000"
+        app:itemTextColor="#383838"
+        app:itemTextAppearance="?android:attr/textAppearanceMedium"
         android:layout_width="wrap_content"
         android:layout_height="match_parent">
 

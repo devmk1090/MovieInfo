@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".selected.SelectedActivity">
+    android:background="#E9E9E9"
+    tools:context=".detail.DetailActivity">
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -33,7 +34,7 @@
                 <ImageView
                     android:id="@+id/selected_poster_iv"
                     android:layout_gravity="center"
-                    android:scaleType="center"
+                    android:scaleType="fitCenter"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
                 <LinearLayout
@@ -45,30 +46,28 @@
                         android:id="@+id/selected_movie_title"
                         android:text="movie"
                         android:textStyle="bold"
-                        android:textSize="18sp"
+                        android:textSize="20sp"
+                        android:textColor="#000000"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
                     <TextView
                         android:id="@+id/selected_movie_tagline"
                         android:text="sub_title"
                         android:textStyle="bold"
-                        android:textSize="14sp"
+                        android:textSize="16sp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="15dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
-                    <TextView
-                        android:text="정보"
-                        android:layout_marginTop="15dp"
-                        android:textStyle="bold"
-                        android:textSize="14sp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+
                     <LinearLayout
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
                         <TextView
                             android:text="개봉일 : "
-                            android:textSize="12sp"
+                            android:textSize="14sp"
+                            android:textColor="#000000"
                             android:textStyle="bold"
                             android:layout_marginTop="2dp"
                             android:layout_width="wrap_content"
@@ -77,7 +76,29 @@
                             android:id="@+id/selected_movie_release"
                             android:layout_marginTop="2dp"
                             android:text="2019"
-                            android:textSize="12sp"
+                            android:textSize="14sp"
+                            android:textColor="#000000"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                        <TextView
+                            android:text="투표수 : "
+                            android:layout_marginTop="2dp"
+                            android:textSize="14sp"
+                            android:textColor="#000000"
+                            android:textStyle="bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <TextView
+                            android:id="@+id/selected_movie_vote_count"
+                            android:text="8"
+                            android:layout_marginTop="2dp"
+                            android:textSize="14sp"
+                            android:textColor="#000000"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
                     </LinearLayout>
@@ -88,7 +109,8 @@
                         <TextView
                             android:text="평점 : "
                             android:layout_marginTop="2dp"
-                            android:textSize="12sp"
+                            android:textSize="14sp"
+                            android:textColor="#000000"
                             android:textStyle="bold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
@@ -96,7 +118,8 @@
                             android:id="@+id/selected_movie_rating"
                             android:text="8"
                             android:layout_marginTop="2dp"
-                            android:textSize="12sp"
+                            android:textSize="14sp"
+                            android:textColor="#000000"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
                     </LinearLayout>
@@ -106,7 +129,8 @@
                         android:layout_height="match_parent">
                         <TextView
                             android:text="상영 시간 : "
-                            android:textSize="12sp"
+                            android:textSize="14sp"
+                            android:textColor="#000000"
                             android:textStyle="bold"
                             android:layout_marginTop="2dp"
                             android:layout_width="wrap_content"
@@ -115,7 +139,8 @@
                             android:id="@+id/selected_movie_runtime"
                             android:layout_marginTop="2dp"
                             android:text="2.3 hr"
-                            android:textSize="12sp"
+                            android:textSize="14sp"
+                            android:textColor="#000000"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
                     </LinearLayout>
@@ -125,7 +150,8 @@
                         android:layout_height="match_parent">
                         <TextView
                             android:textStyle="bold"
-                            android:textSize="12sp"
+                            android:textSize="14sp"
+                            android:textColor="#000000"
                             android:text="제작비 :  "
                             android:layout_marginTop="2dp"
                             android:layout_width="wrap_content"
@@ -134,7 +160,8 @@
                             android:id="@+id/selected_movie_budget"
                             android:layout_marginTop="2dp"
                             android:text=""
-                            android:textSize="12sp"
+                            android:textSize="14sp"
+                            android:textColor="#000000"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
                     </LinearLayout>
@@ -145,7 +172,8 @@
                         <TextView
                             android:layout_marginTop="2dp"
                             android:text="수익 :  "
-                            android:textSize="12sp"
+                            android:textSize="14sp"
+                            android:textColor="#000000"
                             android:textStyle="bold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
@@ -153,14 +181,16 @@
                             android:id="@+id/selected_movie_revenue"
                             android:layout_marginTop="2dp"
                             android:text=""
-                            android:textSize="12sp"
+                            android:textSize="14sp"
+                            android:textColor="#000000"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
                     </LinearLayout>
                     <TextView
                         android:layout_marginTop="2dp"
                         android:text="줄거리 "
-                        android:textSize="12sp"
+                        android:textSize="14sp"
+                        android:textColor="#000000"
                         android:textStyle="bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
@@ -168,7 +198,8 @@
                         android:id="@+id/selected_movie_overview"
                         android:layout_marginTop="2dp"
                         android:text="overview......"
-                        android:textSize="12sp"
+                        android:textSize="14sp"
+                        android:textColor="#000000"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                 </LinearLayout>

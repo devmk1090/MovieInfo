@@ -1,4 +1,4 @@
-package com.devkproject.movieinfo.selected
+package com.devkproject.movieinfo.detail
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -9,7 +9,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.lang.Exception
 
-class SelectedDataSource (private val apiService: TMDBInterface, private val compositeDisposable: CompositeDisposable) {
+class DetailDataSource (private val apiService: TMDBInterface, private val compositeDisposable: CompositeDisposable) {
 
     private val _selectedMovieResponse = MutableLiveData<TMDBDetail>()
     val selectedMovieResponse: LiveData<TMDBDetail>
@@ -25,12 +25,12 @@ class SelectedDataSource (private val apiService: TMDBInterface, private val com
                         {
                             _selectedMovieResponse.postValue(it)
                         }, {
-                            Log.e("SelectedDataSource", it.message)
+                            Log.e("DetailDataSource", it.message)
                         }
                     )
             )
         } catch (e: Exception) {
-            Log.e("SelectedDataSource", e.message)
+            Log.e("DetailDataSource", e.message)
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.devkproject.movieinfo.search
+package com.devkproject.movieinfo.now_playing
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
@@ -9,20 +9,20 @@ import com.devkproject.movieinfo.model.TMDBThumb
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
-class SearchDataSource (private val apiService: TMDBInterface, private val compositeDisposable: CompositeDisposable, private val searchQuery: String)
+class NowPlayingDataSource (private val apiService: TMDBInterface, private val compositeDisposable: CompositeDisposable)
     : PageKeyedDataSource<Int, TMDBThumb>() {
 
-    private val page = FIRST_PAGE
+    private val page= FIRST_PAGE
     private val networkState: MutableLiveData<String> = MutableLiveData()
-
+    
     override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Int, TMDBThumb>) {
         compositeDisposable.add(
-            apiService.getSearchMovie(searchQuery, page, false,"kr")
+            apiService.getNowPlayingMovie(page, "kr")
                 .subscribeOn(Schedulers.io())
                 .subscribe({
                     callback.onResult(it.movieList, null, page + 1)
                 }, {
-                    Log.e("SearchDataSource", it.message)
+                    Log.e("NowPlayingDataSource", it.message)
                     networkState.postValue(it.toString())
                 })
         )
@@ -30,7 +30,7 @@ class SearchDataSource (private val apiService: TMDBInterface, private val compo
 
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, TMDBThumb>) {
         compositeDisposable.add(
-            apiService.getSearchMovie(searchQuery, params.key, false, "kr")
+            apiService.getNowPlayingMovie(params.key, "kr")
                 .subscribeOn(Schedulers.io())
                 .subscribe({
                     if(it.totalPages >= params.key) {
@@ -39,10 +39,9 @@ class SearchDataSource (private val apiService: TMDBInterface, private val compo
                         networkState.postValue("마지막 페이지")
                     }
                 }, {
-                    Log.e("SearchDataSource", it.message)
+                    Log.e("NowPlayingDataSource", it.message)
                     networkState.postValue(it.toString())
-                }
-                )
+                })
         )
     }
 

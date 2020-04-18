@@ -36,6 +36,7 @@ interface TMDBInterface {
     @GET("search/movie")
     fun getSearchMovie(@Query("query") query: String,
                        @Query("page") page: Int,
+                       @Query("include_adult") adult: Boolean,
                        @Query("region") region: String): Single<TMDBResponse>
 
     @GET("genre/movie/list")
@@ -47,4 +48,8 @@ interface TMDBInterface {
                              @Query("include_adult") adult: Boolean,
                              @Query("page") page: Int,
                              @Query("with_genres") genreId: String): Single<TMDBResponse>
+
+    @GET("movie/now_playing")
+    fun getNowPlayingMovie(@Query("page") page: Int,
+                           @Query("region") region: String): Single<TMDBResponse>
 }

@@ -26,7 +26,7 @@ class GenreDataSource (private val apiService: TMDBInterface, private val compos
 
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, TMDBThumb>) {
         compositeDisposable.add(
-            apiService.getGenrePopularMovie("kr", "popularity.desc", false, page, genreId)
+            apiService.getGenrePopularMovie("kr", "popularity.desc", false, params.key, genreId)
                 .subscribeOn(Schedulers.io())
                 .subscribe({
                     if(it.totalPages >= params.key) {

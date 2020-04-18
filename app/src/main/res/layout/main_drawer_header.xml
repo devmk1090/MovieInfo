@@ -1,28 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:layout_marginLeft="20dp"
+    android:background="#A62FBB"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <ImageView
+        android:layout_gravity="center"
         android:id="@+id/header_icon"
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:layout_marginTop="30dp"
         android:src="@drawable/tmdb"/>
-<!--    <TextView-->
-<!--        android:layout_marginTop="5dp"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:textSize="20dp"-->
-<!--        android:textStyle="bold"-->
-<!--        android:textColor="#000000"-->
-<!--        android:text="TMDB"/>-->
-<!--    <TextView-->
-<!--        android:layout_marginTop="5dp"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:textSize="15dp"-->
-<!--        android:textColor="#EB4E4646"-->
-<!--        android:text="https://www.themoviedb.org"/>-->
 </LinearLayout>

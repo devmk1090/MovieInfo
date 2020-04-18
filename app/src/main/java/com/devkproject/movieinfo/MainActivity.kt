@@ -20,6 +20,7 @@ import com.devkproject.movieinfo.api.TMDBInterface
 import com.devkproject.movieinfo.api.TMDBClient
 import com.devkproject.movieinfo.genre.GenreViewModel
 import com.devkproject.movieinfo.model.TMDBGenre
+import com.devkproject.movieinfo.now_playing.NowPlayingViewModel
 import com.devkproject.movieinfo.popular.PopularViewModel
 import com.devkproject.movieinfo.popular.PopularRepository
 import com.devkproject.movieinfo.search.SearchViewModel
@@ -27,7 +28,7 @@ import com.devkproject.movieinfo.upcoming.UpcomigViewModel
 import com.devkproject.movieinfo.upcoming.UpcomingRepository
 import com.google.android.material.navigation.NavigationView
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.main_content.*
 import kotlinx.android.synthetic.main.main_drawer.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -51,6 +52,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var searchView: SearchView? = null
 
     private lateinit var genreViewModel: GenreViewModel
+
+    private lateinit var nowPlayingViewModel: NowPlayingViewModel
 
     private var first_time : Long = 0
     private var second_time : Long = 0
@@ -119,6 +122,21 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     topRatedAdapter.submitList(it)
                 })
             }
+            R.id.nowPlaying_movie -> {
+                supportActionBar!!.title = "현재 상영작"
+
+                nowPlayingViewModel = getNowPlayingViewModel()
+                val nowPlayingAdapter = PagedListRVAdapter(this)
+                val gridLayoutManager = GridLayoutManager(this, 3)
+
+                movie_recyclerView.layoutManager = gridLayoutManager
+                movie_recyclerView.setHasFixedSize(true)
+                movie_recyclerView.adapter = nowPlayingAdapter
+
+                nowPlayingViewModel.nowPlayingView().observe(this, Observer {
+                    nowPlayingAdapter.submitList(it)
+                })
+            }
             R.id.upcoming_movie -> {
                 supportActionBar!!.title = "개봉 예정"
 
@@ -138,8 +156,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.genre_movie -> {
                 val items = arrayOf("액션", "모험", "애니메이션", "코미디", "범죄", "다큐멘터리", "드라마",
-                    "가족", "판타지", "SF", "공포", "스릴러", "전쟁", "로맨스")
-                val alertDialog = AlertDialog.Builder(this)
+                    "가족", "판타지", "SF", "공포", "스릴러", "미스터리", "전쟁", "로맨스")
+                val alertDialog = AlertDialog.Builder(this, 3)
                     .setTitle("장르 선택")
                     .setItems(items) { dialog, which ->
                         when(which) {
@@ -155,28 +173,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             9 -> genreId("878", "SF")
                             10 -> genreId("27", "공포")
                             11 -> genreId("53", "스릴러")
-                            12 -> genreId("10752", "전쟁")
-                            13 -> genreId("10749", "로맨스")
+                            12 -> genreId("9648", "미스터리")
+                            13 -> genreId("10752", "전쟁")
+                            14 -> genreId("10749", "로맨스")
                         }
                         dialog.dismiss()
                     }
                 alertDialog.show()
-//                apiService.getGenreMovie().enqueue(object : Callback<TMDBGenre> {
-//                    override fun onResponse(call: Call<TMDBGenre>, response: Response<TMDBGenre>) {
-//                        val body = response.body()
-//                        for (i in body!!.genres) {
-//                            val items: CharSequence
-//                            sb.append(i.name + i.id)
-//                            println(sb.toString())
-//                        }
-//                    }
-//                    override fun onFailure(call: Call<TMDBGenre>, t: Throwable) {
-//                        Log.e("MainActivity", "실패 : ${t.message}")
-//                    }
-//                })
-//                val alertDialog = AlertDialog.Builder(this)
-//                    .setTitle("테스트")
-//                alertDialog.show()
             }
         }
         main_drawer.closeDrawer(GravityCompat.START)
@@ -282,6 +285,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 return GenreViewModel(apiService) as T
             }
         })[GenreViewModel::class.java]
+    }
+
+    private fun getNowPlayingViewModel(): NowPlayingViewModel {
+        return ViewModelProviders.of(this, object : ViewModelProvider.Factory {
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                return NowPlayingViewModel(apiService) as T
+            }
+
+        })[NowPlayingViewModel::class.java]
     }
 
     override fun onBackPressed() {

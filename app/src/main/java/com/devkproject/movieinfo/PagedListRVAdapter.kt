@@ -9,10 +9,10 @@ import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.devkproject.movieinfo.selected.SelectedActivity
+import com.devkproject.movieinfo.detail.DetailActivity
 import com.devkproject.movieinfo.api.POSTER_URL
 import com.devkproject.movieinfo.model.TMDBThumb
-import kotlinx.android.synthetic.main.popular_item.view.*
+import kotlinx.android.synthetic.main.movie_item.view.*
 
 class PagedListRVAdapter(private val context: Context)
     : PagedListAdapter<TMDBThumb, RecyclerView.ViewHolder>(TMDBDiffCallback()) {
@@ -21,7 +21,7 @@ class PagedListRVAdapter(private val context: Context)
 
         val layoutInflater: LayoutInflater = LayoutInflater.from(parent.context)
         val v: View
-        v = layoutInflater.inflate(R.layout.popular_item, parent, false)
+        v = layoutInflater.inflate(R.layout.movie_item, parent, false)
         return PopularViewHolder(v)
     }
 
@@ -42,7 +42,7 @@ class PagedListRVAdapter(private val context: Context)
                 .into(itemView.popular_thumb_image)
 
             itemView.setOnClickListener {
-                val intent = Intent(context, SelectedActivity::class.java)
+                val intent = Intent(context, DetailActivity::class.java)
                 intent.putExtra("id", movie.id)
                 context.startActivity(intent)
             }

@@ -9,6 +9,7 @@ data class TMDBDetail(
     val popularity: Double,
     @SerializedName("vote_average")
     val rating: Double,
+    val vote_count: Int,
     val runtime: Int,
     val title: String,
     val overview: String,
@@ -18,5 +19,6 @@ data class TMDBDetail(
     val releaseDate: String,
     val status: String,
     val tagline: String,
-    val video: Boolean
+    val video: Boolean,
+    val original_title: String
 )
