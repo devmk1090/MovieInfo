@@ -9,11 +9,11 @@ import com.devkproject.movieinfo.model.TMDBThumb
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
-class GenreDataSource (private val apiService: TMDBInterface, private val compositeDisposable: CompositeDisposable, private val genreId: String)
-    : PageKeyedDataSource<Int, TMDBThumb>() {
+class GenreDataSource (private val apiService: TMDBInterface, private val compositeDisposable: CompositeDisposable, private val genreId: String,
+                       private val sort_by: String) : PageKeyedDataSource<Int, TMDBThumb>() {
     override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Int, TMDBThumb>) {
         compositeDisposable.add(
-            apiService.getGenrePopularMovie("kr", "popularity.desc", false, page, genreId)
+            apiService.getGenrePopularMovie("kr", sort_by, false, page, genreId, 100)
                 .subscribeOn(Schedulers.io())
                 .subscribe({
                     callback.onResult(it.movieList, null, page + 1)
@@ -26,7 +26,7 @@ class GenreDataSource (private val apiService: TMDBInterface, private val compos
 
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, TMDBThumb>) {
         compositeDisposable.add(
-            apiService.getGenrePopularMovie("kr", "popularity.desc", false, params.key, genreId)
+            apiService.getGenrePopularMovie("kr", sort_by, false, params.key, genreId, 100)
                 .subscribeOn(Schedulers.io())
                 .subscribe({
                     if(it.totalPages >= params.key) {

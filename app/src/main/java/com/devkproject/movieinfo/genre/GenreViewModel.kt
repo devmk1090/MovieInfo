@@ -15,8 +15,8 @@ class GenreViewModel (private val apiService: TMDBInterface): ViewModel() {
     lateinit var genreDataSourceFactory: GenreDataSourceFactory
     private val compositeDisposable = CompositeDisposable()
 
-    fun getGenreView(genreId: String): LiveData<PagedList<TMDBThumb>> {
-        genreDataSourceFactory = GenreDataSourceFactory(apiService, compositeDisposable, genreId)
+    fun getGenreView(genreId: String, sort_by: String): LiveData<PagedList<TMDBThumb>> {
+        genreDataSourceFactory = GenreDataSourceFactory(apiService, compositeDisposable, genreId, sort_by)
 
         val config: PagedList.Config = PagedList.Config.Builder()
             .setEnablePlaceholders(false)

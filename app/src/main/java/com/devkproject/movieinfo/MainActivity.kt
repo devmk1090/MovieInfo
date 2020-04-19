@@ -62,26 +62,24 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_drawer)
 
+        main_drawer_navigationView.setNavigationItemSelectedListener(this)
         val toolbar:androidx.appcompat.widget.Toolbar = findViewById(R.id.main_toolbar)
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayShowTitleEnabled(true)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true) //드로어를 꺼낼 홈 버튼 활성화
         supportActionBar!!.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp) //홈버튼 이미지 변경
+        supportActionBar!!.title = "현재 상영작"
 
-        main_drawer_navigationView.setNavigationItemSelectedListener(this)
-
-        upcomingRepository = UpcomingRepository(apiService)
-        upcomingViewModel = getUpcomingViewModel()
-
-        val upcomingAdapter = PagedListRVAdapter(this)
+        nowPlayingViewModel = getNowPlayingViewModel()
+        val nowPlayingAdapter = PagedListRVAdapter(this)
         val gridLayoutManager = GridLayoutManager(this, 3)
 
         movie_recyclerView.layoutManager = gridLayoutManager
         movie_recyclerView.setHasFixedSize(true)
-        movie_recyclerView.adapter = upcomingAdapter
+        movie_recyclerView.adapter = nowPlayingAdapter
 
-        upcomingViewModel.upcomingPagedList.observe(this, Observer {
-            upcomingAdapter.submitList(it)
+        nowPlayingViewModel.nowPlayingView().observe(this, Observer {
+            nowPlayingAdapter.submitList(it)
         })
     }
 
@@ -105,7 +103,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 })
             }
             R.id.topRated_movie -> {
-                supportActionBar!!.title = "높은 평점"
+                supportActionBar!!.title = "높은 평점순"
 
                 tmdbTopRatedRepository = TopRatedRepository(apiService)
                 topRatedViewModel = getTopRatedViewModel()
@@ -154,32 +152,61 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     upcomingAdapter.submitList(it)
                 })
             }
-            R.id.genre_movie -> {
+            R.id.genre_popular_movie -> {
                 val items = arrayOf("액션", "모험", "애니메이션", "코미디", "범죄", "다큐멘터리", "드라마",
                     "가족", "판타지", "SF", "공포", "스릴러", "미스터리", "전쟁", "로맨스")
-                val alertDialog = AlertDialog.Builder(this, 3)
+                AlertDialog.Builder(this, 3)
                     .setTitle("장르 선택")
                     .setItems(items) { dialog, which ->
                         when(which) {
-                            0 -> genreId("28", "액션")
-                            1 -> genreId("12", "모험")
-                            2 -> genreId("16", "애니메이션")
-                            3 -> genreId("35", "코미디")
-                            4 -> genreId("80", "범죄")
-                            5 -> genreId("99", "다큐멘터리")
-                            6 -> genreId("18", "드라마")
-                            7 -> genreId("10751", "가족")
-                            8 -> genreId("14", "판타지")
-                            9 -> genreId("878", "SF")
-                            10 -> genreId("27", "공포")
-                            11 -> genreId("53", "스릴러")
-                            12 -> genreId("9648", "미스터리")
-                            13 -> genreId("10752", "전쟁")
-                            14 -> genreId("10749", "로맨스")
+                            0 -> genreId("28", "액션", "popularity.desc")
+                            1 -> genreId("12", "모험","popularity.desc")
+                            2 -> genreId("16", "애니메이션", "popularity.desc")
+                            3 -> genreId("35", "코미디", "popularity.desc")
+                            4 -> genreId("80", "범죄", "popularity.desc")
+                            5 -> genreId("99", "다큐멘터리", "popularity.desc")
+                            6 -> genreId("18", "드라마", "popularity.desc")
+                            7 -> genreId("10751", "가족", "popularity.desc")
+                            8 -> genreId("14", "판타지", "popularity.desc")
+                            9 -> genreId("878", "SF", "popularity.desc")
+                            10 -> genreId("27", "공포", "popularity.desc")
+                            11 -> genreId("53", "스릴러", "popularity.desc")
+                            12 -> genreId("9648", "미스터리", "popularity.desc")
+                            13 -> genreId("10752", "전쟁", "popularity.desc")
+                            14 -> genreId("10749", "로맨스", "popularity.desc")
                         }
                         dialog.dismiss()
                     }
-                alertDialog.show()
+                    .setNegativeButton("취소", null)
+                    .show()
+            }
+            R.id.genre_rated_movie -> {
+                val items = arrayOf("액션", "모험", "애니메이션", "코미디", "범죄", "다큐멘터리", "드라마",
+                    "가족", "판타지", "SF", "공포", "스릴러", "미스터리", "전쟁", "로맨스")
+                AlertDialog.Builder(this, 3)
+                    .setTitle("장르 선택")
+                    .setItems(items) { dialog, which ->
+                        when(which) {
+                            0 -> genreId("28", "액션", "vote_average.desc")
+                            1 -> genreId("12", "모험", "vote_average.desc")
+                            2 -> genreId("16", "애니메이션", "vote_average.desc")
+                            3 -> genreId("35", "코미디", "vote_average.desc")
+                            4 -> genreId("80", "범죄", "vote_average.desc")
+                            5 -> genreId("99", "다큐멘터리", "vote_average.desc")
+                            6 -> genreId("18", "드라마", "vote_average.desc")
+                            7 -> genreId("10751", "가족", "vote_average.desc")
+                            8 -> genreId("14", "판타지", "vote_average.desc")
+                            9 -> genreId("878", "SF", "vote_average.desc")
+                            10 -> genreId("27", "공포", "vote_average.desc")
+                            11 -> genreId("53", "스릴러", "vote_average.desc")
+                            12 -> genreId("9648", "미스터리", "vote_average.desc")
+                            13 -> genreId("10752", "전쟁", "vote_average.desc")
+                            14 -> genreId("10749", "로맨스", "vote_average.desc")
+                        }
+                        dialog.dismiss()
+                    }
+                    .setNegativeButton("취소", null)
+                    .show()
             }
         }
         main_drawer.closeDrawer(GravityCompat.START)
@@ -198,8 +225,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return super.onOptionsItemSelected(item)
     }
 
-    private fun genreId(genreId: String, genreName: String) {
-        supportActionBar!!.title = "장르 : $genreName"
+    private fun genreId(genreId: String, genreName: String, sort_by: String) {
+        supportActionBar!!.title = "장르 - $genreName"
 
         genreViewModel = getGenreViewModel()
         val genreAdapter = PagedListRVAdapter(this)
@@ -209,7 +236,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         movie_recyclerView.setHasFixedSize(true)
         movie_recyclerView.adapter = genreAdapter
 
-        genreViewModel.getGenreView(genreId).observe(this, Observer {
+        genreViewModel.getGenreView(genreId, sort_by).observe(this, Observer {
             genreAdapter.submitList(it)
         })
     }
@@ -229,7 +256,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         })
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        val menuInflater = menuInflater.inflate(R.menu.toolbar_item, menu)
+        menuInflater.inflate(R.menu.toolbar_item, menu)
         val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
         val searchItem: MenuItem? = menu?.findItem(R.id.search_movie)
         searchView = searchItem?.actionView as SearchView

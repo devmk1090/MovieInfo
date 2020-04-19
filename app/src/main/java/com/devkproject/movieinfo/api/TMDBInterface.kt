@@ -47,7 +47,8 @@ interface TMDBInterface {
                              @Query("sort_by") sortBy: String,
                              @Query("include_adult") adult: Boolean,
                              @Query("page") page: Int,
-                             @Query("with_genres") genreId: String): Single<TMDBResponse>
+                             @Query("with_genres") genreId: String,
+                             @Query("vote_count.gte") vote_count: Int): Single<TMDBResponse>
 
     @GET("movie/now_playing")
     fun getNowPlayingMovie(@Query("page") page: Int,
