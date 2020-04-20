@@ -1,9 +1,6 @@
 package com.devkproject.movieinfo.api
 
-import com.devkproject.movieinfo.model.TMDBDetail
-import com.devkproject.movieinfo.model.TMDBGenre
-import com.devkproject.movieinfo.model.TMDBResponse
-import com.devkproject.movieinfo.model.TMDBThumb
+import com.devkproject.movieinfo.model.*
 import io.reactivex.Observable
 import io.reactivex.Single
 import retrofit2.Call
@@ -20,6 +17,9 @@ interface TMDBInterface {
 
     @GET("movie/{movie_id}")
     fun getMovieDetails(@Path("movie_id") id: Int): Single<TMDBDetail>
+
+    @GET("movie/{movie_id}/credits")
+    fun getMovieCredits(@Path("movie_id") id: Int): Call<TMDBCredits>
 
     @GET("movie/popular")
     fun getPopularMovie(@Query("page") page: Int,

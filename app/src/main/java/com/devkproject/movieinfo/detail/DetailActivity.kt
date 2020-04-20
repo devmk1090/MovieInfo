@@ -2,17 +2,23 @@ package com.devkproject.movieinfo.detail
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.viewpager.widget.ViewPager
 import com.bumptech.glide.Glide
 import com.devkproject.movieinfo.R
 import com.devkproject.movieinfo.api.POSTER_URL
 import com.devkproject.movieinfo.api.TMDBClient
 import com.devkproject.movieinfo.api.TMDBInterface
+import com.devkproject.movieinfo.model.TMDBCredits
 import com.devkproject.movieinfo.model.TMDBDetail
 import kotlinx.android.synthetic.main.activity_detail.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.text.DecimalFormat
 
 class DetailActivity : AppCompatActivity() {
@@ -32,24 +38,17 @@ class DetailActivity : AppCompatActivity() {
         viewModel.selectedMovie.observe(this, Observer {
             bindUI(it)
         })
+
+        val pagerAdapter= PagerAdapter(supportFragmentManager)
+        val pager = findViewById<ViewPager>(R.id.view_pager)
+        pager.adapter = pagerAdapter
+        tab_layout.setupWithViewPager(pager)
     }
 
     private fun bindUI(it: TMDBDetail) {
-        val decimalFormat = DecimalFormat("###,###")
-        val decimalBudget = decimalFormat.format(it.budget) + " $"
-        val decimalRevenue = decimalFormat.format(it.revenue) + " $"
         val originalTitle = it.title + "\n(${it.original_title})"
-        val runtime = it.runtime.toString() + " 분"
         selected_movie_title.text = originalTitle
         selected_movie_tagline.text = it.tagline
-        selected_movie_release.text = it.releaseDate
-        selected_movie_rating.text = it.rating.toString()
-        selected_movie_vote_count.text = it.vote_count.toString()
-        selected_movie_budget.text = decimalBudget
-        selected_movie_revenue.text = decimalRevenue
-        selected_movie_overview.text = it.overview
-        selected_movie_runtime.text = runtime
-
 
         val moviePosterURL: String = POSTER_URL + it.posterPath
         Glide.with(this)
