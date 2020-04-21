@@ -19,7 +19,7 @@ interface TMDBInterface {
     fun getMovieDetails(@Path("movie_id") id: Int): Single<TMDBDetail>
 
     @GET("movie/{movie_id}/credits")
-    fun getMovieCredits(@Path("movie_id") id: Int): Call<TMDBCredits>
+    fun getMovieCredits(@Path("movie_id") id: Int): Single<TMDBCredits>
 
     @GET("movie/popular")
     fun getPopularMovie(@Query("page") page: Int,

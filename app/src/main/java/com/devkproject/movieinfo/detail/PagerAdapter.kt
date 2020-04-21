@@ -3,6 +3,7 @@ package com.devkproject.movieinfo.detail
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import com.devkproject.movieinfo.detail.credits.CreditsFragment
 
 class PagerAdapter (fm: FragmentManager): FragmentPagerAdapter(fm) {
 

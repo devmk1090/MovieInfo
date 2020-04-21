@@ -2,7 +2,6 @@ package com.devkproject.movieinfo.detail
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -13,13 +12,8 @@ import com.devkproject.movieinfo.R
 import com.devkproject.movieinfo.api.POSTER_URL
 import com.devkproject.movieinfo.api.TMDBClient
 import com.devkproject.movieinfo.api.TMDBInterface
-import com.devkproject.movieinfo.model.TMDBCredits
 import com.devkproject.movieinfo.model.TMDBDetail
 import kotlinx.android.synthetic.main.activity_detail.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.text.DecimalFormat
 
 class DetailActivity : AppCompatActivity() {
 

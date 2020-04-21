@@ -15,7 +15,6 @@ import com.devkproject.movieinfo.R
 import com.devkproject.movieinfo.api.TMDBClient
 import com.devkproject.movieinfo.api.TMDBInterface
 import com.devkproject.movieinfo.model.TMDBDetail
-import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.fragment_info.*
 import java.text.DecimalFormat
 
@@ -60,7 +59,10 @@ class InfoFragment : Fragment() {
         private fun getViewModel(movieId: Int): DetailViewModel {
         return ViewModelProviders.of(this, object: ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return DetailViewModel(selectedMovieRepository, movieId) as T
+                return DetailViewModel(
+                    selectedMovieRepository,
+                    movieId
+                ) as T
             }
         })[DetailViewModel::class.java]
     }
