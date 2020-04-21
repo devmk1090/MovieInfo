@@ -20,5 +20,16 @@ data class TMDBDetail(
     val status: String,
     val tagline: String,
     val video: Boolean,
-    val original_title: String
+    val original_title: String,
+    val genres: ArrayList<Genres>,
+    val production_countries: ArrayList<Production>
+)
+
+data class Genres(
+    val id: Int,
+    val name: String
+)
+
+data class Production(
+    val name: String
 )

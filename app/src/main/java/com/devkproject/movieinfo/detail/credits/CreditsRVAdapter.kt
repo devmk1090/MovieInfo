@@ -10,7 +10,7 @@ import com.devkproject.movieinfo.api.POSTER_URL
 import com.devkproject.movieinfo.model.TMDBCast
 import kotlinx.android.synthetic.main.credits_item.view.*
 
-class CreditsRVAdapter (val item: ArrayList<TMDBCast>): RecyclerView.Adapter<CreditsRVAdapter.ViewHolder>() {
+class CreditsRVAdapter (private val item: ArrayList<TMDBCast>): RecyclerView.Adapter<CreditsRVAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.credits_item, parent, false)
         return ViewHolder(v)

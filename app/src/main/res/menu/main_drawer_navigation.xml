@@ -14,7 +14,7 @@
         />
     <item
         android:id="@+id/upcoming_movie"
-        android:title="개봉 예정"
+        android:title="개봉 예정작"
         />
     <item
         android:id="@+id/genre_popular_movie"

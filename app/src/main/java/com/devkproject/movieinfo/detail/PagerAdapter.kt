@@ -10,17 +10,19 @@ class PagerAdapter (fm: FragmentManager): FragmentPagerAdapter(fm) {
     override fun getItem(position: Int): Fragment {
         return when(position) {
             0 -> InfoFragment()
+            1 -> SynopsisFragment()
             else -> CreditsFragment()
         }
     }
 
     override fun getCount(): Int {
-        return 2
+        return 3
     }
 
     override fun getPageTitle(position: Int): CharSequence? {
         return when(position) {
             0 -> "정보"
+            1 -> "줄거리"
             else -> "출연배우"
         }
     }
