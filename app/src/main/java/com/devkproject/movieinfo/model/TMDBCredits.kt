@@ -4,7 +4,8 @@ import com.google.gson.annotations.SerializedName
 
 data class TMDBCredits(
     val id: Int,
-    val cast: ArrayList<TMDBCast>
+    val cast: ArrayList<TMDBCast>,
+    val crew: ArrayList<TMDBCrew>
 )
 
 data class TMDBCast(
@@ -14,4 +15,11 @@ data class TMDBCast(
     @SerializedName("profile_path")
     val picture: String,
     val order: Int
+)
+
+data class TMDBCrew(
+    val name: String,
+    val job: String,
+    @SerializedName("profile_path")
+    val picture: String
 )

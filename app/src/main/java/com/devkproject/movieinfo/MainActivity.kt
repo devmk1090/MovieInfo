@@ -3,10 +3,8 @@ package com.devkproject.movieinfo
 import android.app.AlertDialog
 import android.app.SearchManager
 import android.content.Context
-import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -19,7 +17,6 @@ import com.devkproject.movieinfo.toprated.TopRatedViewModel
 import com.devkproject.movieinfo.api.TMDBInterface
 import com.devkproject.movieinfo.api.TMDBClient
 import com.devkproject.movieinfo.genre.GenreViewModel
-import com.devkproject.movieinfo.model.TMDBGenre
 import com.devkproject.movieinfo.now_playing.NowPlayingViewModel
 import com.devkproject.movieinfo.popular.PopularViewModel
 import com.devkproject.movieinfo.popular.PopularRepository
@@ -27,13 +24,8 @@ import com.devkproject.movieinfo.search.SearchViewModel
 import com.devkproject.movieinfo.upcoming.UpcomigViewModel
 import com.devkproject.movieinfo.upcoming.UpcomingRepository
 import com.google.android.material.navigation.NavigationView
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.main_content.*
 import kotlinx.android.synthetic.main.main_drawer.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.lang.StringBuilder
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 

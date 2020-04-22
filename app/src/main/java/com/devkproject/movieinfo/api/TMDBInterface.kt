@@ -39,9 +39,6 @@ interface TMDBInterface {
                        @Query("include_adult") adult: Boolean,
                        @Query("region") region: String): Single<TMDBResponse>
 
-    @GET("genre/movie/list")
-    fun getGenreMovie(): Call<TMDBGenre>
-
     @GET("discover/movie")
     fun getGenrePopularMovie(@Query("region") region: String,
                              @Query("sort_by") sortBy: String,
