@@ -9,7 +9,7 @@ import io.reactivex.disposables.CompositeDisposable
 class NowPlayingDataSourceFactory (private val apiService: TMDBInterface, private val compositeDisposable: CompositeDisposable)
     : DataSource.Factory<Int, TMDBThumb>() {
 
-    private val nowPlayingLiveDataSource = MutableLiveData<NowPlayingDataSource>()
+    val nowPlayingLiveDataSource = MutableLiveData<NowPlayingDataSource>()
 
     override fun create(): DataSource<Int, TMDBThumb> {
         val nowPlayingDataSource = NowPlayingDataSource(apiService, compositeDisposable)

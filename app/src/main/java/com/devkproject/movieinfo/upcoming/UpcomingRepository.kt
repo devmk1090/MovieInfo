@@ -1,8 +1,10 @@
 package com.devkproject.movieinfo.upcoming
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
+import com.devkproject.movieinfo.NetworkState
 import com.devkproject.movieinfo.api.PER_PAGE
 import com.devkproject.movieinfo.api.TMDBInterface
 import com.devkproject.movieinfo.model.TMDBThumb
@@ -23,5 +25,10 @@ class UpcomingRepository (private val apiService: TMDBInterface) {
         upcomingPagedList = LivePagedListBuilder(upcomingDataSourceFactory, config).build()
 
         return upcomingPagedList
+    }
+
+    fun getNetworkState(): LiveData<NetworkState> {
+        return Transformations.switchMap<UpcomingDataSource, NetworkState>(
+            upcomingDataSourceFactory.upcomingLiveDataSource, UpcomingDataSource::networkState)
     }
 }

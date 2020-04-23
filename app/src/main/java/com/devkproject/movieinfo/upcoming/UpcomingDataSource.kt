@@ -3,6 +3,7 @@ package com.devkproject.movieinfo.upcoming
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PageKeyedDataSource
+import com.devkproject.movieinfo.NetworkState
 import com.devkproject.movieinfo.api.FIRST_PAGE
 import com.devkproject.movieinfo.api.TMDBInterface
 import com.devkproject.movieinfo.model.TMDBThumb
@@ -13,17 +14,20 @@ class UpcomingDataSource (private val apiService: TMDBInterface, private val com
     : PageKeyedDataSource<Int, TMDBThumb>() {
 
     private val page = FIRST_PAGE
-    private val networkState: MutableLiveData<String> = MutableLiveData()
+    val networkState: MutableLiveData<NetworkState> = MutableLiveData()
 
     override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Int, TMDBThumb>) {
+        networkState.postValue(NetworkState.LOADING)
+
         compositeDisposable.add(
             apiService.getUpcomingMovie(page, "kr")
                 .subscribeOn(Schedulers.io())
                 .subscribe({
+                    networkState.postValue(NetworkState.LOADED)
                     callback.onResult(it.movieList, null, page + 1)
                 }, {
                     Log.e("UpcomingDataSource", it.message)
-                    networkState.postValue(it.toString())
+                    networkState.postValue(NetworkState.ERROR)
                 })
         )
     }
@@ -34,13 +38,14 @@ class UpcomingDataSource (private val apiService: TMDBInterface, private val com
                 .subscribeOn(Schedulers.io())
                 .subscribe({
                     if (it.totalPages >= params.key) {
+                        networkState.postValue(NetworkState.LOADED)
                         callback.onResult(it.movieList, params.key + 1)
                     } else {
-                        networkState.postValue("마지막 페이지")
+                        networkState.postValue(NetworkState.ENDOFLIST)
                     }
                 }, {
                     Log.e("UpcomingDataSource", it.message)
-                    networkState.postValue(it.toString())
+                    networkState.postValue(NetworkState.ERROR)
                 })
         )
     }

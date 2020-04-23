@@ -1,9 +1,11 @@
 package com.devkproject.movieinfo.now_playing
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
+import com.devkproject.movieinfo.NetworkState
 import com.devkproject.movieinfo.api.PER_PAGE
 import com.devkproject.movieinfo.api.TMDBInterface
 import com.devkproject.movieinfo.model.TMDBThumb
@@ -11,8 +13,8 @@ import io.reactivex.disposables.CompositeDisposable
 
 class NowPlayingViewModel (private val apiService: TMDBInterface): ViewModel() {
 
-    lateinit var nowPlayingPagedList: LiveData<PagedList<TMDBThumb>>
-    lateinit var nowPlayingDataSourceFactory: NowPlayingDataSourceFactory
+    private lateinit var nowPlayingPagedList: LiveData<PagedList<TMDBThumb>>
+    private lateinit var nowPlayingDataSourceFactory: NowPlayingDataSourceFactory
     private val compositeDisposable = CompositeDisposable()
 
     fun nowPlayingView(): LiveData<PagedList<TMDBThumb>> {
@@ -24,6 +26,15 @@ class NowPlayingViewModel (private val apiService: TMDBInterface): ViewModel() {
             .build()
         nowPlayingPagedList = LivePagedListBuilder(nowPlayingDataSourceFactory, config).build()
         return nowPlayingPagedList
+    }
+
+    fun nowPlayingNetworkState(): LiveData<NetworkState> {
+        return Transformations.switchMap<NowPlayingDataSource, NetworkState>(
+            nowPlayingDataSourceFactory.nowPlayingLiveDataSource, NowPlayingDataSource::networkState)
+    }
+
+    fun listIsEmpty(): Boolean {
+        return nowPlayingPagedList.value?.isEmpty()?: true
     }
 
     override fun onCleared() {

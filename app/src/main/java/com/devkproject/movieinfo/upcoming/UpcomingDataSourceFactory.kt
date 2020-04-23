@@ -9,7 +9,7 @@ import io.reactivex.disposables.CompositeDisposable
 class UpcomingDataSourceFactory (private val apiService: TMDBInterface, private val compositeDisposable: CompositeDisposable)
     :DataSource.Factory<Int, TMDBThumb>() {
 
-    private val upcomingLiveDataSource = MutableLiveData<UpcomingDataSource>()
+    val upcomingLiveDataSource = MutableLiveData<UpcomingDataSource>()
 
     override fun create(): DataSource<Int, TMDBThumb> {
         val upcomingDataSource = UpcomingDataSource(apiService, compositeDisposable)

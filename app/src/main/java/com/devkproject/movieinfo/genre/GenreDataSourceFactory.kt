@@ -9,7 +9,7 @@ import io.reactivex.disposables.CompositeDisposable
 class GenreDataSourceFactory (private val apiService: TMDBInterface, private val compositeDisposable: CompositeDisposable, private val genreId: String,
                               private val sort_by: String): DataSource.Factory<Int, TMDBThumb>() {
 
-    private val genreLiveDataSource = MutableLiveData<GenreDataSource>()
+    val genreLiveDataSource = MutableLiveData<GenreDataSource>()
 
     override fun create(): DataSource<Int, TMDBThumb> {
         val genreDataSource = GenreDataSource(apiService, compositeDisposable, genreId, sort_by)

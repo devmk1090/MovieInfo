@@ -9,7 +9,7 @@ import io.reactivex.disposables.CompositeDisposable
 class SearchDataSourceFactory (private val apiService: TMDBInterface, private val compositeDisposable: CompositeDisposable, private val searchQuery: String)
     : DataSource.Factory<Int, TMDBThumb>() {
 
-    private val searchLiveDataSource = MutableLiveData<SearchDataSource>()
+    val searchLiveDataSource = MutableLiveData<SearchDataSource>()
 
     override fun create(): DataSource<Int, TMDBThumb> {
         val searchDataSource = SearchDataSource(apiService, compositeDisposable, searchQuery)

@@ -9,13 +9,10 @@ import io.reactivex.disposables.CompositeDisposable
 class TopRatedDataSourceFactory (private val apiService: TMDBInterface, private val compositeDisposable: CompositeDisposable)
     :DataSource.Factory<Int, TMDBThumb>() {
 
-    private val topRatedLiveDataSource = MutableLiveData<TopRatedDataSource>()
+    val topRatedLiveDataSource = MutableLiveData<TopRatedDataSource>()
 
     override fun create(): DataSource<Int, TMDBThumb> {
-        val topRatedDataSource = TopRatedDataSource(
-            apiService,
-            compositeDisposable
-        )
+        val topRatedDataSource = TopRatedDataSource(apiService, compositeDisposable)
         topRatedLiveDataSource.postValue(topRatedDataSource)
         return topRatedDataSource
     }

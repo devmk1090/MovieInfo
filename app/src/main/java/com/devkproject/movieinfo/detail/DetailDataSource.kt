@@ -3,6 +3,7 @@ package com.devkproject.movieinfo.detail
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.devkproject.movieinfo.NetworkState
 import com.devkproject.movieinfo.api.TMDBInterface
 import com.devkproject.movieinfo.model.TMDBDetail
 import io.reactivex.disposables.CompositeDisposable
@@ -11,11 +12,16 @@ import java.lang.Exception
 
 class DetailDataSource (private val apiService: TMDBInterface, private val compositeDisposable: CompositeDisposable) {
 
-    private val _selectedMovieResponse = MutableLiveData<TMDBDetail>()
+    private val _networkState = MutableLiveData<NetworkState>()
+    val networkState: LiveData<NetworkState>
+        get() = _networkState
+
+    private val _detailMovieResponse = MutableLiveData<TMDBDetail>()
     val selectedMovieResponse: LiveData<TMDBDetail>
-        get() = _selectedMovieResponse
+        get() = _detailMovieResponse
 
     fun getSelectedMovieDetails(movieId: Int) {
+        _networkState.postValue(NetworkState.LOADING)
 
         try {
             compositeDisposable.add(
@@ -23,8 +29,11 @@ class DetailDataSource (private val apiService: TMDBInterface, private val compo
                     .subscribeOn(Schedulers.io())
                     .subscribe(
                         {
-                            _selectedMovieResponse.postValue(it)
+                            _detailMovieResponse.postValue(it)
+                            _networkState.postValue(NetworkState.LOADED)
+
                         }, {
+                            _networkState.postValue(NetworkState.ERROR)
                             Log.e("DetailDataSource", it.message)
                         }
                     )

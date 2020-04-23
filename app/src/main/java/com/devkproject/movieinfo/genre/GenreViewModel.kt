@@ -1,9 +1,11 @@
 package com.devkproject.movieinfo.genre
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
+import com.devkproject.movieinfo.NetworkState
 import com.devkproject.movieinfo.api.PER_PAGE
 import com.devkproject.movieinfo.api.TMDBInterface
 import com.devkproject.movieinfo.model.TMDBThumb
@@ -24,6 +26,15 @@ class GenreViewModel (private val apiService: TMDBInterface): ViewModel() {
             .build()
         genrePagedList = LivePagedListBuilder(genreDataSourceFactory, config).build()
         return genrePagedList
+    }
+
+    fun genreNetworkState(): LiveData<NetworkState> {
+        return Transformations.switchMap<GenreDataSource, NetworkState>(
+            genreDataSourceFactory.genreLiveDataSource, GenreDataSource::networkState)
+    }
+
+    fun listIsEmpty(): Boolean {
+        return genrePagedList.value?.isEmpty()?: true
     }
 
     override fun onCleared() {

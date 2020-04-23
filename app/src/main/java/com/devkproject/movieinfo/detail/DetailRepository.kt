@@ -1,19 +1,23 @@
 package com.devkproject.movieinfo.detail
 
 import androidx.lifecycle.LiveData
+import com.devkproject.movieinfo.NetworkState
 import com.devkproject.movieinfo.api.TMDBInterface
 import com.devkproject.movieinfo.model.TMDBDetail
 import io.reactivex.disposables.CompositeDisposable
 
 class DetailRepository (private val apiService: TMDBInterface) {
 
-    lateinit var tmdbSelectedDataSource: DetailDataSource
+    lateinit var detailDataSource: DetailDataSource
 
-    fun getSelectedDetails(compositeDisposable: CompositeDisposable, movieId: Int): LiveData<TMDBDetail> {
-        tmdbSelectedDataSource =
-            DetailDataSource(apiService, compositeDisposable)
-        tmdbSelectedDataSource.getSelectedMovieDetails(movieId)
+    fun getDetailMovie(compositeDisposable: CompositeDisposable, movieId: Int): LiveData<TMDBDetail> {
+        detailDataSource = DetailDataSource(apiService, compositeDisposable)
+        detailDataSource.getSelectedMovieDetails(movieId)
 
-        return tmdbSelectedDataSource.selectedMovieResponse
+        return detailDataSource.selectedMovieResponse
+    }
+
+    fun getDetailNetworState(): LiveData<NetworkState> {
+        return detailDataSource.networkState
     }
 }

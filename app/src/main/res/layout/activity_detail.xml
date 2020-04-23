@@ -11,15 +11,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <ProgressBar
-            android:id="@+id/selected_progress_bar"
+            android:id="@+id/detail_progress_bar"
             android:layout_gravity="center"
             android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"/>
         <TextView
-            android:id="@+id/selected_txt_error"
+            android:id="@+id/detail_error_text"
             android:gravity="center"
-            android:text="Connection Problem !"
+            android:text="인터넷 연결을 확인해주세요 !"
             android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
@@ -32,7 +32,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
                 <ImageView
-                    android:id="@+id/selected_poster_iv"
+                    android:id="@+id/detail_movie_poster"
                     android:layout_gravity="center"
                     android:scaleType="fitCenter"
                     android:layout_width="match_parent"
@@ -43,7 +43,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
                     <TextView
-                        android:id="@+id/selected_movie_title"
+                        android:id="@+id/detail_movie_title"
                         android:text="movie"
                         android:textStyle="bold"
                         android:textSize="20sp"
@@ -51,7 +51,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
                     <TextView
-                        android:id="@+id/selected_movie_tagline"
+                        android:id="@+id/detail_movie_tagline"
                         android:text="sub_title"
                         android:textStyle="bold"
                         android:textSize="16sp"
@@ -108,7 +108,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
                         <TextView
-                            android:id="@+id/info_release"
+                            android:id="@+id/detail_movie_release"
                             android:layout_marginTop="2dp"
                             android:text=""
                             android:textSize="16sp"
@@ -129,7 +129,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
                         <TextView
-                            android:id="@+id/info_vote_count"
+                            android:id="@+id/detail_movie_voteCount"
                             android:text=""
                             android:layout_marginTop="2dp"
                             android:textSize="16sp"
@@ -150,7 +150,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
                         <TextView
-                            android:id="@+id/info_rating"
+                            android:id="@+id/detail_movie_rating"
                             android:text=""
                             android:layout_marginTop="2dp"
                             android:textSize="16sp"
@@ -171,7 +171,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
                         <TextView
-                            android:id="@+id/info_runtime"
+                            android:id="@+id/detail_movie_runtime"
                             android:layout_marginTop="2dp"
                             android:text=""
                             android:textSize="16sp"
@@ -192,7 +192,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
                         <TextView
-                            android:id="@+id/info_budget"
+                            android:id="@+id/detail_movie_budget"
                             android:layout_marginTop="2dp"
                             android:text=""
                             android:textSize="16sp"
@@ -213,7 +213,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
                         <TextView
-                            android:id="@+id/info_revenue"
+                            android:id="@+id/detail_movie_revenue"
                             android:layout_marginTop="2dp"
                             android:text=""
                             android:textSize="16sp"
@@ -230,7 +230,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
                     <TextView
-                        android:id="@+id/info_overview"
+                        android:id="@+id/detail_movie_overview"
                         android:layout_marginTop="2dp"
                         android:text="overview......"
                         android:textSize="16sp"
@@ -276,28 +276,6 @@
                         android:layout_height="wrap_content">
                     </androidx.recyclerview.widget.RecyclerView>
                 </LinearLayout>
-<!--                <com.google.android.material.tabs.TabLayout-->
-<!--                    android:id="@+id/tab_layout"-->
-<!--                    android:background="#D3D3D3"-->
-<!--                    app:tabTextAppearance="@style/TabLayoutTextStyle"-->
-<!--                    app:tabIndicatorColor="#0089FF"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content">-->
-<!--                    <com.google.android.material.tabs.TabItem-->
-<!--                        android:text="출연"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"/>-->
-<!--                    <com.google.android.material.tabs.TabItem-->
-<!--                        android:text="제작진"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"/>-->
-<!--                </com.google.android.material.tabs.TabLayout>-->
-<!--                <androidx.viewpager.widget.ViewPager-->
-<!--                    android:layout_margin="5dp"-->
-<!--                    android:id="@+id/view_pager"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="300dp">-->
-<!--                </androidx.viewpager.widget.ViewPager>-->
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

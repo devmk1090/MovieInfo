@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.GravityCompat
@@ -21,8 +22,8 @@ import com.devkproject.movieinfo.now_playing.NowPlayingViewModel
 import com.devkproject.movieinfo.popular.PopularViewModel
 import com.devkproject.movieinfo.popular.PopularRepository
 import com.devkproject.movieinfo.search.SearchViewModel
-import com.devkproject.movieinfo.upcoming.UpcomigViewModel
 import com.devkproject.movieinfo.upcoming.UpcomingRepository
+import com.devkproject.movieinfo.upcoming.UpcomingViewModel
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.main_content.*
 import kotlinx.android.synthetic.main.main_drawer.*
@@ -32,12 +33,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private val apiService: TMDBInterface = TMDBClient.getClient()
 
     private lateinit var popularViewModel: PopularViewModel
-    lateinit var tmdbRepository: PopularRepository
+    lateinit var popularRepository: PopularRepository
 
     private lateinit var topRatedViewModel: TopRatedViewModel
-    lateinit var tmdbTopRatedRepository: TopRatedRepository
+    lateinit var topRatedRepository: TopRatedRepository
 
-    private lateinit var upcomingViewModel: UpcomigViewModel
+    private lateinit var upcomingViewModel: UpcomingViewModel
     lateinit var upcomingRepository: UpcomingRepository
 
     private lateinit var searchViewModel: SearchViewModel
@@ -47,8 +48,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private lateinit var nowPlayingViewModel: NowPlayingViewModel
 
-    private var first_time : Long = 0
-    private var second_time : Long = 0
+    private var firstTime : Long = 0
+    private var secondTime : Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,18 +61,34 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         supportActionBar!!.setDisplayShowTitleEnabled(true)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true) //드로어를 꺼낼 홈 버튼 활성화
         supportActionBar!!.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp) //홈버튼 이미지 변경
-        supportActionBar!!.title = "현재 상영작"
 
+        nowPlaying()
+    }
+
+    private fun nowPlaying() {
+        supportActionBar!!.title = "현재 상영작"
         nowPlayingViewModel = getNowPlayingViewModel()
         val nowPlayingAdapter = PagedListRVAdapter(this)
         val gridLayoutManager = GridLayoutManager(this, 3)
-
+        gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                val viewType: Int = nowPlayingAdapter.getItemViewType(position)
+                return if(viewType == nowPlayingAdapter.MOVIE_TYPE) 1 else 3
+            }
+        }
         movie_recyclerView.layoutManager = gridLayoutManager
         movie_recyclerView.setHasFixedSize(true)
         movie_recyclerView.adapter = nowPlayingAdapter
 
         nowPlayingViewModel.nowPlayingView().observe(this, Observer {
             nowPlayingAdapter.submitList(it)
+        })
+        nowPlayingViewModel.nowPlayingNetworkState().observe(this, Observer {
+            movie_progress_bar.visibility = if(nowPlayingViewModel.listIsEmpty() && it == NetworkState.LOADING) View.VISIBLE else View.GONE
+            movie_error_text.visibility = if(nowPlayingViewModel.listIsEmpty() && it == NetworkState.ERROR) View.VISIBLE else View.GONE
+            if(!nowPlayingViewModel.listIsEmpty()) {
+                nowPlayingAdapter.setNetworkState(it)
+            }
         })
     }
 
@@ -80,52 +97,63 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.popular_movie -> {
                 supportActionBar!!.title = "인기 영화"
 
-                tmdbRepository = PopularRepository(apiService)
+                popularRepository = PopularRepository(apiService)
                 popularViewModel = getPopularViewModel()
 
                 val popularAdapter = PagedListRVAdapter(this)
                 val gridLayoutManager = GridLayoutManager(this, 3)
-
+                gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                    override fun getSpanSize(position: Int): Int {
+                        val viewType: Int = popularAdapter.getItemViewType(position)
+                        return if(viewType == popularAdapter.MOVIE_TYPE) 1 else 3
+                    }
+                }
                 movie_recyclerView.layoutManager = gridLayoutManager
                 movie_recyclerView.setHasFixedSize(true)
                 movie_recyclerView.adapter = popularAdapter
 
-                popularViewModel.tmdbPagedList.observe(this, Observer {
+                popularViewModel.popularPagedList.observe(this, Observer {
                     popularAdapter.submitList(it)
+                })
+                popularViewModel.networkState.observe(this, Observer {
+                    movie_progress_bar.visibility = if(popularViewModel.listIsEmpty() && it == NetworkState.LOADING) View.VISIBLE else View.GONE
+                    movie_error_text.visibility = if(popularViewModel.listIsEmpty() && it == NetworkState.ERROR) View.VISIBLE else View.GONE
+                    if(!popularViewModel.listIsEmpty()) {
+                        popularAdapter.setNetworkState(it)
+                    }
                 })
             }
             R.id.topRated_movie -> {
                 supportActionBar!!.title = "높은 평점순"
 
-                tmdbTopRatedRepository = TopRatedRepository(apiService)
+                topRatedRepository = TopRatedRepository(apiService)
                 topRatedViewModel = getTopRatedViewModel()
 
-                val topRatedAdapter =
-                    PagedListRVAdapter(this)
+                val topRatedAdapter = PagedListRVAdapter(this)
                 val gridLayoutManager = GridLayoutManager(this, 3)
-
+                gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                    override fun getSpanSize(position: Int): Int {
+                        val viewType: Int = topRatedAdapter.getItemViewType(position)
+                        return if(viewType == topRatedAdapter.MOVIE_TYPE) 1 else 3
+                    }
+                }
                 movie_recyclerView.layoutManager = gridLayoutManager
                 movie_recyclerView.setHasFixedSize(true)
                 movie_recyclerView.adapter = topRatedAdapter
 
-                topRatedViewModel.tmdbTopRatedPagedList.observe(this, Observer {
+                topRatedViewModel.topRatedPagedList.observe(this, Observer {
                     topRatedAdapter.submitList(it)
+                })
+                topRatedViewModel.networkState.observe(this, Observer {
+                    movie_progress_bar.visibility = if(topRatedViewModel.listIsEmpty() && it == NetworkState.LOADING) View.VISIBLE else View.GONE
+                    movie_error_text.visibility = if(topRatedViewModel.listIsEmpty() && it == NetworkState.ERROR) View.VISIBLE else View.GONE
+                    if(!topRatedViewModel.listIsEmpty()) {
+                        topRatedAdapter.setNetworkState(it)
+                    }
                 })
             }
             R.id.nowPlaying_movie -> {
-                supportActionBar!!.title = "현재 상영작"
-
-                nowPlayingViewModel = getNowPlayingViewModel()
-                val nowPlayingAdapter = PagedListRVAdapter(this)
-                val gridLayoutManager = GridLayoutManager(this, 3)
-
-                movie_recyclerView.layoutManager = gridLayoutManager
-                movie_recyclerView.setHasFixedSize(true)
-                movie_recyclerView.adapter = nowPlayingAdapter
-
-                nowPlayingViewModel.nowPlayingView().observe(this, Observer {
-                    nowPlayingAdapter.submitList(it)
-                })
+                nowPlaying()
             }
             R.id.upcoming_movie -> {
                 supportActionBar!!.title = "개봉 예정"
@@ -135,13 +163,25 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
                 val upcomingAdapter = PagedListRVAdapter(this)
                 val gridLayoutManager = GridLayoutManager(this, 3)
-
+                gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                    override fun getSpanSize(position: Int): Int {
+                        val viewType: Int = upcomingAdapter.getItemViewType(position)
+                        return if(viewType == upcomingAdapter.MOVIE_TYPE) 1 else 3
+                    }
+                }
                 movie_recyclerView.layoutManager = gridLayoutManager
                 movie_recyclerView.setHasFixedSize(true)
                 movie_recyclerView.adapter = upcomingAdapter
 
                 upcomingViewModel.upcomingPagedList.observe(this, Observer {
                     upcomingAdapter.submitList(it)
+                })
+                upcomingViewModel.networkState.observe(this, Observer {
+                    movie_progress_bar.visibility = if(upcomingViewModel.listIsEmpty() && it == NetworkState.LOADING) View.VISIBLE else View.GONE
+                    movie_error_text.visibility = if(upcomingViewModel.listIsEmpty() && it == NetworkState.ERROR) View.VISIBLE else View.GONE
+                    if(!upcomingViewModel.listIsEmpty()) {
+                        upcomingAdapter.setNetworkState(it)
+                    }
                 })
             }
             R.id.genre_popular_movie -> {
@@ -223,7 +263,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         genreViewModel = getGenreViewModel()
         val genreAdapter = PagedListRVAdapter(this)
         val gridLayoutManager = GridLayoutManager(this, 3)
-
+        gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                val viewType: Int = genreAdapter.getItemViewType(position)
+                return if(viewType == genreAdapter.MOVIE_TYPE) 1 else 3
+            }
+        }
         movie_recyclerView.layoutManager = gridLayoutManager
         movie_recyclerView.setHasFixedSize(true)
         movie_recyclerView.adapter = genreAdapter
@@ -231,20 +276,39 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         genreViewModel.getGenreView(genreId, sort_by).observe(this, Observer {
             genreAdapter.submitList(it)
         })
+        genreViewModel.genreNetworkState().observe(this, Observer {
+            movie_progress_bar.visibility = if(genreViewModel.listIsEmpty() && it == NetworkState.LOADING) View.VISIBLE else View.GONE
+            movie_error_text.visibility = if(genreViewModel.listIsEmpty() && it == NetworkState.ERROR) View.VISIBLE else View.GONE
+            if(!genreViewModel.listIsEmpty()) {
+                genreAdapter.setNetworkState(it)
+            }
+        })
     }
+
     fun searchQuery(query: String) {
         supportActionBar!!.title = "검색 : $query"
 
         searchViewModel = getSearchViewModel()
         val searchAdapter = PagedListRVAdapter(this)
         val gridLayoutManager = GridLayoutManager(this, 3)
-
+        gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                val viewType: Int = searchAdapter.getItemViewType(position)
+                return if(viewType == searchAdapter.MOVIE_TYPE) 1 else 3
+            }
+        }
         movie_recyclerView.layoutManager = gridLayoutManager
         movie_recyclerView.setHasFixedSize(true)
         movie_recyclerView.adapter = searchAdapter
 
         searchViewModel.searchView(query).observe(this, Observer {
             searchAdapter.submitList(it)
+        })
+        searchViewModel.searchViewNetworkState().observe(this, Observer {
+            movie_progress_bar.visibility = if(searchViewModel.listIsEmpty() && it == NetworkState.LOADING) View.VISIBLE else View.GONE
+            if(!searchViewModel.listIsEmpty()) {
+                searchAdapter.setNetworkState(it)
+            }
         })
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -269,7 +333,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun getPopularViewModel(): PopularViewModel {
         return ViewModelProviders.of(this, object: ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return PopularViewModel(tmdbRepository) as T
+                return PopularViewModel(popularRepository) as T
             }
         })[PopularViewModel::class.java]
     }
@@ -277,17 +341,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun getTopRatedViewModel(): TopRatedViewModel {
         return ViewModelProviders.of(this, object: ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return TopRatedViewModel(tmdbTopRatedRepository) as T
+                return TopRatedViewModel(topRatedRepository) as T
             }
         })[TopRatedViewModel::class.java]
     }
 
-    private fun getUpcomingViewModel(): UpcomigViewModel {
+    private fun getUpcomingViewModel(): UpcomingViewModel {
         return ViewModelProviders.of(this, object : ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return UpcomigViewModel(upcomingRepository) as T
+                return UpcomingViewModel(upcomingRepository) as T
             }
-        })[UpcomigViewModel::class.java]
+        })[UpcomingViewModel::class.java]
     }
 
     private fun getSearchViewModel(): SearchViewModel {
@@ -323,12 +387,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             main_drawer.closeDrawer(GravityCompat.START)
         }
         else {
-            second_time = System.currentTimeMillis()
-            if(second_time - first_time < 2000) {
+            secondTime = System.currentTimeMillis()
+            if(secondTime - firstTime < 2000) {
                 super.onBackPressed()
                 finishAffinity()
             } else Toast.makeText(this,"한 번 더 누르면 종료됩니다", Toast.LENGTH_SHORT).show()
-            first_time = System.currentTimeMillis()
+            firstTime = System.currentTimeMillis()
         }
     }
 }

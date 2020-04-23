@@ -1,15 +1,15 @@
 package com.devkproject.movieinfo.detail
 
-import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.viewpager.widget.ViewPager
 import com.bumptech.glide.Glide
+import com.devkproject.movieinfo.NetworkState
 import com.devkproject.movieinfo.R
 import com.devkproject.movieinfo.api.POSTER_URL
 import com.devkproject.movieinfo.api.TMDBClient
@@ -20,13 +20,12 @@ import com.devkproject.movieinfo.detail.credits.CreditsViewModel
 import com.devkproject.movieinfo.detail.credits.CrewRVAdapter
 import com.devkproject.movieinfo.model.*
 import kotlinx.android.synthetic.main.activity_detail.*
-import kotlinx.android.synthetic.main.fragment_credits.*
 import java.text.DecimalFormat
 
 class DetailActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: DetailViewModel
-    private lateinit var selectedMovieRepository: DetailRepository
+    private lateinit var detailViewModel: DetailViewModel
+    private lateinit var detailRepository: DetailRepository
     private lateinit var creditsViewModel: CreditsViewModel
     private lateinit var creditsRepository: CreditsRepository
 
@@ -36,26 +35,25 @@ class DetailActivity : AppCompatActivity() {
 
         val movieId: Int = intent.getIntExtra("id", 1)
         val apiService: TMDBInterface = TMDBClient.getClient()
-        selectedMovieRepository = DetailRepository(apiService)
-        creditsRepository = CreditsRepository(apiService)
-        creditsViewModel = getViewModel2(movieId)
-        viewModel = getViewModel(movieId)
-        viewModel.selectedMovie.observe(this, Observer {
+
+        detailRepository = DetailRepository(apiService)
+        detailViewModel = getDetailViewModel(movieId)
+        detailViewModel.detailMovie.observe(this, Observer {
             bindUI(it)
             setGenreRVAdapter(it.genres)
             setProductionRVAdapter(it.production_countries)
         })
+        detailViewModel.networkState.observe(this, Observer {
+            detail_progress_bar.visibility = if(it == NetworkState.LOADING) View.VISIBLE else View.GONE
+            detail_error_text.visibility = if(it == NetworkState.ERROR) View.VISIBLE else View.GONE
+        })
+
+        creditsRepository = CreditsRepository(apiService)
+        creditsViewModel = getCreditsViewModel(movieId)
         creditsViewModel.creditsMovie.observe(this, Observer {
             setCastRVAdapter(it.cast)
             setCrewRVAdapter(it.crew)
         })
-
-//        val pagerAdapter= PagerAdapter(supportFragmentManager)
-//        val pager = findViewById<ViewPager>(R.id.view_pager)
-//        pager.adapter = pagerAdapter
-//        tab_layout.setupWithViewPager(pager)
-//        tab_layout.setTabTextColors(Color.GRAY, Color.BLACK)
-
     }
 
     private fun bindUI(it: TMDBDetail) {
@@ -64,21 +62,21 @@ class DetailActivity : AppCompatActivity() {
         val decimalRevenue = decimalFormat.format(it.revenue) + " $"
         val runtime = it.runtime.toString() + " 분"
         val originalTitle = it.title + "\n(${it.original_title})"
-        selected_movie_title.text = originalTitle
-        selected_movie_tagline.text = it.tagline
 
-        info_release.text = it.releaseDate
-        info_rating.text = it.rating.toString()
-        info_vote_count.text = it.vote_count.toString()
-        info_budget.text = decimalBudget
-        info_revenue.text = decimalRevenue
-        info_runtime.text = runtime
-        info_overview.text = it.overview
+        detail_movie_title.text = originalTitle
+        detail_movie_tagline.text = it.tagline
+        detail_movie_release.text = it.releaseDate
+        detail_movie_voteCount.text = it.vote_count.toString()
+        detail_movie_rating.text = it.rating.toString()
+        detail_movie_runtime.text = runtime
+        detail_movie_budget.text = decimalBudget
+        detail_movie_revenue.text = decimalRevenue
+        detail_movie_overview.text = it.overview
 
         val moviePosterURL: String = POSTER_URL + it.posterPath
         Glide.with(this)
             .load(moviePosterURL)
-            .into(selected_poster_iv)
+            .into(detail_movie_poster)
     }
 
     private fun setGenreRVAdapter(item: ArrayList<Genres>) {
@@ -109,20 +107,17 @@ class DetailActivity : AppCompatActivity() {
         crew_recyclerView.adapter = crewRVAdapter
     }
 
-    private fun getViewModel(movieId: Int): DetailViewModel {
+    private fun getDetailViewModel(movieId: Int): DetailViewModel {
         return ViewModelProviders.of(this, object: ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return DetailViewModel(selectedMovieRepository, movieId) as T
+                return DetailViewModel(detailRepository, movieId) as T
             }
         })[DetailViewModel::class.java]
     }
-    private fun getViewModel2(movieId: Int): CreditsViewModel {
+    private fun getCreditsViewModel(movieId: Int): CreditsViewModel {
         return ViewModelProviders.of(this, object: ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return CreditsViewModel(
-                    creditsRepository,
-                    movieId
-                ) as T
+                return CreditsViewModel(creditsRepository, movieId) as T
             }
         })[CreditsViewModel::class.java]
     }
