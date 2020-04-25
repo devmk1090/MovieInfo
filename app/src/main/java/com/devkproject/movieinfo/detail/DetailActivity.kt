@@ -19,6 +19,9 @@ import com.devkproject.movieinfo.detail.credits.CreditsRepository
 import com.devkproject.movieinfo.detail.credits.CreditsViewModel
 import com.devkproject.movieinfo.detail.credits.CrewRVAdapter
 import com.devkproject.movieinfo.model.*
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
 import kotlinx.android.synthetic.main.activity_detail.*
 import java.text.DecimalFormat
 
@@ -29,9 +32,16 @@ class DetailActivity : AppCompatActivity() {
     private lateinit var creditsViewModel: CreditsViewModel
     private lateinit var creditsRepository: CreditsRepository
 
+    private lateinit var mAdView: AdView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
+
+        MobileAds.initialize(this) {}
+        mAdView = this.findViewById(R.id.adView_detail)
+        val adRequest = AdRequest.Builder().build()
+        mAdView.loadAd(adRequest)
 
         val movieId: Int = intent.getIntExtra("id", 1)
         val apiService: TMDBInterface = TMDBClient.getClient()

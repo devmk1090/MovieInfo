@@ -24,6 +24,9 @@ import com.devkproject.movieinfo.popular.PopularRepository
 import com.devkproject.movieinfo.search.SearchViewModel
 import com.devkproject.movieinfo.upcoming.UpcomingRepository
 import com.devkproject.movieinfo.upcoming.UpcomingViewModel
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.main_content.*
 import kotlinx.android.synthetic.main.main_drawer.*
@@ -51,9 +54,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var firstTime : Long = 0
     private var secondTime : Long = 0
 
+    private lateinit var mAdView: AdView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_drawer)
+
+        MobileAds.initialize(this) {}
+        mAdView = this.findViewById(R.id.adView_main)
+        val adRequest = AdRequest.Builder().build()
+        mAdView.loadAd(adRequest)
 
         main_drawer_navigationView.setNavigationItemSelectedListener(this)
         val toolbar:androidx.appcompat.widget.Toolbar = findViewById(R.id.main_toolbar)

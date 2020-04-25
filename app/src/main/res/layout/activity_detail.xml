@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,6 +7,7 @@
     android:background="#E9E9E9"
     tools:context=".detail.DetailActivity">
     <LinearLayout
+        android:layout_above="@+id/adView_detail"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -279,4 +280,15 @@
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <com.google.android.gms.ads.AdView
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/adView_detail"
+        ads:adSize="BANNER"
+        ads:adUnitId="ca-app-pub-1646409874287424/1585126093"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+</RelativeLayout>
+
+    <!--    TEST_ID = "ca-app-pub-3940256099942544/6300978111"-->
+    <!--    UNIT_ID = "ca-app-pub-1646409874287424/1585126093"-->
