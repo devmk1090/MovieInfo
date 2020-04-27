@@ -17,7 +17,7 @@ class DetailRepository (private val apiService: TMDBInterface) {
         return detailDataSource.selectedMovieResponse
     }
 
-    fun getDetailNetworState(): LiveData<NetworkState> {
+    fun getDetailNetworkState(): LiveData<NetworkState> {
         return detailDataSource.networkState
     }
 }

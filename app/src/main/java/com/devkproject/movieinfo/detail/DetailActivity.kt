@@ -14,6 +14,8 @@ import com.devkproject.movieinfo.R
 import com.devkproject.movieinfo.api.POSTER_URL
 import com.devkproject.movieinfo.api.TMDBClient
 import com.devkproject.movieinfo.api.TMDBInterface
+import com.devkproject.movieinfo.db.Favorite
+import com.devkproject.movieinfo.db.FavoriteViewModel
 import com.devkproject.movieinfo.detail.credits.CreditsRVAdapter
 import com.devkproject.movieinfo.detail.credits.CreditsRepository
 import com.devkproject.movieinfo.detail.credits.CreditsViewModel
@@ -31,6 +33,7 @@ class DetailActivity : AppCompatActivity() {
     private lateinit var detailRepository: DetailRepository
     private lateinit var creditsViewModel: CreditsViewModel
     private lateinit var creditsRepository: CreditsRepository
+    private lateinit var favoriteViewModel: FavoriteViewModel
 
     private lateinit var mAdView: AdView
 
@@ -45,7 +48,12 @@ class DetailActivity : AppCompatActivity() {
 
         val movieId: Int = intent.getIntExtra("id", 1)
         val apiService: TMDBInterface = TMDBClient.getClient()
+        favoriteViewModel = ViewModelProvider(this).get(FavoriteViewModel::class.java)
 
+        favorite_btn.setOnClickListener {
+            val movie = Favorite(movieId)
+            favoriteViewModel.insert(movie)
+        }
         detailRepository = DetailRepository(apiService)
         detailViewModel = getDetailViewModel(movieId)
         detailViewModel.detailMovie.observe(this, Observer {

@@ -15,7 +15,7 @@ class DetailViewModel (private val detailRepository: DetailRepository, movieId: 
     }
 
     val networkState: LiveData<NetworkState> by lazy {
-        detailRepository.getDetailNetworState()
+        detailRepository.getDetailNetworkState()
     }
 
     override fun onCleared() {

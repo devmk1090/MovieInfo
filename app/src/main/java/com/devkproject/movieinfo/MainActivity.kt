@@ -17,7 +17,12 @@ import com.devkproject.movieinfo.toprated.TopRatedRepository
 import com.devkproject.movieinfo.toprated.TopRatedViewModel
 import com.devkproject.movieinfo.api.TMDBInterface
 import com.devkproject.movieinfo.api.TMDBClient
+import com.devkproject.movieinfo.db.FavoriteRVAdapter
+import com.devkproject.movieinfo.db.FavoriteViewModel
+import com.devkproject.movieinfo.detail.DetailRepository
+import com.devkproject.movieinfo.detail.DetailViewModel
 import com.devkproject.movieinfo.genre.GenreViewModel
+import com.devkproject.movieinfo.model.TMDBDetail
 import com.devkproject.movieinfo.now_playing.NowPlayingViewModel
 import com.devkproject.movieinfo.popular.PopularViewModel
 import com.devkproject.movieinfo.popular.PopularRepository
@@ -50,6 +55,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var genreViewModel: GenreViewModel
 
     private lateinit var nowPlayingViewModel: NowPlayingViewModel
+
+    private lateinit var detailViewModel: DetailViewModel
+    private lateinit var detailRepository: DetailRepository
+
+    private lateinit var favoriteViewModel: FavoriteViewModel
 
     private var firstTime : Long = 0
     private var secondTime : Long = 0
@@ -250,9 +260,34 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     .setNegativeButton("취소", null)
                     .show()
             }
+            R.id.favorite_movie -> {
+                supportActionBar!!.title = "찜 목록"
+
+                val favoriteRVAdapter = FavoriteRVAdapter(this)
+//                detailRepository = DetailRepository(apiService)
+//                detailViewModel = getDetailViewModel(12223)
+//
+//                val detailAdapter = PagedListRVAdapter(this)
+                val gridLayoutManager = GridLayoutManager(this, 3)
+                movie_recyclerView.layoutManager = gridLayoutManager
+                movie_recyclerView.setHasFixedSize(true)
+                movie_recyclerView.adapter = favoriteRVAdapter
+
+                favoriteViewModel = ViewModelProvider(this).get(FavoriteViewModel::class.java)
+                favoriteViewModel.allMovie.observe(this, Observer {
+                    it.let { favoriteRVAdapter.setFavorite(it) }
+                })
+//
+//                detailViewModel.detailMovie.observe(this, Observer {
+//                    bindUI(it)
+//                })
+            }
         }
         main_drawer.closeDrawer(GravityCompat.START)
         return true
+    }
+    private fun bindUI(it: TMDBDetail) {
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -387,6 +422,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
 
         })[NowPlayingViewModel::class.java]
+    }
+
+    private fun getDetailViewModel(movieId: Int): DetailViewModel {
+        return ViewModelProviders.of(this, object: ViewModelProvider.Factory {
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                return DetailViewModel(detailRepository, movieId) as T
+            }
+        })[DetailViewModel::class.java]
     }
 
     override fun onBackPressed() {
