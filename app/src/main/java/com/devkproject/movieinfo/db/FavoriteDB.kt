@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 
 @Database(entities = [Favorite::class], version = 1)
 abstract class FavoriteDB: RoomDatabase() {
+
     abstract fun favoriteDAO(): FavoriteDAO
 
     private class FavoriteDBCallback(private val scope: CoroutineScope): RoomDatabase.Callback() {
@@ -18,10 +19,7 @@ abstract class FavoriteDB: RoomDatabase() {
             INSTANCE.let { database ->
                 scope.launch {
                     var favoriteDAO = database!!.favoriteDAO()
-
                     favoriteDAO.deleteAll()
-                    val favorite = Favorite(21212)
-                    favoriteDAO.insert(favorite)
                 }
             }
         }

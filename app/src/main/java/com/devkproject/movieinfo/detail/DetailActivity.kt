@@ -47,13 +47,34 @@ class DetailActivity : AppCompatActivity() {
         mAdView.loadAd(adRequest)
 
         val movieId: Int = intent.getIntExtra("id", 1)
+        val title = intent.getStringExtra("title")
+        val releaseDate = intent.getStringExtra("release")
+        val rating = intent.getDoubleExtra("rating", 1.0)
+        val poster = intent.getStringExtra("poster")
+        val movie = Favorite(movieId, title, releaseDate, rating, poster)
+
+
         val apiService: TMDBInterface = TMDBClient.getClient()
         favoriteViewModel = ViewModelProvider(this).get(FavoriteViewModel::class.java)
 
+        favoriteViewModel.allMovie.observe(this, Observer {
+            if (it.contains(movie)) {
+                favorite_btn.text = "찜 해제"
+            } else {
+                favorite_btn.text = "찜 하기"
+            }
+        })
+
         favorite_btn.setOnClickListener {
-            val movie = Favorite(movieId)
-            favoriteViewModel.insert(movie)
+            if(favorite_btn.text == "찜 하기") {
+                favoriteViewModel.insert(movie)
+                favorite_btn.text = "찜 해제"
+            } else {
+                favoriteViewModel.delete(movie)
+                favorite_btn.text = "찜 하기"
+            }
         }
+
         detailRepository = DetailRepository(apiService)
         detailViewModel = getDetailViewModel(movieId)
         detailViewModel.detailMovie.observe(this, Observer {

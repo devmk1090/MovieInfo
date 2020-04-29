@@ -29,4 +29,7 @@ class FavoriteViewModel (application: Application): AndroidViewModel(application
     fun insert(favorite: Favorite) = viewModelScope.launch(Dispatchers.IO) {
         favoriteRepository.insert(favorite)
     }
+    fun delete(favorite: Favorite) = viewModelScope.launch(Dispatchers.IO) {
+        favoriteRepository.delete(favorite)
+    }
 }

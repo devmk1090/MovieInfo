@@ -76,6 +76,10 @@ class PagedListRVAdapter(private val context: Context)
             itemView.setOnClickListener {
                 val intent = Intent(context, DetailActivity::class.java)
                 intent.putExtra("id", movie.id)
+                intent.putExtra("title", movie.title)
+                intent.putExtra("release", movie.releaseDate)
+                intent.putExtra("rating", movie.rating)
+                intent.putExtra("poster", movie.posterPath)
                 context.startActivity(intent)
             }
         }

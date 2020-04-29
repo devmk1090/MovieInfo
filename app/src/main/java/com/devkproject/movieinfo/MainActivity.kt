@@ -264,10 +264,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 supportActionBar!!.title = "찜 목록"
 
                 val favoriteRVAdapter = FavoriteRVAdapter(this)
-//                detailRepository = DetailRepository(apiService)
-//                detailViewModel = getDetailViewModel(12223)
-//
-//                val detailAdapter = PagedListRVAdapter(this)
                 val gridLayoutManager = GridLayoutManager(this, 3)
                 movie_recyclerView.layoutManager = gridLayoutManager
                 movie_recyclerView.setHasFixedSize(true)
@@ -277,17 +273,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 favoriteViewModel.allMovie.observe(this, Observer {
                     it.let { favoriteRVAdapter.setFavorite(it) }
                 })
-//
-//                detailViewModel.detailMovie.observe(this, Observer {
-//                    bindUI(it)
-//                })
             }
         }
         main_drawer.closeDrawer(GravityCompat.START)
         return true
-    }
-    private fun bindUI(it: TMDBDetail) {
-
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
