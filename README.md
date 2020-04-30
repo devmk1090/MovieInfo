@@ -11,6 +11,9 @@
 * 실시간 검색 기능   
 단어를 입력할때마다 실시간으로 영화 검색.   
 
-<img src="https://user-images.githubusercontent.com/48673676/80583329-05a37480-8a4b-11ea-9666-bdd982a9e5fe.png" width="30%"> <img src="https://user-images.githubusercontent.com/48673676/80583264-f6242b80-8a4a-11ea-9604-abb8d2d0cfce.png" width="30%">
+<img src="https://user-images.githubusercontent.com/48673676/80583329-05a37480-8a4b-11ea-9666-bdd982a9e5fe.png" width="30%"> <img src="https://user-images.githubusercontent.com/48673676/80692217-40b9ac80-8b0c-11ea-85c2-adfc3e030b9e.png" width="30%">
+<img src="https://user-images.githubusercontent.com/48673676/80583264-f6242b80-8a4a-11ea-9604-abb8d2d0cfce.png" width="30%">
    
 <img src="https://user-images.githubusercontent.com/48673676/80583364-1227cd00-8a4b-11ea-98f9-68bb243c914b.png" width="30%"> <img src="https://user-images.githubusercontent.com/48673676/80583388-19e77180-8a4b-11ea-9953-55ff09f77f65.png" width="30%">
+
+
