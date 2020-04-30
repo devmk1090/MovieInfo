@@ -11,6 +11,9 @@
 * 실시간 검색 기능   
 단어를 입력할때마다 실시간으로 영화 검색.   
 
+* 찜 목록   
+인상깊은 영화가 있다면 '찜 하기' 를 눌러 '찜 목록' 에서 쉽게 접근 가능.   
+
 <img src="https://user-images.githubusercontent.com/48673676/80583329-05a37480-8a4b-11ea-9666-bdd982a9e5fe.png" width="30%"> <img src="https://user-images.githubusercontent.com/48673676/80692217-40b9ac80-8b0c-11ea-85c2-adfc3e030b9e.png" width="30%">
 <img src="https://user-images.githubusercontent.com/48673676/80583264-f6242b80-8a4a-11ea-9604-abb8d2d0cfce.png" width="30%">
    
