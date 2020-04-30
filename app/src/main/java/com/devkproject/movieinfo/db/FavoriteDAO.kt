@@ -9,9 +9,6 @@ interface FavoriteDAO {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(favorite: Favorite)
 
-    @Update
-    fun update(favorite: Favorite)
-
     @Query("SELECT * FROM favoriteMovie")
     fun getMovieList(): LiveData<List<Favorite>>
 

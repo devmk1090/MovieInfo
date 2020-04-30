@@ -14,8 +14,8 @@ android {
         minSdkVersion 19
         targetSdkVersion 29
         multiDexEnabled true
-        versionCode 3
-        versionName "1.0.2"
+        versionCode 5
+        versionName "1.1.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -57,5 +57,4 @@ dependencies {
     implementation 'androidx.paging:paging-runtime:2.1.2'
     implementation 'androidx.room:room-runtime:2.2.5'
     kapt 'android.arch.persistence.room:compiler:2.2.4'
-
 }

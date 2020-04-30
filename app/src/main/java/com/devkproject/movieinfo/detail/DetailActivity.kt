@@ -1,5 +1,6 @@
 package com.devkproject.movieinfo.detail
 
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -60,8 +61,10 @@ class DetailActivity : AppCompatActivity() {
         favoriteViewModel.allMovie.observe(this, Observer {
             if (it.contains(movie)) {
                 favorite_btn.text = "찜 해제"
+                favorite_btn.setTextColor(Color.GRAY)
             } else {
                 favorite_btn.text = "찜 하기"
+                favorite_btn.setTextColor(Color.BLACK)
             }
         })
 
@@ -69,9 +72,11 @@ class DetailActivity : AppCompatActivity() {
             if(favorite_btn.text == "찜 하기") {
                 favoriteViewModel.insert(movie)
                 favorite_btn.text = "찜 해제"
+                favorite_btn.setTextColor(Color.GRAY)
             } else {
                 favoriteViewModel.delete(movie)
                 favorite_btn.text = "찜 하기"
+                favorite_btn.setTextColor(Color.BLACK)
             }
         }
 

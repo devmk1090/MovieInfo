@@ -33,21 +33,21 @@ class NowPlayingDataSource (private val apiService: TMDBInterface, private val c
     }
 
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, TMDBThumb>) {
-//        compositeDisposable.add(
-//            apiService.getNowPlayingMovie(params.key, "kr")
-//                .subscribeOn(Schedulers.io())
-//                .subscribe({
-//                    if(it.totalPages >= params.key) {
-//                        networkState.postValue(NetworkState.LOADED)
-//                        callback.onResult(it.movieList, params.key + 1)
-//                    } else {
-//                        networkState.postValue(NetworkState.ENDOFLIST)
-//                    }
-//                }, {
-//                    Log.e("NowPlayingDataSource", it.message)
-//                    networkState.postValue(NetworkState.ERROR)
-//                })
-//        )
+        compositeDisposable.add(
+            apiService.getNowPlayingMovie(params.key, "kr")
+                .subscribeOn(Schedulers.io())
+                .subscribe({
+                    if(2 >= params.key) {
+                        networkState.postValue(NetworkState.LOADED)
+                        callback.onResult(it.movieList, params.key + 1)
+                    } else {
+                        networkState.postValue(NetworkState.ENDOFLIST)
+                    }
+                }, {
+                    Log.e("NowPlayingDataSource", it.message)
+                    networkState.postValue(NetworkState.ERROR)
+                })
+        )
     }
 
     override fun loadBefore(params: LoadParams<Int>, callback: LoadCallback<Int, TMDBThumb>) {}
