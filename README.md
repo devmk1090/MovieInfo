@@ -1,8 +1,8 @@
-# 모든 영화 정보 - TMDB 를 이용한 영화 정보
+# 영화 정보 - TMDB 를 이용한 영화 정보
 
 * Play Store : https://play.google.com/store/apps/details?id=com.devkproject.movieinfo   
       
-* 다양한 정보   
+* 다양한 카테고리   
 현재 인기 영화, 현재 상영작, 개봉 예정작, 높은 평점순 으로 정보 확인.   
 
 * 장르 검색 기능   
@@ -14,9 +14,8 @@
 * 찜 목록   
 인상깊은 영화가 있다면 '찜 하기' 를 눌러 '찜 목록' 에서 쉽게 접근 가능.   
 
-<img src="https://user-images.githubusercontent.com/48673676/80583329-05a37480-8a4b-11ea-9666-bdd982a9e5fe.png" width="30%"> <img src="https://user-images.githubusercontent.com/48673676/80692217-40b9ac80-8b0c-11ea-85c2-adfc3e030b9e.png" width="30%">
-<img src="https://user-images.githubusercontent.com/48673676/80583264-f6242b80-8a4a-11ea-9604-abb8d2d0cfce.png" width="30%">
+<img src="https://user-images.githubusercontent.com/48673676/80958460-0881d900-8e40-11ea-980c-aacde4999796.png" width="30%"> <img src="https://user-images.githubusercontent.com/48673676/80958498-19cae580-8e40-11ea-977d-c857ba03833e.png" width="30%">
    
-<img src="https://user-images.githubusercontent.com/48673676/80583364-1227cd00-8a4b-11ea-98f9-68bb243c914b.png" width="30%"> <img src="https://user-images.githubusercontent.com/48673676/80583388-19e77180-8a4b-11ea-9953-55ff09f77f65.png" width="30%">
+<img src="https://user-images.githubusercontent.com/48673676/80958505-1afc1280-8e40-11ea-8cff-7df95dd32b77.png" width="30%"> <img src="(https://user-images.githubusercontent.com/48673676/80958509-1d5e6c80-8e40-11ea-9eac-5b9e768b71b8.png" width="30%">
 
 
