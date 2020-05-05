@@ -13,6 +13,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.devkproject.movieinfo.toprated.TopRatedRepository
 import com.devkproject.movieinfo.toprated.TopRatedViewModel
 import com.devkproject.movieinfo.api.TMDBInterface
@@ -55,9 +56,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var genreViewModel: GenreViewModel
 
     private lateinit var nowPlayingViewModel: NowPlayingViewModel
-
-    private lateinit var detailViewModel: DetailViewModel
-    private lateinit var detailRepository: DetailRepository
 
     private lateinit var favoriteViewModel: FavoriteViewModel
 
@@ -411,14 +409,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
 
         })[NowPlayingViewModel::class.java]
-    }
-
-    private fun getDetailViewModel(movieId: Int): DetailViewModel {
-        return ViewModelProviders.of(this, object: ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return DetailViewModel(detailRepository, movieId) as T
-            }
-        })[DetailViewModel::class.java]
     }
 
     override fun onBackPressed() {

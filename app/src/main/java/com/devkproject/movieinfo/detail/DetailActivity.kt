@@ -3,6 +3,7 @@ package com.devkproject.movieinfo.detail
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
@@ -54,6 +55,7 @@ class DetailActivity : AppCompatActivity() {
         val poster = intent.getStringExtra("poster")
         val movie = Favorite(movieId, title, releaseDate, rating, poster)
 
+        Log.d("DetailActivity", movieId.toString())
 
         val apiService: TMDBInterface = TMDBClient.getClient()
         favoriteViewModel = ViewModelProvider(this).get(FavoriteViewModel::class.java)

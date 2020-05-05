@@ -38,6 +38,10 @@
                     android:scaleType="fitCenter"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/videos_recyclerView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
                 <LinearLayout
                     android:orientation="vertical"
                     android:layout_margin="8dp"

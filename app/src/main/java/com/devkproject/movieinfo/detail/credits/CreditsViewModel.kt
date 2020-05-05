@@ -18,10 +18,3 @@ class CreditsViewModel(private val creditsRepository: CreditsRepository, movieId
         compositeDisposable.dispose()
     }
 }
-
-//    fun getCreditsMovie(movieId: Int): LiveData<TMDBCast> {
-//        creditsDataSource = CreditsDataSource(apiService, compositeDisposable)
-//        creditsDataSource.getCreditsMovie(movieId)
-//
-//        return creditsDataSource.creditsMovieResponse
-//    }
