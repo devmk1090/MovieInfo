@@ -15,6 +15,11 @@ const val BASE_URL = "https://api.themoviedb.org/3/"
 const val API_KEY = "4140785408ae0d33bd7a2220a28fa0e2"
 const val POSTER_URL = "https://image.tmdb.org/t/p/w342"
 
+//youtube
+const val YOUTUBE_BASE_URL = "https://www.youtube.com/watch?v="
+const val YOUTUBE_THUMBNAIL_BASE_URL = "https://img.youtube.com/vi/"
+const val YOUTUBE_THUMBNAIL_URL_JPG = "/0.jpg"
+
 //object class : 싱글턴 클래스, 여러번 호출해도 객체는 한번만 생성
 object TMDBClient {
     fun getClient(): TMDBInterface {

@@ -6,7 +6,7 @@ data class TMDBVideos(
 )
 
 data class TMDBTrailers(
-    val id: Int,
+    val id: String,
     val key: String,
     val name: String,
     val type: String

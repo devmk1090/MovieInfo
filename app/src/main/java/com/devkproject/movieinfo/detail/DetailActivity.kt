@@ -22,6 +22,9 @@ import com.devkproject.movieinfo.detail.credits.CreditsRVAdapter
 import com.devkproject.movieinfo.detail.credits.CreditsRepository
 import com.devkproject.movieinfo.detail.credits.CreditsViewModel
 import com.devkproject.movieinfo.detail.credits.CrewRVAdapter
+import com.devkproject.movieinfo.detail.videos.VideosRVAdapter
+import com.devkproject.movieinfo.detail.videos.VideosRepository
+import com.devkproject.movieinfo.detail.videos.VideosViewModel
 import com.devkproject.movieinfo.model.*
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
@@ -36,6 +39,8 @@ class DetailActivity : AppCompatActivity() {
     private lateinit var creditsViewModel: CreditsViewModel
     private lateinit var creditsRepository: CreditsRepository
     private lateinit var favoriteViewModel: FavoriteViewModel
+    private lateinit var videosViewModel: VideosViewModel
+    private lateinit var videosRepository: VideosRepository
 
     private lateinit var mAdView: AdView
 
@@ -100,6 +105,12 @@ class DetailActivity : AppCompatActivity() {
             setCastRVAdapter(it.cast)
             setCrewRVAdapter(it.crew)
         })
+
+        videosRepository = VideosRepository(apiService)
+        videosViewModel = getVideosViewModel(movieId)
+        videosViewModel.videosMovie.observe(this, Observer {
+            setVideosRVAdapter(it.results)
+        })
     }
 
     private fun bindUI(it: TMDBDetail) {
@@ -153,6 +164,13 @@ class DetailActivity : AppCompatActivity() {
         crew_recyclerView.adapter = crewRVAdapter
     }
 
+    private fun setVideosRVAdapter(item: ArrayList<TMDBTrailers>) {
+        val videosRVAdapter = VideosRVAdapter(item, this)
+        videos_recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        videos_recyclerView.setHasFixedSize(true)
+        videos_recyclerView.adapter = videosRVAdapter
+    }
+
     private fun getDetailViewModel(movieId: Int): DetailViewModel {
         return ViewModelProviders.of(this, object: ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
@@ -160,11 +178,20 @@ class DetailActivity : AppCompatActivity() {
             }
         })[DetailViewModel::class.java]
     }
+
     private fun getCreditsViewModel(movieId: Int): CreditsViewModel {
         return ViewModelProviders.of(this, object: ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
                 return CreditsViewModel(creditsRepository, movieId) as T
             }
         })[CreditsViewModel::class.java]
+    }
+
+    private fun getVideosViewModel(movieId: Int): VideosViewModel {
+        return ViewModelProviders.of(this, object : ViewModelProvider.Factory {
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                return VideosViewModel(videosRepository, movieId) as T
+            }
+        })[VideosViewModel::class.java]
     }
 }
