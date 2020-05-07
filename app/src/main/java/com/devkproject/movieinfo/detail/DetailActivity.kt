@@ -4,7 +4,9 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -29,8 +31,11 @@ import com.devkproject.movieinfo.model.*
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
+import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.activity_detail.*
+import kotlinx.android.synthetic.main.detail_scroll.*
 import java.text.DecimalFormat
+import kotlin.math.abs
 
 class DetailActivity : AppCompatActivity() {
 
@@ -47,6 +52,26 @@ class DetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
+
+        val toolbar: Toolbar = findViewById(R.id.detail_toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar!!.setDisplayShowTitleEnabled(true)
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setHomeAsUpIndicator(R.drawable.ic_arrow_back_black_24dp)
+
+        detail_appbar_layout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
+            when {
+                abs(verticalOffset) == appBarLayout!!.totalScrollRange -> {
+                    detail_collapsing_toolbar_layout.title = intent.getStringExtra("title")
+                }
+                verticalOffset == 0 -> {
+                    detail_collapsing_toolbar_layout.title = ""
+                }
+                else -> {
+                    detail_collapsing_toolbar_layout.title = ""
+                }
+            }
+        })
 
         MobileAds.initialize(this) {}
         mAdView = this.findViewById(R.id.adView_detail)
@@ -97,6 +122,7 @@ class DetailActivity : AppCompatActivity() {
         detailViewModel.networkState.observe(this, Observer {
             detail_progress_bar.visibility = if(it == NetworkState.LOADING) View.VISIBLE else View.GONE
             detail_error_text.visibility = if(it == NetworkState.ERROR) View.VISIBLE else View.GONE
+            detail_scroll_item.visibility = if(it == NetworkState.ERROR) View.GONE else View.VISIBLE
         })
 
         creditsRepository = CreditsRepository(apiService)
@@ -193,5 +219,15 @@ class DetailActivity : AppCompatActivity() {
                 return VideosViewModel(videosRepository, movieId) as T
             }
         })[VideosViewModel::class.java]
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            android.R.id.home -> {
+                finish()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
