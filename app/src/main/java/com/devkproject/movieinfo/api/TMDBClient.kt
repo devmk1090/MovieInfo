@@ -20,6 +20,10 @@ const val YOUTUBE_BASE_URL = "https://www.youtube.com/watch?v="
 const val YOUTUBE_THUMBNAIL_BASE_URL = "https://img.youtube.com/vi/"
 const val YOUTUBE_THUMBNAIL_URL_JPG = "/0.jpg"
 
+//share
+const val SHARE_URL = "https://www.themoviedb.org/movie/"
+const val SHARE_TYPE = "text/plain"
+
 //object class : 싱글턴 클래스, 여러번 호출해도 객체는 한번만 생성
 object TMDBClient {
     fun getClient(): TMDBInterface {

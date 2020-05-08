@@ -1,12 +1,15 @@
 package com.devkproject.movieinfo.detail
 
+import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.Toolbar
+import androidx.core.app.ShareCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -15,9 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.devkproject.movieinfo.NetworkState
 import com.devkproject.movieinfo.R
-import com.devkproject.movieinfo.api.POSTER_URL
-import com.devkproject.movieinfo.api.TMDBClient
-import com.devkproject.movieinfo.api.TMDBInterface
+import com.devkproject.movieinfo.api.*
 import com.devkproject.movieinfo.db.Favorite
 import com.devkproject.movieinfo.db.FavoriteViewModel
 import com.devkproject.movieinfo.detail.credits.CreditsRVAdapter
@@ -63,6 +64,7 @@ class DetailActivity : AppCompatActivity() {
             when {
                 abs(verticalOffset) == appBarLayout!!.totalScrollRange -> {
                     detail_collapsing_toolbar_layout.title = intent.getStringExtra("title")
+                    detail_collapsing_toolbar_layout.setCollapsedTitleTextColor(Color.WHITE)
                 }
                 verticalOffset == 0 -> {
                     detail_collapsing_toolbar_layout.title = ""
@@ -123,6 +125,7 @@ class DetailActivity : AppCompatActivity() {
             detail_progress_bar.visibility = if(it == NetworkState.LOADING) View.VISIBLE else View.GONE
             detail_error_text.visibility = if(it == NetworkState.ERROR) View.VISIBLE else View.GONE
             detail_scroll_item.visibility = if(it == NetworkState.ERROR) View.GONE else View.VISIBLE
+            detail_collapsing_toolbar_layout.visibility = if(it == NetworkState.ERROR) View.GONE else View.VISIBLE
         })
 
         creditsRepository = CreditsRepository(apiService)
@@ -141,8 +144,8 @@ class DetailActivity : AppCompatActivity() {
 
     private fun bindUI(it: TMDBDetail) {
         val decimalFormat = DecimalFormat("###,###")
-        val decimalBudget = decimalFormat.format(it.budget) + " $"
-        val decimalRevenue = decimalFormat.format(it.revenue) + " $"
+        val decimalBudget = "$ " + decimalFormat.format(it.budget)
+        val decimalRevenue = "$ " + decimalFormat.format(it.revenue)
         val runtime = it.runtime.toString() + " 분"
         val originalTitle = it.title + "\n(${it.original_title})"
 
@@ -221,13 +224,34 @@ class DetailActivity : AppCompatActivity() {
         })[VideosViewModel::class.java]
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.detail_item, menu)
+        return true
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
             android.R.id.home -> {
                 finish()
                 return true
             }
+            R.id.share_movie -> {
+                shareMovie()
+                return true
+            }
+
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun shareMovie() {
+        val title = intent.getStringExtra("title") + getString(R.string.next_line) +
+                SHARE_URL + intent.getIntExtra("id", 1)
+        val intent = ShareCompat.IntentBuilder.from(this)
+            .setType(SHARE_TYPE)
+            .setText(title)
+            .createChooserIntent()
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT)
+        startActivity(intent)
     }
 }

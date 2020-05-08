@@ -32,6 +32,7 @@ class CreditsRVAdapter (private val item: ArrayList<TMDBCast>): RecyclerView.Ada
             val profileUrl: String = POSTER_URL + it.picture
             Glide.with(itemView.context)
                 .load(profileUrl)
+                .placeholder(R.drawable.ic_person_black_24dp)
                 .into(itemView.credits_image)
         }
     }
