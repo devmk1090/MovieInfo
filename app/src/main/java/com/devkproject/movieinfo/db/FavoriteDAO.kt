@@ -14,8 +14,4 @@ interface FavoriteDAO {
 
     @Delete
     fun delete(favorite: Favorite)
-
-    @Query("DELETE FROM favoriteMovie")
-    fun deleteAll()
-
 }

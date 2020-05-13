@@ -13,17 +13,6 @@ abstract class FavoriteDB: RoomDatabase() {
 
     abstract fun favoriteDAO(): FavoriteDAO
 
-    private class FavoriteDBCallback(private val scope: CoroutineScope): RoomDatabase.Callback() {
-        override fun onOpen(db: SupportSQLiteDatabase) {
-            super.onOpen(db)
-            INSTANCE.let { database ->
-                scope.launch {
-                    var favoriteDAO = database!!.favoriteDAO()
-                    favoriteDAO.deleteAll()
-                }
-            }
-        }
-    }
     companion object {
         // Singleton prevents multiple instances of database opening at the same time.
         @Volatile

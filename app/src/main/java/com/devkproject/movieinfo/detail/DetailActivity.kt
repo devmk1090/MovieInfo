@@ -124,8 +124,8 @@ class DetailActivity : AppCompatActivity() {
         detailViewModel.networkState.observe(this, Observer {
             detail_progress_bar.visibility = if(it == NetworkState.LOADING) View.VISIBLE else View.GONE
             detail_error_text.visibility = if(it == NetworkState.ERROR) View.VISIBLE else View.GONE
-            detail_scroll_item.visibility = if(it == NetworkState.ERROR) View.GONE else View.VISIBLE
-            detail_collapsing_toolbar_layout.visibility = if(it == NetworkState.ERROR) View.GONE else View.VISIBLE
+            detail_scroll_item.visibility = if(it == NetworkState.ERROR || it == NetworkState.LOADING) View.GONE else View.VISIBLE
+            detail_collapsing_toolbar_layout.visibility = if(it == NetworkState.ERROR || it == NetworkState.LOADING) View.GONE else View.VISIBLE
         })
 
         creditsRepository = CreditsRepository(apiService)

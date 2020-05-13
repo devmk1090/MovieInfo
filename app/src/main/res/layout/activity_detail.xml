@@ -59,7 +59,7 @@
         xmlns:ads="http://schemas.android.com/apk/res-auto"
         android:id="@+id/adView_detail"
         ads:adSize="BANNER"
-        ads:adUnitId="ca-app-pub-3940256099942544/6300978111"
+        ads:adUnitId="ca-app-pub-1646409874287424/1585126093"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
