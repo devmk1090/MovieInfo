@@ -14,12 +14,13 @@ data class TMDBCast(
     val name: String,
     @SerializedName("profile_path")
     val picture: String,
-    val order: Int
+    val credit_id: String
 )
 
 data class TMDBCrew(
     val name: String,
     val job: String,
     @SerializedName("profile_path")
-    val picture: String
+    val picture: String,
+    val credit_id: String
 )

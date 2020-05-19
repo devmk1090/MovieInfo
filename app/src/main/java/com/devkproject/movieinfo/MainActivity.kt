@@ -13,17 +13,13 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.devkproject.movieinfo.toprated.TopRatedRepository
 import com.devkproject.movieinfo.toprated.TopRatedViewModel
 import com.devkproject.movieinfo.api.TMDBInterface
 import com.devkproject.movieinfo.api.TMDBClient
 import com.devkproject.movieinfo.db.FavoriteRVAdapter
 import com.devkproject.movieinfo.db.FavoriteViewModel
-import com.devkproject.movieinfo.detail.DetailRepository
-import com.devkproject.movieinfo.detail.DetailViewModel
 import com.devkproject.movieinfo.genre.GenreViewModel
-import com.devkproject.movieinfo.model.TMDBDetail
 import com.devkproject.movieinfo.now_playing.NowPlayingViewModel
 import com.devkproject.movieinfo.popular.PopularViewModel
 import com.devkproject.movieinfo.popular.PopularRepository

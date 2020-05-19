@@ -10,6 +10,7 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ShareCompat
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -19,6 +20,7 @@ import com.bumptech.glide.Glide
 import com.devkproject.movieinfo.NetworkState
 import com.devkproject.movieinfo.R
 import com.devkproject.movieinfo.api.*
+import com.devkproject.movieinfo.databinding.ActivityDetailBinding
 import com.devkproject.movieinfo.db.Favorite
 import com.devkproject.movieinfo.db.FavoriteViewModel
 import com.devkproject.movieinfo.detail.credits.CreditsRVAdapter
@@ -50,9 +52,11 @@ class DetailActivity : AppCompatActivity() {
 
     private lateinit var mAdView: AdView
 
+    private lateinit var binding: ActivityDetailBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_detail)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_detail)
 
         val toolbar: Toolbar = findViewById(R.id.detail_toolbar)
         setSupportActionBar(toolbar)
@@ -180,7 +184,7 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun setCastRVAdapter(item: ArrayList<TMDBCast>) {
-        val creditsRVAdapter = CreditsRVAdapter(item)
+        val creditsRVAdapter = CreditsRVAdapter(item, this)
         credits_recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         credits_recyclerView.setHasFixedSize(true)
         credits_recyclerView.adapter = creditsRVAdapter

@@ -17,6 +17,9 @@ android {
         versionCode 9
         versionName "1.2.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        dataBinding {
+            enabled = true
+        }
     }
     buildTypes {
         release {
