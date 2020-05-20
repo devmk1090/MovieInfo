@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.devkproject.movieinfo.R
 import com.devkproject.movieinfo.api.POSTER_URL
-import com.devkproject.movieinfo.detail.ActorCredits.ActorCreditActivity
+import com.devkproject.movieinfo.detail.person.PersonActivity
 import com.devkproject.movieinfo.model.TMDBCast
 import kotlinx.android.synthetic.main.credits_item.view.*
 
@@ -38,11 +38,11 @@ class CreditsRVAdapter (private val item: ArrayList<TMDBCast>, private val conte
                 .placeholder(R.drawable.ic_person_black_24dp)
                 .into(itemView.credits_image)
             itemView.setOnClickListener {
-                val intent = Intent(context, ActorCreditActivity::class.java)
-                intent.putExtra("id", cast.credit_id)
+                val intent = Intent(context, PersonActivity::class.java)
+                intent.putExtra("id", cast.id)
                 intent.putExtra("picture", cast.picture)
                 context.startActivity(intent)
-                println(cast.credit_id)
+                println(cast.id)
             }
         }
     }

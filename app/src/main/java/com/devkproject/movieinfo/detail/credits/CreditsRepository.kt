@@ -9,10 +9,7 @@ class CreditsRepository (private val apiService: TMDBInterface) {
     private lateinit var creditsDataSource: CreditsDataSource
 
     fun getCreditsMovie(compositeDisposable: CompositeDisposable, movieId: Int): LiveData<TMDBCredits> {
-        creditsDataSource = CreditsDataSource(
-            apiService,
-            compositeDisposable
-        )
+        creditsDataSource = CreditsDataSource(apiService, compositeDisposable)
         creditsDataSource.getCreditsMovie(movieId)
         return creditsDataSource.creditsMovieResponse
     }

@@ -94,8 +94,8 @@ class DetailActivity : AppCompatActivity() {
         Log.d("DetailActivity", movieId.toString())
 
         val apiService: TMDBInterface = TMDBClient.getClient()
-        favoriteViewModel = ViewModelProvider(this).get(FavoriteViewModel::class.java)
 
+        favoriteViewModel = ViewModelProvider(this).get(FavoriteViewModel::class.java)
         favoriteViewModel.allMovie.observe(this, Observer {
             if (it.contains(movie)) {
                 favorite_btn.text = "찜 해제"
@@ -133,7 +133,8 @@ class DetailActivity : AppCompatActivity() {
         })
 
         creditsRepository = CreditsRepository(apiService)
-        creditsViewModel = getCreditsViewModel(movieId)
+        creditsViewModel = ViewModelProvider(this, CreditsViewModel.CreditsViewModelFactory(creditsRepository, movieId))
+            .get(CreditsViewModel::class.java)
         creditsViewModel.creditsMovie.observe(this, Observer {
             setCastRVAdapter(it.cast)
             setCrewRVAdapter(it.crew)
@@ -212,13 +213,13 @@ class DetailActivity : AppCompatActivity() {
         })[DetailViewModel::class.java]
     }
 
-    private fun getCreditsViewModel(movieId: Int): CreditsViewModel {
-        return ViewModelProviders.of(this, object: ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return CreditsViewModel(creditsRepository, movieId) as T
-            }
-        })[CreditsViewModel::class.java]
-    }
+//    private fun getCreditsViewModel(movieId: Int): CreditsViewModel {
+//        return ViewModelProviders.of(this, object: ViewModelProvider.Factory {
+//            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+//                return CreditsViewModel(creditsRepository, movieId) as T
+//            }
+//        })[CreditsViewModel::class.java]
+//    }
 
     private fun getVideosViewModel(movieId: Int): VideosViewModel {
         return ViewModelProviders.of(this, object : ViewModelProvider.Factory {
