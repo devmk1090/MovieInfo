@@ -1,5 +1,7 @@
 package com.devkproject.movieinfo.detail.credits
 
+import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,10 +9,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.devkproject.movieinfo.R
 import com.devkproject.movieinfo.api.POSTER_URL
+import com.devkproject.movieinfo.detail.person.PersonActivity
 import com.devkproject.movieinfo.model.TMDBCrew
 import kotlinx.android.synthetic.main.crew_item.view.*
 
-class CrewRVAdapter (private val item: ArrayList<TMDBCrew>): RecyclerView.Adapter<CrewRVAdapter.ViewHolder>() {
+class CrewRVAdapter (private val item: ArrayList<TMDBCrew>, private val context: Context): RecyclerView.Adapter<CrewRVAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.crew_item, parent, false)
         return ViewHolder(v)
@@ -21,18 +24,26 @@ class CrewRVAdapter (private val item: ArrayList<TMDBCrew>): RecyclerView.Adapte
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(item[position])
+        holder.bind(item[position], context)
     }
 
     class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
-        fun bind(it: TMDBCrew?) {
-            itemView.crew_name.text = it!!.name
-                itemView.crew_job.text = it.job
-            val profileUrl: String = POSTER_URL + it.picture
+        fun bind(crew: TMDBCrew?, context: Context) {
+            itemView.crew_name.text = crew!!.name
+                itemView.crew_job.text = crew.job
+            val profileUrl: String = POSTER_URL + crew.picture
             Glide.with(itemView.context)
                 .load(profileUrl)
                 .placeholder(R.drawable.ic_person_black_24dp)
                 .into(itemView.crew_image)
+//            itemView.setOnClickListener {
+//                val intent = Intent(context, PersonActivity::class.java)
+//                intent.putExtra("id", crew.id)
+//                intent.putExtra("picture", crew.picture)
+//                intent.putExtra("name", crew.name)
+//                context.startActivity(intent)
+//                println(crew.id)
+//            }
         }
     }
 }

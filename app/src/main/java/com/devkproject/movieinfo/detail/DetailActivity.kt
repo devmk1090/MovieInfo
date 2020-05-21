@@ -119,7 +119,8 @@ class DetailActivity : AppCompatActivity() {
         }
 
         detailRepository = DetailRepository(apiService)
-        detailViewModel = getDetailViewModel(movieId)
+        detailViewModel = ViewModelProvider(this, DetailViewModel.DetailViewModelFactory(detailRepository, movieId))
+            .get(DetailViewModel::class.java)
         detailViewModel.detailMovie.observe(this, Observer {
             bindUI(it)
             setGenreRVAdapter(it.genres)
@@ -141,7 +142,8 @@ class DetailActivity : AppCompatActivity() {
         })
 
         videosRepository = VideosRepository(apiService)
-        videosViewModel = getVideosViewModel(movieId)
+        videosViewModel = ViewModelProvider(this, VideosViewModel.VideosViewModelFactory(videosRepository, movieId))
+            .get(VideosViewModel::class.java)
         videosViewModel.videosMovie.observe(this, Observer {
             setVideosRVAdapter(it.results)
         })
@@ -192,7 +194,7 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun setCrewRVAdapter(item: ArrayList<TMDBCrew>) {
-        val crewRVAdapter = CrewRVAdapter(item)
+        val crewRVAdapter = CrewRVAdapter(item, this)
         crew_recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         crew_recyclerView.setHasFixedSize(true)
         crew_recyclerView.adapter = crewRVAdapter
@@ -203,30 +205,6 @@ class DetailActivity : AppCompatActivity() {
         videos_recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         videos_recyclerView.setHasFixedSize(true)
         videos_recyclerView.adapter = videosRVAdapter
-    }
-
-    private fun getDetailViewModel(movieId: Int): DetailViewModel {
-        return ViewModelProviders.of(this, object: ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return DetailViewModel(detailRepository, movieId) as T
-            }
-        })[DetailViewModel::class.java]
-    }
-
-//    private fun getCreditsViewModel(movieId: Int): CreditsViewModel {
-//        return ViewModelProviders.of(this, object: ViewModelProvider.Factory {
-//            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-//                return CreditsViewModel(creditsRepository, movieId) as T
-//            }
-//        })[CreditsViewModel::class.java]
-//    }
-
-    private fun getVideosViewModel(movieId: Int): VideosViewModel {
-        return ViewModelProviders.of(this, object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return VideosViewModel(videosRepository, movieId) as T
-            }
-        })[VideosViewModel::class.java]
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

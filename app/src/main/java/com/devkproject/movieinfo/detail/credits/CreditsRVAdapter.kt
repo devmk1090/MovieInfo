@@ -5,6 +5,7 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.devkproject.movieinfo.R
@@ -38,9 +39,12 @@ class CreditsRVAdapter (private val item: ArrayList<TMDBCast>, private val conte
                 .placeholder(R.drawable.ic_person_black_24dp)
                 .into(itemView.credits_image)
             itemView.setOnClickListener {
+                val animation = AnimationUtils.loadAnimation(context, R.anim.translate)
+                itemView.startAnimation(animation)
                 val intent = Intent(context, PersonActivity::class.java)
                 intent.putExtra("id", cast.id)
                 intent.putExtra("picture", cast.picture)
+                intent.putExtra("name", cast.name)
                 context.startActivity(intent)
                 println(cast.id)
             }

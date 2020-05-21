@@ -3,6 +3,7 @@ package com.devkproject.movieinfo.now_playing
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.devkproject.movieinfo.NetworkState
@@ -10,6 +11,7 @@ import com.devkproject.movieinfo.api.PER_PAGE
 import com.devkproject.movieinfo.api.TMDBInterface
 import com.devkproject.movieinfo.model.TMDBThumb
 import io.reactivex.disposables.CompositeDisposable
+import java.lang.IllegalArgumentException
 
 class NowPlayingViewModel (private val apiService: TMDBInterface): ViewModel() {
 
@@ -40,5 +42,15 @@ class NowPlayingViewModel (private val apiService: TMDBInterface): ViewModel() {
     override fun onCleared() {
         super.onCleared()
         compositeDisposable.dispose()
+    }
+
+    class NowPlayingViewModelFactory(private val apiService: TMDBInterface): ViewModelProvider.Factory {
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            return if (modelClass.isAssignableFrom(NowPlayingViewModel::class.java)) {
+                NowPlayingViewModel(apiService) as T
+            } else {
+                throw IllegalArgumentException()
+            }
+        }
     }
 }

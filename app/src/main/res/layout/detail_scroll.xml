@@ -3,11 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
-    <data>
-        <variable
-            name="movieDetail"
-            type="com.devkproject.movieinfo.model.TMDBDetail" />
-    </data>
+<!--    <data>-->
+<!--        <variable-->
+<!--            name="movieDetail"-->
+<!--            type="com.devkproject.movieinfo.model.TMDBDetail"/>-->
+<!--        <variable-->
+<!--            name="viewModel"-->
+<!--            type="com.devkproject.movieinfo.detail.DetailViewModel" />-->
+<!--    </data>-->
 <androidx.core.widget.NestedScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -26,17 +29,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <TextView
-                tools:text="Star Wars: The Last Jedi"
+                tools:text="영화 타이틀"
                 android:id="@+id/detail_movie_title"
-                android:text="@{movieDetail.title}"
                 android:textStyle="bold"
                 android:textSize="20sp"
                 android:textColor="#000000"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <TextView
+                tools:text="영화 부제"
                 android:id="@+id/detail_movie_tagline"
-                android:text="@{movieDetail.tagline}"
                 android:textStyle="bold"
                 android:textSize="16sp"
                 android:layout_marginTop="5dp"
@@ -227,7 +229,7 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:layout_marginTop="5dp"
-                    android:text="출연"
+                    android:text="출연 (클릭시 배우의 필모그래피 확인)"
                     android:textSize="16sp"
                     android:textColor="#000000"
                     android:textStyle="bold"

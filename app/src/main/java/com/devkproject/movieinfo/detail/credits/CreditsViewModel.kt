@@ -28,6 +28,5 @@ class CreditsViewModel(private val creditsRepository: CreditsRepository, movieId
                 throw IllegalArgumentException()
             }
         }
-
     }
 }

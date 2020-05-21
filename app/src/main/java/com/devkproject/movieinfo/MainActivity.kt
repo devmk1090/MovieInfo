@@ -21,6 +21,7 @@ import com.devkproject.movieinfo.db.FavoriteRVAdapter
 import com.devkproject.movieinfo.db.FavoriteViewModel
 import com.devkproject.movieinfo.genre.GenreViewModel
 import com.devkproject.movieinfo.now_playing.NowPlayingViewModel
+import com.devkproject.movieinfo.popular.PopularDataSourceFactory
 import com.devkproject.movieinfo.popular.PopularViewModel
 import com.devkproject.movieinfo.popular.PopularRepository
 import com.devkproject.movieinfo.search.SearchViewModel
@@ -38,13 +39,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private val apiService: TMDBInterface = TMDBClient.getClient()
 
     private lateinit var popularViewModel: PopularViewModel
-    lateinit var popularRepository: PopularRepository
+    private lateinit var popularRepository: PopularRepository
 
     private lateinit var topRatedViewModel: TopRatedViewModel
-    lateinit var topRatedRepository: TopRatedRepository
+    private lateinit var topRatedRepository: TopRatedRepository
 
     private lateinit var upcomingViewModel: UpcomingViewModel
-    lateinit var upcomingRepository: UpcomingRepository
+    private lateinit var upcomingRepository: UpcomingRepository
 
     private lateinit var searchViewModel: SearchViewModel
     private var searchView: SearchView? = null
@@ -81,7 +82,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun nowPlaying() {
         supportActionBar!!.title = "현재 상영작"
-        nowPlayingViewModel = getNowPlayingViewModel()
+        nowPlayingViewModel = ViewModelProvider(this, NowPlayingViewModel.NowPlayingViewModelFactory(apiService))
+            .get(NowPlayingViewModel::class.java)
         val nowPlayingAdapter = PagedListRVAdapter(this)
         val gridLayoutManager = GridLayoutManager(this, 3)
         gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
@@ -112,7 +114,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 supportActionBar!!.title = "인기 영화"
 
                 popularRepository = PopularRepository(apiService)
-                popularViewModel = getPopularViewModel()
+                popularViewModel = ViewModelProvider(this, PopularViewModel.PopularViewModelFactory(popularRepository))
+                    .get(PopularViewModel::class.java)
 
                 val popularAdapter = PagedListRVAdapter(this)
                 val gridLayoutManager = GridLayoutManager(this, 3)
@@ -141,7 +144,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 supportActionBar!!.title = "높은 평점순"
 
                 topRatedRepository = TopRatedRepository(apiService)
-                topRatedViewModel = getTopRatedViewModel()
+                topRatedViewModel = ViewModelProvider(this, TopRatedViewModel.TopRatedViewModelFactory(topRatedRepository))
+                    .get(TopRatedViewModel::class.java)
 
                 val topRatedAdapter = PagedListRVAdapter(this)
                 val gridLayoutManager = GridLayoutManager(this, 3)
@@ -173,7 +177,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 supportActionBar!!.title = "개봉 예정"
 
                 upcomingRepository = UpcomingRepository(apiService)
-                upcomingViewModel = getUpcomingViewModel()
+                upcomingViewModel = ViewModelProvider(this, UpcomingViewModel.UpcomingViewModelFactory(upcomingRepository))
+                    .get(UpcomingViewModel::class.java)
 
                 val upcomingAdapter = PagedListRVAdapter(this)
                 val gridLayoutManager = GridLayoutManager(this, 3)
@@ -288,7 +293,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun genreId(genreId: String, genreName: String, sort_by: String) {
         supportActionBar!!.title = "장르 - $genreName"
 
-        genreViewModel = getGenreViewModel()
+        genreViewModel = ViewModelProvider(this, GenreViewModel.GenreViewModelFactory(apiService))
+            .get(GenreViewModel::class.java)
+
         val genreAdapter = PagedListRVAdapter(this)
         val gridLayoutManager = GridLayoutManager(this, 3)
         gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
@@ -316,7 +323,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     fun searchQuery(query: String) {
         supportActionBar!!.title = "검색 : $query"
 
-        searchViewModel = getSearchViewModel()
+        searchViewModel = ViewModelProvider(this, SearchViewModel.SearchViewModelFactory(apiService))
+            .get(SearchViewModel::class.java)
+
         val searchAdapter = PagedListRVAdapter(this)
         val gridLayoutManager = GridLayoutManager(this, 3)
         gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
@@ -356,55 +365,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         })
         return true
-    }
-
-    private fun getPopularViewModel(): PopularViewModel {
-        return ViewModelProviders.of(this, object: ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return PopularViewModel(popularRepository) as T
-            }
-        })[PopularViewModel::class.java]
-    }
-
-    private fun getTopRatedViewModel(): TopRatedViewModel {
-        return ViewModelProviders.of(this, object: ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return TopRatedViewModel(topRatedRepository) as T
-            }
-        })[TopRatedViewModel::class.java]
-    }
-
-    private fun getUpcomingViewModel(): UpcomingViewModel {
-        return ViewModelProviders.of(this, object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return UpcomingViewModel(upcomingRepository) as T
-            }
-        })[UpcomingViewModel::class.java]
-    }
-
-    private fun getSearchViewModel(): SearchViewModel {
-        return ViewModelProviders.of(this, object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return SearchViewModel(apiService) as T
-            }
-        })[SearchViewModel::class.java]
-    }
-
-    private fun getGenreViewModel(): GenreViewModel {
-        return ViewModelProviders.of(this, object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return GenreViewModel(apiService) as T
-            }
-        })[GenreViewModel::class.java]
-    }
-
-    private fun getNowPlayingViewModel(): NowPlayingViewModel {
-        return ViewModelProviders.of(this, object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return NowPlayingViewModel(apiService) as T
-            }
-
-        })[NowPlayingViewModel::class.java]
     }
 
     override fun onBackPressed() {

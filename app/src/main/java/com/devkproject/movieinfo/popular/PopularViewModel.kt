@@ -2,10 +2,12 @@ package com.devkproject.movieinfo.popular
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.paging.PagedList
 import com.devkproject.movieinfo.NetworkState
 import com.devkproject.movieinfo.model.TMDBThumb
 import io.reactivex.disposables.CompositeDisposable
+import java.lang.IllegalArgumentException
 
 class PopularViewModel (private val popularRepository: PopularRepository): ViewModel() {
 
@@ -27,5 +29,15 @@ class PopularViewModel (private val popularRepository: PopularRepository): ViewM
     override fun onCleared() {
         super.onCleared()
         compositeDisposable.dispose()
+    }
+
+    class PopularViewModelFactory(private val popularRepository: PopularRepository): ViewModelProvider.Factory {
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            return if (modelClass.isAssignableFrom(PopularViewModel::class.java)) {
+                PopularViewModel(popularRepository) as T
+            } else {
+                throw IllegalArgumentException()
+            }
+        }
     }
 }

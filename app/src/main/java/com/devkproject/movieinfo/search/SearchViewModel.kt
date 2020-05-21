@@ -3,6 +3,7 @@ package com.devkproject.movieinfo.search
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.devkproject.movieinfo.NetworkState
@@ -10,8 +11,9 @@ import com.devkproject.movieinfo.api.PER_PAGE
 import com.devkproject.movieinfo.api.TMDBInterface
 import com.devkproject.movieinfo.model.TMDBThumb
 import io.reactivex.disposables.CompositeDisposable
+import java.lang.IllegalArgumentException
 
-class SearchViewModel (private var apiService: TMDBInterface): ViewModel() {
+class SearchViewModel (private val apiService: TMDBInterface): ViewModel() {
 
     private lateinit var searchPagedList: LiveData<PagedList<TMDBThumb>>
     private lateinit var searchDataSourceFactory: SearchDataSourceFactory
@@ -42,5 +44,16 @@ class SearchViewModel (private var apiService: TMDBInterface): ViewModel() {
     override fun onCleared() {
         super.onCleared()
         compositeDisposable.dispose()
+    }
+
+    class SearchViewModelFactory(private val apiService: TMDBInterface): ViewModelProvider.Factory {
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            return if (modelClass.isAssignableFrom(SearchViewModel::class.java)) {
+                SearchViewModel(apiService) as T
+            } else {
+                throw IllegalArgumentException()
+            }
+        }
+
     }
 }
