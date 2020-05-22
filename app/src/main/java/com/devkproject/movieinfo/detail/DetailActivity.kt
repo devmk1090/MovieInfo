@@ -12,9 +12,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ShareCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.devkproject.movieinfo.NetworkState
@@ -90,8 +88,6 @@ class DetailActivity : AppCompatActivity() {
         val rating = intent.getDoubleExtra("rating", 1.0)
         val poster = intent.getStringExtra("poster")
         val movie = Favorite(movieId, title, releaseDate, rating, poster)
-
-        Log.d("DetailActivity", movieId.toString())
 
         val apiService: TMDBInterface = TMDBClient.getClient()
 
@@ -222,7 +218,6 @@ class DetailActivity : AppCompatActivity() {
                 shareMovie()
                 return true
             }
-
         }
         return super.onOptionsItemSelected(item)
     }

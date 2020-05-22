@@ -21,7 +21,6 @@ import com.devkproject.movieinfo.db.FavoriteRVAdapter
 import com.devkproject.movieinfo.db.FavoriteViewModel
 import com.devkproject.movieinfo.genre.GenreViewModel
 import com.devkproject.movieinfo.now_playing.NowPlayingViewModel
-import com.devkproject.movieinfo.popular.PopularDataSourceFactory
 import com.devkproject.movieinfo.popular.PopularViewModel
 import com.devkproject.movieinfo.popular.PopularRepository
 import com.devkproject.movieinfo.search.SearchViewModel

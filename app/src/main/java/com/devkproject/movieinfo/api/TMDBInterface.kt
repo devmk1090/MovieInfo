@@ -15,6 +15,9 @@ import retrofit2.http.Query
 
 interface TMDBInterface {
 
+    @GET("person/{person_id}")
+    fun getPersonDetail(@Path("person_id") id: Int): Single<TMDBPersonDetail>
+
     @GET("person/{person_id}/movie_credits")
     fun getPerson(@Path("person_id") id: Int): Single<TMDBPerson>
 

@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.devkproject.movieinfo.model.TMDBPerson
+import com.devkproject.movieinfo.model.TMDBPersonDetail
 import io.reactivex.disposables.CompositeDisposable
 import java.lang.IllegalArgumentException
 
@@ -13,6 +14,10 @@ class PersonViewModel(private val personRepository: PersonRepository, personId: 
 
     val getPerson: LiveData<TMDBPerson> by lazy {
         personRepository.getPerson(compositeDisposable, personId)
+    }
+
+    val getPersonDetail: LiveData<TMDBPersonDetail> by lazy {
+        personRepository.getPersonDetail(compositeDisposable, personId)
     }
 
     override fun onCleared() {

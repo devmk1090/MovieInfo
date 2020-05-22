@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.devkproject.movieinfo.api.TMDBInterface
 import com.devkproject.movieinfo.model.TMDBPerson
+import com.devkproject.movieinfo.model.TMDBPersonDetail
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.lang.Exception
@@ -15,6 +16,10 @@ class PersonDataSource (private val apiService: TMDBInterface, private val compo
     val personResponse: LiveData<TMDBPerson>
         get() = _personResponse
 
+    private val _personDetailResponse = MutableLiveData<TMDBPersonDetail>()
+    val personDetailResponse: LiveData<TMDBPersonDetail>
+        get() = _personDetailResponse
+
     fun getPerson(personId: Int) {
         try {
             compositeDisposable.add(
@@ -22,6 +27,22 @@ class PersonDataSource (private val apiService: TMDBInterface, private val compo
                     .subscribeOn(Schedulers.io())
                     .subscribe({
                         _personResponse.postValue(it)
+                    }, {
+                        Log.e("PersonDataSource", it.message)
+                    })
+            )
+        } catch (e: Exception) {
+            Log.e("PersonDataSource", e.message)
+        }
+    }
+
+    fun getPersonDetail(personId: Int) {
+        try {
+            compositeDisposable.add(
+                apiService.getPersonDetail(personId)
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({
+                        _personDetailResponse.postValue(it)
                     }, {
                         Log.e("PersonDataSource", it.message)
                     })
