@@ -69,12 +69,3 @@
 </layout>
     <!--    TEST_ID = "ca-app-pub-3940256099942544/6300978111"-->
     <!--    UNIT_ID = "ca-app-pub-1646409874287424/1585126093"-->
-
-    <!--    <data>-->
-    <!--        <variable-->
-    <!--            name="movieDetail"-->
-    <!--            type="com.devkproject.movieinfo.model.TMDBDetail" />-->
-    <!--        <variable-->
-    <!--            name="viewModel"-->
-    <!--            type="com.devkproject.movieinfo.detail.DetailViewModel"/>-->
-    <!--    </data>-->

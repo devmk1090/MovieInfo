@@ -1,5 +1,6 @@
 package com.devkproject.movieinfo.detail.person
 
+import android.graphics.Color
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -20,7 +21,9 @@ import com.devkproject.movieinfo.model.TMDBPersonDetail
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
+import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.activity_person.*
+import kotlin.math.abs
 
 class PersonActivity : AppCompatActivity() {
 
@@ -46,9 +49,24 @@ class PersonActivity : AppCompatActivity() {
 
         val toolbar: Toolbar = findViewById(R.id.person_toolbar)
         setSupportActionBar(toolbar)
+        supportActionBar!!.setDisplayShowTitleEnabled(true)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setHomeAsUpIndicator(R.drawable.ic_arrow_back_black_24dp)
-        supportActionBar!!.title = name
+
+        person_appbar_layout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener{appBarLayout, verticalOffset ->
+            when {
+                abs(verticalOffset) == appBarLayout!!.totalScrollRange -> {
+                    person_collapsing_toolbar.title = name
+                    person_collapsing_toolbar.setCollapsedTitleTextColor(Color.WHITE)
+                }
+                verticalOffset == 0 -> {
+                    person_collapsing_toolbar.title = ""
+                }
+                else -> {
+                    person_collapsing_toolbar.title = ""
+                }
+            }
+        })
 
         val profilePIC: String = POSTER_URL + picture
         Glide.with(this)
@@ -68,11 +86,35 @@ class PersonActivity : AppCompatActivity() {
     }
 
     private fun bindDetail(it: TMDBPersonDetail) {
-        if (it.also_known_as.isEmpty()) {
-            person_also_known_as.text = ""
+        val name = "이름 : " + it.name
+        person_name.text = name
+
+        val job = "직업 : " + it.known_for_department
+        person_job.text = job
+
+        if (it.place_of_birth == null) {
+            val place = "출생 : "
+            person_place_of_birth.text = place
         } else {
-            person_also_known_as.text = it.also_known_as.toString()
+            val place = "출생 : " + it.place_of_birth
+            person_place_of_birth.text = place
         }
+
+        when {
+            it.gender == 1 -> {
+                val gender = "성별 : woman"
+                person_gender.text = gender
+            }
+            it.gender == 2 -> {
+                val gender = "성별 : man"
+                person_gender.text = gender
+            }
+            else -> {
+                val gender = "성별 : "
+                person_gender.text = gender
+            }
+        }
+
         when {
             it.birthday == null && it.deathday == null -> {
                 val birthToDeath = ""
@@ -87,7 +129,6 @@ class PersonActivity : AppCompatActivity() {
                 person_birth_to_death.text = birthToDeath
             }
         }
-        person_place_of_birth.text = it.place_of_birth
     }
 
     private fun setPersonCast(item: ArrayList<TMDBPersonCast>) {

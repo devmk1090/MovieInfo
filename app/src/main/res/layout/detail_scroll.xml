@@ -3,14 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
-<!--    <data>-->
-<!--        <variable-->
-<!--            name="movieDetail"-->
-<!--            type="com.devkproject.movieinfo.model.TMDBDetail"/>-->
-<!--        <variable-->
-<!--            name="viewModel"-->
-<!--            type="com.devkproject.movieinfo.detail.DetailViewModel" />-->
-<!--    </data>-->
 <androidx.core.widget.NestedScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent">

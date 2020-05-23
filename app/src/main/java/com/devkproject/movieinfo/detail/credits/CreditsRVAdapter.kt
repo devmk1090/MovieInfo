@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -50,7 +49,6 @@ class CreditsRVAdapter (private val item: ArrayList<TMDBCast>, private val conte
                     intent.putExtra("picture", cast.picture)
                     intent.putExtra("name", cast.name)
                     context.startActivity(intent, options.toBundle())
-                    Log.d("PERSON", cast.id.toString())
                 } else {
                     val intent = Intent(context, PersonActivity::class.java)
                     intent.putExtra("id", cast.id)

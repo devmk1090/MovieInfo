@@ -5,5 +5,6 @@ data class TMDBPersonDetail(
     val birthday: String,
     val deathday: String,
     val place_of_birth: String,
-    val also_known_as: ArrayList<String>
+    val known_for_department: String,
+    val gender: Int
 )
