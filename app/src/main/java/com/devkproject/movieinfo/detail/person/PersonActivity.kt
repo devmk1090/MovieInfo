@@ -87,46 +87,46 @@ class PersonActivity : AppCompatActivity() {
 
     private fun bindDetail(it: TMDBPersonDetail) {
         val name = "이름 : " + it.name
-        person_name.text = name
+        binding.personName.text = name
 
         val job = "직업 : " + it.known_for_department
-        person_job.text = job
+        binding.personJob.text = job
 
         if (it.place_of_birth == null) {
             val place = "출생 : "
-            person_place_of_birth.text = place
+            binding.personPlaceOfBirth.text = place
         } else {
             val place = "출생 : " + it.place_of_birth
-            person_place_of_birth.text = place
+            binding.personPlaceOfBirth.text = place
         }
 
         when {
             it.gender == 1 -> {
                 val gender = "성별 : woman"
-                person_gender.text = gender
+                binding.personGender.text = gender
             }
             it.gender == 2 -> {
                 val gender = "성별 : man"
-                person_gender.text = gender
+                binding.personGender.text = gender
             }
             else -> {
                 val gender = "성별 : "
-                person_gender.text = gender
+                binding.personGender.text = gender
             }
         }
 
         when {
             it.birthday == null && it.deathday == null -> {
                 val birthToDeath = ""
-                person_birth_to_death.text = birthToDeath
+                binding.personBirthToDeath.text = birthToDeath
             }
             it.deathday == null -> {
                 val birthToDeath = it.birthday + " ~ "
-                person_birth_to_death.text = birthToDeath
+                binding.personBirthToDeath.text = birthToDeath
             }
             else -> {
                 val birthToDeath = it.birthday + " ~ " + it.deathday
-                person_birth_to_death.text = birthToDeath
+                binding.personBirthToDeath.text = birthToDeath
             }
         }
     }

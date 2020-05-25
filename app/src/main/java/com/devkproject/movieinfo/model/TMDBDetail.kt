@@ -11,7 +11,7 @@ data class TMDBDetail(
     val rating: Double,
     val vote_count: Int,
     val runtime: Int,
-    val title: String,
+    var title: String,
     val overview: String,
     @SerializedName("poster_path")
     val posterPath: String,

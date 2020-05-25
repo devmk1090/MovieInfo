@@ -3,6 +3,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="model"
+            type="com.devkproject.movieinfo.model.TMDBDetail" />
+    </data>
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -38,6 +43,7 @@
         <include
             android:id="@+id/detail_scroll_item"
             layout="@layout/detail_scroll"
+            app:model="@{model}"
             />
         <LinearLayout
             android:orientation="vertical"
