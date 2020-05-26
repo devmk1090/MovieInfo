@@ -3,11 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-    <data>
-        <variable
-            name="model"
-            type="com.devkproject.movieinfo.model.TMDBDetail" />
-    </data>
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -43,7 +38,6 @@
         <include
             android:id="@+id/detail_scroll_item"
             layout="@layout/detail_scroll"
-            app:model="@{model}"
             />
         <LinearLayout
             android:orientation="vertical"
@@ -63,6 +57,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
         </LinearLayout>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_favorite"
+            android:layout_margin="8dp"
+            android:src="@drawable/ic_star_border_black_24dp"
+            app:maxImageSize="36dp"
+            android:backgroundTint="@android:color/white"
+            app:layout_anchor="@id/detail_appbar_layout"
+            app:layout_anchorGravity="bottom|end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
         <com.google.android.gms.ads.AdView
             android:layout_gravity="bottom"
             xmlns:ads="http://schemas.android.com/apk/res-auto"

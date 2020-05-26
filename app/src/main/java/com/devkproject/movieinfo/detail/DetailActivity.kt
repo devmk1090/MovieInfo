@@ -48,6 +48,7 @@ class DetailActivity : AppCompatActivity() {
     private lateinit var videosRepository: VideosRepository
 
     private lateinit var mAdView: AdView
+    private var isFavorite: Boolean? = null
 
     private lateinit var binding: ActivityDetailBinding
 
@@ -93,23 +94,21 @@ class DetailActivity : AppCompatActivity() {
         favoriteViewModel = ViewModelProvider(this).get(FavoriteViewModel::class.java)
         favoriteViewModel.allMovie.observe(this, Observer {
             if (it.contains(movie)) {
-                favorite_btn.text = "찜 해제"
-                favorite_btn.setTextColor(Color.GRAY)
+                fab_favorite.setImageResource(R.drawable.ic_star_black_24dp)
+                isFavorite = true
             } else {
-                favorite_btn.text = "찜 하기"
-                favorite_btn.setTextColor(Color.BLACK)
+                fab_favorite.setImageResource(R.drawable.ic_star_border_black_24dp)
+                isFavorite = false
             }
         })
 
-        favorite_btn.setOnClickListener {
-            if(favorite_btn.text == "찜 하기") {
+        fab_favorite.setOnClickListener {
+            if (isFavorite == false) {
                 favoriteViewModel.insert(movie)
-                favorite_btn.text = "찜 해제"
-                favorite_btn.setTextColor(Color.GRAY)
+                fab_favorite.setImageResource(R.drawable.ic_star_black_24dp)
             } else {
                 favoriteViewModel.delete(movie)
-                favorite_btn.text = "찜 하기"
-                favorite_btn.setTextColor(Color.BLACK)
+                fab_favorite.setImageResource(R.drawable.ic_star_border_black_24dp)
             }
         }
 
