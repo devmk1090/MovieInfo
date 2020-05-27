@@ -100,12 +100,12 @@ class PersonActivity : AppCompatActivity() {
             binding.personPlaceOfBirth.text = place
         }
 
-        when {
-            it.gender == 1 -> {
+        when (it.gender) {
+            1 -> {
                 val gender = "성별 : woman"
                 binding.personGender.text = gender
             }
-            it.gender == 2 -> {
+            2 -> {
                 val gender = "성별 : man"
                 binding.personGender.text = gender
             }
