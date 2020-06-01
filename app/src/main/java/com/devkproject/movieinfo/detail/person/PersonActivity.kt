@@ -49,9 +49,11 @@ class PersonActivity : AppCompatActivity() {
 
         val toolbar: Toolbar = findViewById(R.id.person_toolbar)
         setSupportActionBar(toolbar)
-        supportActionBar!!.setDisplayShowTitleEnabled(true)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        supportActionBar!!.setHomeAsUpIndicator(R.drawable.ic_arrow_back_black_24dp)
+        supportActionBar!!.run {
+            setDisplayShowTitleEnabled(true)
+            setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.ic_arrow_back_black_24dp)
+        }
 
         person_appbar_layout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener{appBarLayout, verticalOffset ->
             when {
@@ -134,9 +136,11 @@ class PersonActivity : AppCompatActivity() {
     private fun setPersonCast(item: ArrayList<TMDBPersonCast>) {
         val actorCreditsRVAdapter = PersonRVAdapter(item, this)
         val gridLayoutManager = GridLayoutManager(this, 3)
-        person_recyclerView.layoutManager = gridLayoutManager
-        person_recyclerView.setHasFixedSize(true)
-        person_recyclerView.adapter = actorCreditsRVAdapter
+        person_recyclerView.run {
+            layoutManager = gridLayoutManager
+            setHasFixedSize(true)
+            adapter = actorCreditsRVAdapter
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

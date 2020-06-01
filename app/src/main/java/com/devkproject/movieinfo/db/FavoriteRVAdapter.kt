@@ -45,13 +45,14 @@ class FavoriteRVAdapter internal constructor(private val context: Context): Recy
                 .load(posterUrl)
                 .into(itemView.popular_thumb_image)
             itemView.setOnClickListener {
-                val intent = Intent(context, DetailActivity::class.java)
-                intent.putExtra("id", favorite.movieId)
-                intent.putExtra("title", favorite.title)
-                intent.putExtra("release", favorite.release)
-                intent.putExtra("rating", favorite.rating)
-                intent.putExtra("poster", favorite.poster)
-                context.startActivity(intent)
+                Intent(context, DetailActivity::class.java).apply {
+                    putExtra("id", favorite.movieId)
+                    putExtra("title", favorite.title)
+                    putExtra("release", favorite.release)
+                    putExtra("rating", favorite.rating)
+                    putExtra("poster", favorite.poster)
+                    context.startActivity(this)
+                }
             }
         }
     }

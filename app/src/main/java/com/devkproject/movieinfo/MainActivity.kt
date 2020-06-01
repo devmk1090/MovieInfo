@@ -5,6 +5,7 @@ import android.app.SearchManager
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -13,6 +14,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.GridLayoutManager
+import com.devkproject.movieinfo.api.GENRE_POPULAR
 import com.devkproject.movieinfo.toprated.TopRatedRepository
 import com.devkproject.movieinfo.toprated.TopRatedViewModel
 import com.devkproject.movieinfo.api.TMDBInterface
@@ -60,6 +62,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private lateinit var mAdView: AdView
 
+    private var movieAdapter = PagedListRVAdapter(this)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_drawer)
@@ -72,37 +76,43 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         main_drawer_navigationView.setNavigationItemSelectedListener(this)
         val toolbar:androidx.appcompat.widget.Toolbar = findViewById(R.id.main_toolbar)
         setSupportActionBar(toolbar)
-        supportActionBar!!.setDisplayShowTitleEnabled(true)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true) //드로어를 꺼낼 홈 버튼 활성화
-        supportActionBar!!.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp) //홈버튼 이미지 변경
-
+        supportActionBar!!.run {
+            setDisplayShowTitleEnabled(true)
+            setDisplayHomeAsUpEnabled(true) //드로어를 꺼낼 홈 버튼 활성화
+            setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp) //홈버튼 이미지 변경
+        }
         nowPlaying()
+    }
+
+    private fun movieSetting() {
+        movieAdapter = PagedListRVAdapter(this)
+        val gridLayoutManager = GridLayoutManager(this, 3)
+        gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                val viewType: Int = movieAdapter.getItemViewType(position)
+                return if(viewType == movieAdapter.MOVIE_TYPE) 1 else 3
+            }
+        }
+        movie_recyclerView.run {
+            layoutManager = gridLayoutManager
+            setHasFixedSize(true)
+            adapter = movieAdapter
+        }
     }
 
     private fun nowPlaying() {
         supportActionBar!!.title = "현재 상영작"
         nowPlayingViewModel = ViewModelProvider(this, NowPlayingViewModel.NowPlayingViewModelFactory(apiService))
             .get(NowPlayingViewModel::class.java)
-        val nowPlayingAdapter = PagedListRVAdapter(this)
-        val gridLayoutManager = GridLayoutManager(this, 3)
-        gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-            override fun getSpanSize(position: Int): Int {
-                val viewType: Int = nowPlayingAdapter.getItemViewType(position)
-                return if(viewType == nowPlayingAdapter.MOVIE_TYPE) 1 else 3
-            }
-        }
-        movie_recyclerView.layoutManager = gridLayoutManager
-        movie_recyclerView.setHasFixedSize(true)
-        movie_recyclerView.adapter = nowPlayingAdapter
-
+        movieSetting()
         nowPlayingViewModel.nowPlayingView().observe(this, Observer {
-            nowPlayingAdapter.submitList(it)
+            movieAdapter.submitList(it)
         })
         nowPlayingViewModel.nowPlayingNetworkState().observe(this, Observer {
             movie_progress_bar.visibility = if(nowPlayingViewModel.listIsEmpty() && it == NetworkState.LOADING) View.VISIBLE else View.GONE
             movie_error_text.visibility = if(nowPlayingViewModel.listIsEmpty() && it == NetworkState.ERROR) View.VISIBLE else View.GONE
             if(!nowPlayingViewModel.listIsEmpty()) {
-                nowPlayingAdapter.setNetworkState(it)
+                movieAdapter.setNetworkState(it)
             }
         })
     }
@@ -116,26 +126,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 popularViewModel = ViewModelProvider(this, PopularViewModel.PopularViewModelFactory(popularRepository))
                     .get(PopularViewModel::class.java)
 
-                val popularAdapter = PagedListRVAdapter(this)
-                val gridLayoutManager = GridLayoutManager(this, 3)
-                gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-                    override fun getSpanSize(position: Int): Int {
-                        val viewType: Int = popularAdapter.getItemViewType(position)
-                        return if(viewType == popularAdapter.MOVIE_TYPE) 1 else 3
-                    }
-                }
-                movie_recyclerView.layoutManager = gridLayoutManager
-                movie_recyclerView.setHasFixedSize(true)
-                movie_recyclerView.adapter = popularAdapter
-
+                movieSetting()
                 popularViewModel.popularPagedList.observe(this, Observer {
-                    popularAdapter.submitList(it)
+                    movieAdapter.submitList(it)
                 })
                 popularViewModel.networkState.observe(this, Observer {
                     movie_progress_bar.visibility = if(popularViewModel.listIsEmpty() && it == NetworkState.LOADING) View.VISIBLE else View.GONE
                     movie_error_text.visibility = if(popularViewModel.listIsEmpty() && it == NetworkState.ERROR) View.VISIBLE else View.GONE
                     if(!popularViewModel.listIsEmpty()) {
-                        popularAdapter.setNetworkState(it)
+                        movieAdapter.setNetworkState(it)
                     }
                 })
             }
@@ -145,27 +144,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 topRatedRepository = TopRatedRepository(apiService)
                 topRatedViewModel = ViewModelProvider(this, TopRatedViewModel.TopRatedViewModelFactory(topRatedRepository))
                     .get(TopRatedViewModel::class.java)
-
-                val topRatedAdapter = PagedListRVAdapter(this)
-                val gridLayoutManager = GridLayoutManager(this, 3)
-                gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-                    override fun getSpanSize(position: Int): Int {
-                        val viewType: Int = topRatedAdapter.getItemViewType(position)
-                        return if(viewType == topRatedAdapter.MOVIE_TYPE) 1 else 3
-                    }
-                }
-                movie_recyclerView.layoutManager = gridLayoutManager
-                movie_recyclerView.setHasFixedSize(true)
-                movie_recyclerView.adapter = topRatedAdapter
-
+                movieSetting()
                 topRatedViewModel.topRatedPagedList.observe(this, Observer {
-                    topRatedAdapter.submitList(it)
+                    movieAdapter.submitList(it)
                 })
                 topRatedViewModel.networkState.observe(this, Observer {
                     movie_progress_bar.visibility = if(topRatedViewModel.listIsEmpty() && it == NetworkState.LOADING) View.VISIBLE else View.GONE
                     movie_error_text.visibility = if(topRatedViewModel.listIsEmpty() && it == NetworkState.ERROR) View.VISIBLE else View.GONE
                     if(!topRatedViewModel.listIsEmpty()) {
-                        topRatedAdapter.setNetworkState(it)
+                        movieAdapter.setNetworkState(it)
                     }
                 })
             }
@@ -178,70 +165,56 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 upcomingRepository = UpcomingRepository(apiService)
                 upcomingViewModel = ViewModelProvider(this, UpcomingViewModel.UpcomingViewModelFactory(upcomingRepository))
                     .get(UpcomingViewModel::class.java)
-
-                val upcomingAdapter = PagedListRVAdapter(this)
-                val gridLayoutManager = GridLayoutManager(this, 3)
-                gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-                    override fun getSpanSize(position: Int): Int {
-                        val viewType: Int = upcomingAdapter.getItemViewType(position)
-                        return if(viewType == upcomingAdapter.MOVIE_TYPE) 1 else 3
-                    }
-                }
-                movie_recyclerView.layoutManager = gridLayoutManager
-                movie_recyclerView.setHasFixedSize(true)
-                movie_recyclerView.adapter = upcomingAdapter
-
+                movieSetting()
                 upcomingViewModel.upcomingPagedList.observe(this, Observer {
-                    upcomingAdapter.submitList(it)
+                    movieAdapter.submitList(it)
                 })
                 upcomingViewModel.networkState.observe(this, Observer {
                     movie_progress_bar.visibility = if(upcomingViewModel.listIsEmpty() && it == NetworkState.LOADING) View.VISIBLE else View.GONE
                     movie_error_text.visibility = if(upcomingViewModel.listIsEmpty() && it == NetworkState.ERROR) View.VISIBLE else View.GONE
                     if(!upcomingViewModel.listIsEmpty()) {
-                        upcomingAdapter.setNetworkState(it)
+                        movieAdapter.setNetworkState(it)
                     }
                 })
             }
             R.id.genre_popular_movie -> {
-                val items = arrayOf("액션", "모험", "애니메이션", "코미디", "범죄", "다큐멘터리", "드라마",
-                    "가족", "판타지", "SF", "공포", "스릴러", "미스터리", "전쟁", "로맨스")
                 AlertDialog.Builder(this, 3)
                     .setTitle("장르 선택")
-                    .setItems(items) { dialog, which ->
+                    .setItems(R.array.genre_item) { dialog, which ->
                         when(which) {
-                            0 -> genreId("28", "액션", "popularity.desc")
-                            1 -> genreId("12", "모험","popularity.desc")
-                            2 -> genreId("16", "애니메이션", "popularity.desc")
-                            3 -> genreId("35", "코미디", "popularity.desc")
-                            4 -> genreId("80", "범죄", "popularity.desc")
-                            5 -> genreId("99", "다큐멘터리", "popularity.desc")
-                            6 -> genreId("18", "드라마", "popularity.desc")
-                            7 -> genreId("10751", "가족", "popularity.desc")
-                            8 -> genreId("14", "판타지", "popularity.desc")
-                            9 -> genreId("878", "SF", "popularity.desc")
-                            10 -> genreId("27", "공포", "popularity.desc")
-                            11 -> genreId("53", "스릴러", "popularity.desc")
-                            12 -> genreId("9648", "미스터리", "popularity.desc")
-                            13 -> genreId("10752", "전쟁", "popularity.desc")
-                            14 -> genreId("10749", "로맨스", "popularity.desc")
+                            0 -> genreId("28", which.toString(), GENRE_POPULAR)
+//                            1 -> genreId("12", [1],GENRE_POPULAR)
+//                            2 -> genreId("16", , GENRE_POPULAR)
+//                            3 -> genreId("35", , GENRE_POPULAR)
+//                            4 -> genreId("10749", , GENRE_POPULAR)
+//                            5 -> genreId("99", , GENRE_POPULAR)
+//                            6 -> genreId("18", , GENRE_POPULAR)
+//                            7 -> genreId("10751", , GENRE_POPULAR)
+//                            8 -> genreId("14", , GENRE_POPULAR)
+//                            9 -> genreId("878", , GENRE_POPULAR)
+//                            10 -> genreId("27", , GENRE_POPULAR)
+//                            11 -> genreId("53", , GENRE_POPULAR)
+//                            12 -> genreId("9648", , GENRE_POPULAR)
+//                            13 -> genreId("10752", , GENRE_POPULAR)
+//                            14 -> genreId("80", , GENRE_POPULAR)
                         }
                         dialog.dismiss()
                     }
                     .setNegativeButton("취소", null)
                     .show()
+
             }
             R.id.genre_rated_movie -> {
-                val items = arrayOf("액션", "모험", "애니메이션", "코미디", "범죄", "다큐멘터리", "드라마",
-                    "가족", "판타지", "SF", "공포", "스릴러", "미스터리", "전쟁", "로맨스")
+
                 AlertDialog.Builder(this, 3)
                     .setTitle("장르 선택")
-                    .setItems(items) { dialog, which ->
+                    .setItems(R.array.genre_item) { dialog, which ->
                         when(which) {
                             0 -> genreId("28", "액션", "vote_average.desc")
                             1 -> genreId("12", "모험", "vote_average.desc")
                             2 -> genreId("16", "애니메이션", "vote_average.desc")
                             3 -> genreId("35", "코미디", "vote_average.desc")
-                            4 -> genreId("80", "범죄", "vote_average.desc")
+                            4 -> genreId("10749", "로맨스", "vote_average.desc")
                             5 -> genreId("99", "다큐멘터리", "vote_average.desc")
                             6 -> genreId("18", "드라마", "vote_average.desc")
                             7 -> genreId("10751", "가족", "vote_average.desc")
@@ -251,7 +224,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             11 -> genreId("53", "스릴러", "vote_average.desc")
                             12 -> genreId("9648", "미스터리", "vote_average.desc")
                             13 -> genreId("10752", "전쟁", "vote_average.desc")
-                            14 -> genreId("10749", "로맨스", "vote_average.desc")
+                            14 -> genreId("80", "범죄", "vote_average.desc")
                         }
                         dialog.dismiss()
                     }
@@ -260,16 +233,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.favorite_movie -> {
                 supportActionBar!!.title = "찜 목록"
-
                 val favoriteRVAdapter = FavoriteRVAdapter(this)
                 val gridLayoutManager = GridLayoutManager(this, 3)
-                movie_recyclerView.layoutManager = gridLayoutManager
-                movie_recyclerView.setHasFixedSize(true)
-                movie_recyclerView.adapter = favoriteRVAdapter
-
+                movie_recyclerView.run {
+                    layoutManager = gridLayoutManager
+                    setHasFixedSize(true)
+                    adapter = favoriteRVAdapter
+                }
                 favoriteViewModel = ViewModelProvider(this).get(FavoriteViewModel::class.java)
                 favoriteViewModel.allMovie.observe(this, Observer {
-                    it.let { favoriteRVAdapter.setFavorite(it) }
+                    favoriteRVAdapter.setFavorite(it)
                 })
             }
         }
@@ -294,27 +267,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         genreViewModel = ViewModelProvider(this, GenreViewModel.GenreViewModelFactory(apiService))
             .get(GenreViewModel::class.java)
-
-        val genreAdapter = PagedListRVAdapter(this)
-        val gridLayoutManager = GridLayoutManager(this, 3)
-        gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-            override fun getSpanSize(position: Int): Int {
-                val viewType: Int = genreAdapter.getItemViewType(position)
-                return if(viewType == genreAdapter.MOVIE_TYPE) 1 else 3
-            }
-        }
-        movie_recyclerView.layoutManager = gridLayoutManager
-        movie_recyclerView.setHasFixedSize(true)
-        movie_recyclerView.adapter = genreAdapter
-
+        movieSetting()
         genreViewModel.getGenreView(genreId, sort_by).observe(this, Observer {
-            genreAdapter.submitList(it)
+            movieAdapter.submitList(it)
         })
         genreViewModel.genreNetworkState().observe(this, Observer {
             movie_progress_bar.visibility = if(genreViewModel.listIsEmpty() && it == NetworkState.LOADING) View.VISIBLE else View.GONE
             movie_error_text.visibility = if(genreViewModel.listIsEmpty() && it == NetworkState.ERROR) View.VISIBLE else View.GONE
             if(!genreViewModel.listIsEmpty()) {
-                genreAdapter.setNetworkState(it)
+                movieAdapter.setNetworkState(it)
             }
         })
     }
@@ -324,26 +285,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         searchViewModel = ViewModelProvider(this, SearchViewModel.SearchViewModelFactory(apiService))
             .get(SearchViewModel::class.java)
-
-        val searchAdapter = PagedListRVAdapter(this)
-        val gridLayoutManager = GridLayoutManager(this, 3)
-        gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-            override fun getSpanSize(position: Int): Int {
-                val viewType: Int = searchAdapter.getItemViewType(position)
-                return if(viewType == searchAdapter.MOVIE_TYPE) 1 else 3
-            }
-        }
-        movie_recyclerView.layoutManager = gridLayoutManager
-        movie_recyclerView.setHasFixedSize(true)
-        movie_recyclerView.adapter = searchAdapter
-
+        movieSetting()
         searchViewModel.searchView(query).observe(this, Observer {
-            searchAdapter.submitList(it)
+            movieAdapter.submitList(it)
         })
         searchViewModel.searchViewNetworkState().observe(this, Observer {
             movie_progress_bar.visibility = if(searchViewModel.listIsEmpty() && it == NetworkState.LOADING) View.VISIBLE else View.GONE
             if(!searchViewModel.listIsEmpty()) {
-                searchAdapter.setNetworkState(it)
+                movieAdapter.setNetworkState(it)
             }
         })
     }

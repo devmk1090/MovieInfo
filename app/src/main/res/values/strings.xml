@@ -4,4 +4,21 @@
     <string name="next_line">\n</string>
     <string name="detail_cast">출연 (터치시 배우 필모그래피)</string>
     <string name="filmography">필모그래피</string>
+    <string-array name="genre_item">
+        <item>액션</item>
+        <item>모험</item>
+        <item>애니메이션</item>
+        <item>코미디</item>
+        <item>로맨스</item>
+        <item>다큐멘터리</item>
+        <item>드라마</item>
+        <item>가족</item>
+        <item>판타지</item>
+        <item>SF</item>
+        <item>공포</item>
+        <item>스릴러</item>
+        <item>미스터리</item>
+        <item>전쟁</item>
+        <item>범죄</item>
+    </string-array>
 </resources>

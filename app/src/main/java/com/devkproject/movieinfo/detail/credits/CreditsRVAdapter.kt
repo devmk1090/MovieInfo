@@ -42,19 +42,21 @@ class CreditsRVAdapter (private val item: ArrayList<TMDBCast>, private val conte
                 .into(itemView.credits_image)
             itemView.credits_image.setOnClickListener {
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    val intent = Intent(context, PersonActivity::class.java)
                     val options = ActivityOptionsCompat.makeSceneTransitionAnimation(context as Activity,
                         itemView.credits_image, itemView.credits_image.transitionName)
-                    intent.putExtra("id", cast.id)
-                    intent.putExtra("picture", cast.picture)
-                    intent.putExtra("name", cast.name)
-                    context.startActivity(intent, options.toBundle())
+                    Intent(context, PersonActivity::class.java).apply {
+                        putExtra("id", cast.id)
+                        putExtra("picture", cast.picture)
+                        putExtra("name", cast.name)
+                        context.startActivity(this, options.toBundle())
+                    }
                 } else {
-                    val intent = Intent(context, PersonActivity::class.java)
-                    intent.putExtra("id", cast.id)
-                    intent.putExtra("picture", cast.picture)
-                    intent.putExtra("name", cast.name)
-                    context.startActivity(intent)
+                    Intent(context, PersonActivity::class.java).apply {
+                        putExtra("id", cast.id)
+                        putExtra("picture", cast.picture)
+                        putExtra("name", cast.name)
+                        context.startActivity(this)
+                    }
                 }
             }
         }

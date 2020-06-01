@@ -58,9 +58,11 @@ class DetailActivity : AppCompatActivity() {
 
         val toolbar: Toolbar = findViewById(R.id.detail_toolbar)
         setSupportActionBar(toolbar)
-        supportActionBar!!.setDisplayShowTitleEnabled(true)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        supportActionBar!!.setHomeAsUpIndicator(R.drawable.ic_arrow_back_black_24dp)
+        supportActionBar!!.run {
+            setDisplayShowTitleEnabled(true)
+            setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.ic_arrow_back_black_24dp)
+        }
 
         detail_appbar_layout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
             when {
@@ -168,37 +170,47 @@ class DetailActivity : AppCompatActivity() {
 
     private fun setGenreRVAdapter(item: ArrayList<Genres>) {
         val genreRVAdapter = GenreRVAdapter(item)
-        genre_recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        genre_recyclerView.setHasFixedSize(true)
-        genre_recyclerView.adapter = genreRVAdapter
+        genre_recyclerView.run {
+            layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.HORIZONTAL, false)
+            setHasFixedSize(true)
+            adapter = genreRVAdapter
+        }
     }
 
     private fun setProductionRVAdapter(item: ArrayList<Production>) {
         val productionRVAdapter = ProductionRVAdapter(item)
-        production_recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        production_recyclerView.setHasFixedSize(true)
-        production_recyclerView.adapter = productionRVAdapter
+        production_recyclerView.run {
+            layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.HORIZONTAL, false)
+            setHasFixedSize(true)
+            adapter = productionRVAdapter
+        }
     }
 
     private fun setCastRVAdapter(item: ArrayList<TMDBCast>) {
         val creditsRVAdapter = CreditsRVAdapter(item, this)
-        credits_recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        credits_recyclerView.setHasFixedSize(true)
-        credits_recyclerView.adapter = creditsRVAdapter
+        credits_recyclerView.run {
+            layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.HORIZONTAL, false)
+            setHasFixedSize(true)
+            adapter = creditsRVAdapter
+        }
     }
 
     private fun setCrewRVAdapter(item: ArrayList<TMDBCrew>) {
         val crewRVAdapter = CrewRVAdapter(item, this)
-        crew_recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        crew_recyclerView.setHasFixedSize(true)
-        crew_recyclerView.adapter = crewRVAdapter
+        crew_recyclerView.run {
+            layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.HORIZONTAL, false)
+            setHasFixedSize(true)
+            adapter = crewRVAdapter
+        }
     }
 
     private fun setVideosRVAdapter(item: ArrayList<TMDBTrailers>) {
         val videosRVAdapter = VideosRVAdapter(item, this)
-        videos_recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        videos_recyclerView.setHasFixedSize(true)
-        videos_recyclerView.adapter = videosRVAdapter
+        videos_recyclerView.run {
+            layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.HORIZONTAL, false)
+            setHasFixedSize(true)
+            adapter = videosRVAdapter
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

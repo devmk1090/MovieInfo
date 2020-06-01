@@ -74,13 +74,14 @@ class PagedListRVAdapter(private val context: Context)
                 .into(itemView.popular_thumb_image)
 
             itemView.setOnClickListener {
-                val intent = Intent(context, DetailActivity::class.java)
-                intent.putExtra("id", movie.id)
-                intent.putExtra("title", movie.title)
-                intent.putExtra("release", movie.releaseDate)
-                intent.putExtra("rating", movie.rating)
-                intent.putExtra("poster", movie.posterPath)
-                context.startActivity(intent)
+                Intent(context, DetailActivity::class.java).apply {
+                    putExtra("id", movie.id)
+                    putExtra("title", movie.title)
+                    putExtra("release", movie.releaseDate)
+                    putExtra("rating", movie.rating)
+                    putExtra("poster", movie.posterPath)
+                    context.startActivity(this)
+                }
             }
         }
     }
