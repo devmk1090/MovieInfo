@@ -24,9 +24,6 @@ const val YOUTUBE_THUMBNAIL_URL_JPG = "/0.jpg"
 const val SHARE_URL = "https://www.themoviedb.org/movie/"
 const val SHARE_TYPE = "text/plain"
 
-const val GENRE_POPULAR = "popularity.desc"
-const val GENRE_RATED = "vote_average.desc"
-
 //object class : 싱글턴 클래스, 여러번 호출해도 객체는 한번만 생성
 object TMDBClient {
     fun getClient(): TMDBInterface {

@@ -5,7 +5,6 @@ import android.app.SearchManager
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -14,7 +13,6 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.GridLayoutManager
-import com.devkproject.movieinfo.api.GENRE_POPULAR
 import com.devkproject.movieinfo.toprated.TopRatedRepository
 import com.devkproject.movieinfo.toprated.TopRatedViewModel
 import com.devkproject.movieinfo.api.TMDBInterface
@@ -38,6 +36,7 @@ import kotlinx.android.synthetic.main.main_drawer.*
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private val apiService: TMDBInterface = TMDBClient.getClient()
+    private var movieAdapter = PagedListRVAdapter(this)
 
     private lateinit var popularViewModel: PopularViewModel
     private lateinit var popularRepository: PopularRepository
@@ -62,7 +61,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private lateinit var mAdView: AdView
 
-    private var movieAdapter = PagedListRVAdapter(this)
+    companion object {
+        const val GENRE_POPULAR = "popularity.desc"
+        const val GENRE_RATED = "vote_average.desc"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -178,25 +180,26 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 })
             }
             R.id.genre_popular_movie -> {
-                AlertDialog.Builder(this, 3)
+                val items = resources.getStringArray(R.array.genre_item)
+                AlertDialog.Builder(this, 2)
                     .setTitle("장르 선택")
                     .setItems(R.array.genre_item) { dialog, which ->
                         when(which) {
-                            0 -> genreId("28", which.toString(), GENRE_POPULAR)
-//                            1 -> genreId("12", [1],GENRE_POPULAR)
-//                            2 -> genreId("16", , GENRE_POPULAR)
-//                            3 -> genreId("35", , GENRE_POPULAR)
-//                            4 -> genreId("10749", , GENRE_POPULAR)
-//                            5 -> genreId("99", , GENRE_POPULAR)
-//                            6 -> genreId("18", , GENRE_POPULAR)
-//                            7 -> genreId("10751", , GENRE_POPULAR)
-//                            8 -> genreId("14", , GENRE_POPULAR)
-//                            9 -> genreId("878", , GENRE_POPULAR)
-//                            10 -> genreId("27", , GENRE_POPULAR)
-//                            11 -> genreId("53", , GENRE_POPULAR)
-//                            12 -> genreId("9648", , GENRE_POPULAR)
-//                            13 -> genreId("10752", , GENRE_POPULAR)
-//                            14 -> genreId("80", , GENRE_POPULAR)
+                            0 -> genreId("28", items[which], GENRE_POPULAR)
+                            1 -> genreId("12", items[which], GENRE_POPULAR)
+                            2 -> genreId("16", items[which], GENRE_POPULAR)
+                            3 -> genreId("35", items[which], GENRE_POPULAR)
+                            4 -> genreId("10749", items[which], GENRE_POPULAR)
+                            5 -> genreId("99", items[which], GENRE_POPULAR)
+                            6 -> genreId("18", items[which], GENRE_POPULAR)
+                            7 -> genreId("10751", items[which], GENRE_POPULAR)
+                            8 -> genreId("14", items[which], GENRE_POPULAR)
+                            9 -> genreId("878", items[which], GENRE_POPULAR)
+                            10 -> genreId("27", items[which], GENRE_POPULAR)
+                            11 -> genreId("53", items[which], GENRE_POPULAR)
+                            12 -> genreId("9648", items[which], GENRE_POPULAR)
+                            13 -> genreId("10752", items[which], GENRE_POPULAR)
+                            14 -> genreId("80", items[which], GENRE_POPULAR)
                         }
                         dialog.dismiss()
                     }
@@ -205,26 +208,26 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             }
             R.id.genre_rated_movie -> {
-
-                AlertDialog.Builder(this, 3)
+                val items = resources.getStringArray(R.array.genre_item)
+                AlertDialog.Builder(this, 2)
                     .setTitle("장르 선택")
                     .setItems(R.array.genre_item) { dialog, which ->
                         when(which) {
-                            0 -> genreId("28", "액션", "vote_average.desc")
-                            1 -> genreId("12", "모험", "vote_average.desc")
-                            2 -> genreId("16", "애니메이션", "vote_average.desc")
-                            3 -> genreId("35", "코미디", "vote_average.desc")
-                            4 -> genreId("10749", "로맨스", "vote_average.desc")
-                            5 -> genreId("99", "다큐멘터리", "vote_average.desc")
-                            6 -> genreId("18", "드라마", "vote_average.desc")
-                            7 -> genreId("10751", "가족", "vote_average.desc")
-                            8 -> genreId("14", "판타지", "vote_average.desc")
-                            9 -> genreId("878", "SF", "vote_average.desc")
-                            10 -> genreId("27", "공포", "vote_average.desc")
-                            11 -> genreId("53", "스릴러", "vote_average.desc")
-                            12 -> genreId("9648", "미스터리", "vote_average.desc")
-                            13 -> genreId("10752", "전쟁", "vote_average.desc")
-                            14 -> genreId("80", "범죄", "vote_average.desc")
+                            0 -> genreId("28", items[which], GENRE_RATED)
+                            1 -> genreId("12", items[which], GENRE_RATED)
+                            2 -> genreId("16", items[which], GENRE_RATED)
+                            3 -> genreId("35", items[which], GENRE_RATED)
+                            4 -> genreId("10749", items[which], GENRE_RATED)
+                            5 -> genreId("99", items[which], GENRE_RATED)
+                            6 -> genreId("18", items[which], GENRE_RATED)
+                            7 -> genreId("10751", items[which], GENRE_RATED)
+                            8 -> genreId("14", items[which], GENRE_RATED)
+                            9 -> genreId("878", items[which], GENRE_RATED)
+                            10 -> genreId("27", items[which], GENRE_RATED)
+                            11 -> genreId("53", items[which], GENRE_RATED)
+                            12 -> genreId("9648", items[which], GENRE_RATED)
+                            13 -> genreId("10752", items[which], GENRE_RATED)
+                            14 -> genreId("80", items[which], GENRE_RATED)
                         }
                         dialog.dismiss()
                     }

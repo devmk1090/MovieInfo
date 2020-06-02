@@ -38,13 +38,14 @@ class PersonRVAdapter(private val item: ArrayList<TMDBPersonCast>, private val c
                 .load(profileUrl)
                 .into(itemView.popular_thumb_image)
             itemView.setOnClickListener {
-                val intent = Intent(context, DetailActivity::class.java)
-                intent.putExtra("id", cast.id)
-                intent.putExtra("title", cast.title)
-                intent.putExtra("release", cast.releaseDate)
-                intent.putExtra("rating", cast.rating)
-                intent.putExtra("poster", cast.posterPath)
-                context.startActivity(intent)
+                Intent(context, DetailActivity::class.java).apply {
+                    putExtra("id", cast.id)
+                    putExtra("title", cast.title)
+                    putExtra("release", cast.releaseDate)
+                    putExtra("rating", cast.rating)
+                    putExtra("poster", cast.posterPath)
+                    context.startActivity(this)
+                }
             }
         }
     }

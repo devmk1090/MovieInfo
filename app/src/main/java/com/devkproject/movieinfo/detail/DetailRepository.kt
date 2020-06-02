@@ -8,7 +8,7 @@ import io.reactivex.disposables.CompositeDisposable
 
 class DetailRepository (private val apiService: TMDBInterface) {
 
-    lateinit var detailDataSource: DetailDataSource
+    private lateinit var detailDataSource: DetailDataSource
 
     fun getDetailMovie(compositeDisposable: CompositeDisposable, movieId: Int): LiveData<TMDBDetail> {
         detailDataSource = DetailDataSource(apiService, compositeDisposable)

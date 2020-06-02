@@ -15,8 +15,8 @@ import java.lang.IllegalArgumentException
 
 class GenreViewModel (private val apiService: TMDBInterface): ViewModel() {
 
-    lateinit var genrePagedList: LiveData<PagedList<TMDBThumb>>
-    lateinit var genreDataSourceFactory: GenreDataSourceFactory
+    private lateinit var genrePagedList: LiveData<PagedList<TMDBThumb>>
+    private lateinit var genreDataSourceFactory: GenreDataSourceFactory
     private val compositeDisposable = CompositeDisposable()
 
     fun getGenreView(genreId: String, sort_by: String): LiveData<PagedList<TMDBThumb>> {
