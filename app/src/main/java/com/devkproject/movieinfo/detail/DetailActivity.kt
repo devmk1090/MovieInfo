@@ -112,6 +112,9 @@ class DetailActivity : AppCompatActivity() {
                 favoriteViewModel.delete(movie)
                 fab_favorite.setImageResource(R.drawable.ic_star_border_black_24dp)
             }
+
+            //throw IllegalStateException("Firebase Crashlytics Test")
+
         }
 
         detailRepository = DetailRepository(apiService)
