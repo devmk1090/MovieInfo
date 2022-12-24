@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/popular_movie"
+        android:title="인기 영화"
+        />
+    <item
+        android:id="@+id/topRated_movie"
+        android:title="높은 평점순"
+        />
+    <item
+        android:id="@+id/nowPlaying_movie"
+        android:title="현재 상영작"
+        />
+    <item
+        android:id="@+id/upcoming_movie"
+        android:title="개봉 예정작"
+        />
+    <item
+        android:id="@+id/genre_popular_movie"
+        android:title="장르 - 인기순"
+        />
+    <item
+        android:id="@+id/genre_rated_movie"
+        android:title="장르 - 평점순"
+        />
+    <item
+        android:id="@+id/favorite_movie"
+        android:title="찜 목록"
+        />
+</menu>
