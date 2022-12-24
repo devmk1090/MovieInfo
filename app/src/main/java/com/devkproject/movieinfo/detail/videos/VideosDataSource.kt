@@ -23,11 +23,11 @@ class VideosDataSource (private val apiService: TMDBInterface, private val compo
                     .subscribe({
                         _videosMovieResponse.postValue(it)
                     }, {
-                        Log.e("VideosDataSource", it.message)
+                        Log.e("VideosDataSource", it.message!!)
                     })
             )
         } catch (e: Exception) {
-            Log.e("VideosDataSource", e.message)
+            Log.e("VideosDataSource", e.message.toString())
         }
     }
 }

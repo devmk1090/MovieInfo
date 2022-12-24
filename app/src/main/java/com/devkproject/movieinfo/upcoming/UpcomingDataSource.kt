@@ -26,7 +26,7 @@ class UpcomingDataSource (private val apiService: TMDBInterface, private val com
                     networkState.postValue(NetworkState.LOADED)
                     callback.onResult(it.movieList, null, page + 1)
                 }, {
-                    Log.e("UpcomingDataSource", it.message)
+                    Log.e("UpcomingDataSource", it.message!!)
                     networkState.postValue(NetworkState.ERROR)
                 })
         )
@@ -44,7 +44,7 @@ class UpcomingDataSource (private val apiService: TMDBInterface, private val com
                         networkState.postValue(NetworkState.ENDOFLIST)
                     }
                 }, {
-                    Log.e("UpcomingDataSource", it.message)
+                    Log.e("UpcomingDataSource", it.message!!)
                     networkState.postValue(NetworkState.ERROR)
                 })
         )

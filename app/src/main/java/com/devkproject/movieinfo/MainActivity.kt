@@ -319,19 +319,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onBackPressed() {
-        if(!searchView!!.isIconified) {
-            searchView!!.isIconified = true
-            searchView!!.onActionViewCollapsed()
-        } else if(main_drawer.isDrawerOpen(GravityCompat.START)) {
-            main_drawer.closeDrawer(GravityCompat.START)
-        }
-        else {
-            secondTime = System.currentTimeMillis()
-            if(secondTime - firstTime < 2000) {
-                super.onBackPressed()
-                finishAffinity()
-            } else Toast.makeText(this,"한 번 더 누르면 종료됩니다", Toast.LENGTH_SHORT).show()
-            firstTime = System.currentTimeMillis()
-        }
+        val dialog = BackDialog(this)
+        dialog.showDialog(this)
     }
 }

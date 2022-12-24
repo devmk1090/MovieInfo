@@ -25,7 +25,7 @@ class TopRatedDataSource (private val apiService: TMDBInterface, private val com
                     callback.onResult(it.movieList, null, page + 1)
                     networkState.postValue(NetworkState.LOADED)
                 }, {
-                    Log.e("TopRatedDataSource", it.message)
+                    Log.e("TopRatedDataSource", it.message!!)
                     networkState.postValue(NetworkState.ERROR)
                 }
                 )
@@ -44,7 +44,7 @@ class TopRatedDataSource (private val apiService: TMDBInterface, private val com
                         networkState.postValue(NetworkState.ENDOFLIST)
                     }
                 }, {
-                    Log.e("TopRatedDataSource", it.message)
+                    Log.e("TopRatedDataSource", it.message!!)
                     networkState.postValue(NetworkState.ERROR)
                 })
         )

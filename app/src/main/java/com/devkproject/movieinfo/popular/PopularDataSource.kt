@@ -25,7 +25,7 @@ class PopularDataSource (private val apiService: TMDBInterface, private val comp
                 callback.onResult(it.movieList, null, page + 1)
                 networkState.postValue(NetworkState.LOADED)
             }, {
-                Log.e("PopularDataSource", it.message)
+                Log.e("PopularDataSource", it.message!!)
                 networkState.postValue(NetworkState.ERROR)
             })
         )
@@ -43,7 +43,7 @@ class PopularDataSource (private val apiService: TMDBInterface, private val comp
                     networkState.postValue(NetworkState.ENDOFLIST)
                 }
             }, {
-                Log.e("PopularDataSource", it.message)
+                Log.e("PopularDataSource", it.message!!)
                 networkState.postValue(NetworkState.ERROR)
             }
             )

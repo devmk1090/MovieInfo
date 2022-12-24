@@ -25,11 +25,11 @@ class CreditsDataSource (private val apiService: TMDBInterface, private val comp
                     .subscribe({
                         _creditsMovieResponse.postValue(it)
                     }, {
-                        Log.e("CreditsDataSource", it.message)
+                        Log.e("CreditsDataSource", it.message!!)
                     })
             )
         } catch (e: Exception) {
-            Log.e("CreditsDataSource", e.message)
+            Log.e("CreditsDataSource", e.message.toString())
         }
     }
 }

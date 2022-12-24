@@ -24,7 +24,7 @@ class SearchDataSource (private val apiService: TMDBInterface, private val compo
                     networkState.postValue(NetworkState.LOADED)
                     callback.onResult(it.movieList, null, page + 1)
                 }, {
-                    Log.e("SearchDataSource", it.message)
+                    Log.e("SearchDataSource", it.message!!)
                     networkState.postValue(NetworkState.ERROR)
                 })
         )
@@ -42,7 +42,7 @@ class SearchDataSource (private val apiService: TMDBInterface, private val compo
                         networkState.postValue(NetworkState.ENDOFLIST)
                     }
                 }, {
-                    Log.e("SearchDataSource", it.message)
+                    Log.e("SearchDataSource", it.message!!)
                     networkState.postValue(NetworkState.ERROR)
                 }
                 )

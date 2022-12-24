@@ -26,7 +26,7 @@ class NowPlayingDataSource (private val apiService: TMDBInterface, private val c
                     callback.onResult(it.movieList, null, page + 1)
                     networkState.postValue(NetworkState.LOADED)
                 }, {
-                    Log.e("NowPlayingDataSource", it.message)
+                    Log.e("NowPlayingDataSource", it.message!!)
                     networkState.postValue(NetworkState.ERROR)
                 })
         )
@@ -44,7 +44,7 @@ class NowPlayingDataSource (private val apiService: TMDBInterface, private val c
                         networkState.postValue(NetworkState.ENDOFLIST)
                     }
                 }, {
-                    Log.e("NowPlayingDataSource", it.message)
+                    Log.e("NowPlayingDataSource", it.message!!)
                     networkState.postValue(NetworkState.ERROR)
                 })
         )

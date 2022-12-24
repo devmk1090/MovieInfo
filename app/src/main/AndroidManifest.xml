@@ -11,9 +11,14 @@
         android:roundIcon="@drawable/movie_icon_blue"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".detail.person.PersonActivity"/>
-        <activity android:name=".detail.DetailActivity" />
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".detail.person.PersonActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".detail.DetailActivity"
+            android:exported="false"/>
+        <activity android:name=".MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

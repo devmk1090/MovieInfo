@@ -28,11 +28,11 @@ class PersonDataSource (private val apiService: TMDBInterface, private val compo
                     .subscribe({
                         _personResponse.postValue(it)
                     }, {
-                        Log.e("PersonDataSource", it.message)
+                        Log.e("PersonDataSource", it.message!!)
                     })
             )
         } catch (e: Exception) {
-            Log.e("PersonDataSource", e.message)
+            Log.e("PersonDataSource", e.message.toString())
         }
     }
 
@@ -44,11 +44,11 @@ class PersonDataSource (private val apiService: TMDBInterface, private val compo
                     .subscribe({
                         _personDetailResponse.postValue(it)
                     }, {
-                        Log.e("PersonDataSource", it.message)
+                        Log.e("PersonDataSource", it.message!!)
                     })
             )
         } catch (e: Exception) {
-            Log.e("PersonDataSource", e.message)
+            Log.e("PersonDataSource", e.message.toString())
         }
     }
 }

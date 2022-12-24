@@ -26,7 +26,7 @@ class GenreDataSource (private val apiService: TMDBInterface, private val compos
                     networkState.postValue(NetworkState.LOADED)
                     callback.onResult(it.movieList, null, page + 1)
                 }, {
-                    Log.e("GenreDataSource", it.message)
+                    Log.e("GenreDataSource", it.message!!)
                     networkState.postValue(NetworkState.ERROR)
                 })
         )
@@ -44,7 +44,7 @@ class GenreDataSource (private val apiService: TMDBInterface, private val compos
                         networkState.postValue(NetworkState.ENDOFLIST)
                     }
                 }, {
-                    Log.e("GenreDataSource", it.message)
+                    Log.e("GenreDataSource", it.message!!)
                     networkState.postValue(NetworkState.ERROR)
                 })
         )

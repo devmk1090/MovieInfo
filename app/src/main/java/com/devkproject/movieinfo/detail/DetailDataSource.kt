@@ -34,12 +34,12 @@ class DetailDataSource (private val apiService: TMDBInterface, private val compo
 
                         }, {
                             _networkState.postValue(NetworkState.ERROR)
-                            Log.e("DetailDataSource", it.message)
+                            Log.e("DetailDataSource", it.message!!)
                         }
                     )
             )
         } catch (e: Exception) {
-            Log.e("DetailDataSource", e.message)
+            Log.e("DetailDataSource", e.message.toString())
         }
     }
 }
