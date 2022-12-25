@@ -1,7 +1,13 @@
 <resources>
     <string name="app_name">영화 정보</string>
     <string name="adMob">ca-app-pub-1646409874287424~9341215234</string>
-    <string name="adMob_dialog">ca-app-pub-1646409874287424~9341215234</string>
+
+    <string name="adMob_banner_test">ca-app-pub-3940256099942544/6300978111</string>
+
+    <string name="adMob_main">ca-app-pub-1646409874287424/6760936312</string>
+    <string name="adMob_detail">ca-app-pub-1646409874287424/1585126093</string>
+    <string name="adMob_dialog">ca-app-pub-1646409874287424/2028956482</string>
+
     <string name="next_line">\n</string>
     <string name="detail_cast">출연 (터치시 배우 필모그래피)</string>
     <string name="filmography">필모그래피</string>
