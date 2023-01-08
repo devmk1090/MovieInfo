@@ -3,6 +3,7 @@ package com.devkproject.movieinfo
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
+import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import kotlinx.android.synthetic.main.dialog_back_ad.*
 
@@ -20,6 +21,11 @@ class BackDialog(context: Context) {
                 activity.finishAffinity() }
 
             val adRequest = AdRequest.Builder().build()
+            dialog_adView.adListener = object : AdListener() {
+                override fun onAdLoaded() {
+                    super.onAdLoaded()
+                }
+            }
             dialog_adView.loadAd(adRequest)
 
             show()
