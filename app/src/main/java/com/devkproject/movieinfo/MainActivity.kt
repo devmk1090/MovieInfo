@@ -3,6 +3,8 @@ package com.devkproject.movieinfo
 import android.app.AlertDialog
 import android.app.SearchManager
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -247,6 +249,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 favoriteViewModel.allMovie.observe(this, Observer {
                     favoriteRVAdapter.setFavorite(it)
                 })
+            }
+            R.id.movie_tv_app -> {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.devkproject.movieinfo3"))
+                startActivity(intent);
             }
         }
         main_drawer.closeDrawer(GravityCompat.START)

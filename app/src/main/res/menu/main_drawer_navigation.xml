@@ -28,4 +28,8 @@
         android:id="@+id/favorite_movie"
         android:title="찜 목록"
         />
+    <item
+        android:id="@+id/movie_tv_app"
+        android:title="영화, TV 시리즈 앱"
+        />
 </menu>
