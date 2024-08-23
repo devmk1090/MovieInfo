@@ -11,9 +11,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.devkproject.movieinfo.detail.DetailActivity
 import com.devkproject.movieinfo.api.POSTER_URL
+import com.devkproject.movieinfo.databinding.MovieItemBinding
+import com.devkproject.movieinfo.databinding.NetworkItemBinding
 import com.devkproject.movieinfo.model.TMDBThumb
-import kotlinx.android.synthetic.main.movie_item.view.*
-import kotlinx.android.synthetic.main.network_item.view.*
 
 class PagedListRVAdapter(private val context: Context)
     : PagedListAdapter<TMDBThumb, RecyclerView.ViewHolder>(TMDBDiffCallback()) {
@@ -24,15 +24,14 @@ class PagedListRVAdapter(private val context: Context)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val layoutInflater: LayoutInflater = LayoutInflater.from(parent.context)
-        val v: View
 
         return if(viewType == MOVIE_TYPE) {
-            v = layoutInflater.inflate(R.layout.movie_item, parent, false)
-            PopularViewHolder(v)
+            val binding = MovieItemBinding.inflate(layoutInflater, parent, false)
+            PopularViewHolder(binding)
         }
         else {
-            v = layoutInflater.inflate(R.layout.network_item, parent, false)
-            NetworkViewHolder(v)
+            val binding = NetworkItemBinding.inflate(layoutInflater, parent, false)
+            NetworkViewHolder(binding)
         }
     }
 
@@ -62,16 +61,16 @@ class PagedListRVAdapter(private val context: Context)
         }
     }
 
-    class PopularViewHolder(view: View): RecyclerView.ViewHolder(view) {
+    class PopularViewHolder(private val binding: MovieItemBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(movie: TMDBThumb?, context: Context) {
-            itemView.popular_thumb_title.text = movie!!.title
-            itemView.popular_thumb_releaseDate.text = movie.releaseDate
-            itemView.popular_rating.text = movie.rating.toString()
+            binding.popularThumbTitle.text = movie!!.title
+            binding.popularThumbReleaseDate.text = movie.releaseDate
+            binding.popularRating.text = movie.rating.toString()
 
             val posterUrl: String = POSTER_URL + movie.posterPath
             Glide.with(itemView.context)
                 .load(posterUrl)
-                .into(itemView.popular_thumb_image)
+                .into(binding.popularThumbImage)
 
             itemView.setOnClickListener {
                 Intent(context, DetailActivity::class.java).apply {
@@ -86,24 +85,24 @@ class PagedListRVAdapter(private val context: Context)
         }
     }
 
-    class NetworkViewHolder(view: View): RecyclerView.ViewHolder(view) {
+    class NetworkViewHolder(private val binding: NetworkItemBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(networkState: NetworkState?) {
             if(networkState != null && networkState == NetworkState.LOADING) {
-                itemView.progress_bar_item.visibility = View.VISIBLE
+                binding.progressBarItem.visibility = View.VISIBLE
             }
             else {
-                itemView.progress_bar_item.visibility = View.GONE
+                binding.progressBarItem.visibility = View.GONE
             }
             if(networkState != null && networkState == NetworkState.ERROR) {
-                itemView.error_msg_item.visibility = View.VISIBLE
-                itemView.error_msg_item.text = networkState.message
+                binding.errorMsgItem.visibility = View.VISIBLE
+                binding.errorMsgItem.text = networkState.message
             }
             else if(networkState != null && networkState == NetworkState.ENDOFLIST) {
-                itemView.error_msg_item.visibility = View.VISIBLE
-                itemView.error_msg_item.text = networkState.message
+                binding.errorMsgItem.visibility = View.VISIBLE
+                binding.errorMsgItem.text = networkState.message
             }
             else {
-                itemView.error_msg_item.visibility = View.GONE
+                binding.errorMsgItem.visibility = View.GONE
             }
         }
     }
