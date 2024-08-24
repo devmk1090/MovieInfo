@@ -18,6 +18,8 @@ import com.devkproject.movieinfo.NetworkState
 import com.devkproject.movieinfo.R
 import com.devkproject.movieinfo.api.*
 import com.devkproject.movieinfo.databinding.ActivityDetailBinding
+import com.devkproject.movieinfo.databinding.DetailScrollBinding
+import com.devkproject.movieinfo.databinding.MainContentBinding
 import com.devkproject.movieinfo.db.Favorite
 import com.devkproject.movieinfo.db.FavoriteViewModel
 import com.devkproject.movieinfo.detail.credits.CreditsRVAdapter
@@ -32,12 +34,13 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.appbar.AppBarLayout
-import kotlinx.android.synthetic.main.activity_detail.*
-import kotlinx.android.synthetic.main.detail_scroll.*
 import java.text.DecimalFormat
 import kotlin.math.abs
 
 class DetailActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityDetailBinding
+    private lateinit var includeBinding: DetailScrollBinding
 
     private lateinit var detailViewModel: DetailViewModel
     private lateinit var detailRepository: DetailRepository
@@ -50,11 +53,13 @@ class DetailActivity : AppCompatActivity() {
     private lateinit var mAdView: AdView
     private var isFavorite: Boolean? = null
 
-    private lateinit var binding: ActivityDetailBinding
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_detail)
+        binding = ActivityDetailBinding.inflate(layoutInflater)
+        includeBinding = DetailScrollBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setContentView(includeBinding.root)
+
 
         val toolbar: Toolbar = findViewById(R.id.detail_toolbar)
         setSupportActionBar(toolbar)
@@ -64,17 +69,17 @@ class DetailActivity : AppCompatActivity() {
             setHomeAsUpIndicator(R.drawable.ic_arrow_back_black_24dp)
         }
 
-        detail_appbar_layout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
+        binding.detailAppbarLayout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
             when {
                 abs(verticalOffset) == appBarLayout!!.totalScrollRange -> {
-                    detail_collapsing_toolbar_layout.title = intent.getStringExtra("title")
-                    detail_collapsing_toolbar_layout.setCollapsedTitleTextColor(Color.WHITE)
+                    binding.detailCollapsingToolbarLayout.title = intent.getStringExtra("title")
+                    binding.detailCollapsingToolbarLayout.setCollapsedTitleTextColor(Color.WHITE)
                 }
                 verticalOffset == 0 -> {
-                    detail_collapsing_toolbar_layout.title = ""
+                    binding.detailCollapsingToolbarLayout.title = ""
                 }
                 else -> {
-                    detail_collapsing_toolbar_layout.title = ""
+                    binding.detailCollapsingToolbarLayout.title = ""
                 }
             }
         })
@@ -96,21 +101,21 @@ class DetailActivity : AppCompatActivity() {
         favoriteViewModel = ViewModelProvider(this).get(FavoriteViewModel::class.java)
         favoriteViewModel.allMovie.observe(this, Observer {
             if (it.contains(movie)) {
-                fab_favorite.setImageResource(R.drawable.ic_star_black_24dp)
+                binding.fabFavorite.setImageResource(R.drawable.ic_star_black_24dp)
                 isFavorite = true
             } else {
-                fab_favorite.setImageResource(R.drawable.ic_star_border_black_24dp)
+                binding.fabFavorite.setImageResource(R.drawable.ic_star_border_black_24dp)
                 isFavorite = false
             }
         })
 
-        fab_favorite.setOnClickListener {
+        binding.fabFavorite.setOnClickListener {
             if (isFavorite == false) {
                 favoriteViewModel.insert(movie)
-                fab_favorite.setImageResource(R.drawable.ic_star_black_24dp)
+                binding.fabFavorite.setImageResource(R.drawable.ic_star_black_24dp)
             } else {
                 favoriteViewModel.delete(movie)
-                fab_favorite.setImageResource(R.drawable.ic_star_border_black_24dp)
+                binding.fabFavorite.setImageResource(R.drawable.ic_star_border_black_24dp)
             }
 
             //throw IllegalStateException("Firebase Crashlytics Test")
@@ -126,10 +131,10 @@ class DetailActivity : AppCompatActivity() {
             setProductionRVAdapter(it.production_countries)
         })
         detailViewModel.networkState.observe(this, Observer {
-            detail_progress_bar.visibility = if(it == NetworkState.LOADING) View.VISIBLE else View.GONE
-            detail_error_text.visibility = if(it == NetworkState.ERROR) View.VISIBLE else View.GONE
-            detail_scroll_item.visibility = if(it == NetworkState.ERROR || it == NetworkState.LOADING) View.GONE else View.VISIBLE
-            detail_collapsing_toolbar_layout.visibility = if(it == NetworkState.ERROR || it == NetworkState.LOADING) View.GONE else View.VISIBLE
+            binding.detailProgressBar.visibility = if(it == NetworkState.LOADING) View.VISIBLE else View.GONE
+            binding.detailErrorText.visibility = if(it == NetworkState.ERROR) View.VISIBLE else View.GONE
+//            binding.detailScrollItem.visibility = if(it == NetworkState.ERROR || it == NetworkState.LOADING) View.GONE else View.VISIBLE
+            binding.detailCollapsingToolbarLayout.visibility = if(it == NetworkState.ERROR || it == NetworkState.LOADING) View.GONE else View.VISIBLE
         })
 
         creditsRepository = CreditsRepository(apiService)
@@ -155,25 +160,25 @@ class DetailActivity : AppCompatActivity() {
         val runtime = it.runtime.toString() + " 분"
         val originalTitle = it.title + "\n(${it.original_title})"
 
-        detail_movie_title.text = originalTitle
-        detail_movie_tagline.text = it.tagline
-        detail_movie_release.text = it.releaseDate
-        detail_movie_voteCount.text = it.vote_count.toString()
-        detail_movie_rating.text = it.rating.toString()
-        detail_movie_runtime.text = runtime
-        detail_movie_budget.text = decimalBudget
-        detail_movie_revenue.text = decimalRevenue
-        detail_movie_overview.text = it.overview
+        includeBinding.detailMovieTitle.text = originalTitle
+        includeBinding.detailMovieTagline.text = it.tagline
+        includeBinding.detailMovieRelease.text = it.releaseDate
+        includeBinding.detailMovieVoteCount.text = it.vote_count.toString()
+        includeBinding.detailMovieRating.text = it.rating.toString()
+        includeBinding.detailMovieRuntime.text = runtime
+        includeBinding.detailMovieBudget.text = decimalBudget
+        includeBinding.detailMovieRevenue.text = decimalRevenue
+        includeBinding.detailMovieOverview.text = it.overview
 
         val moviePosterURL: String = POSTER_URL + it.posterPath
         Glide.with(this)
             .load(moviePosterURL)
-            .into(detail_movie_poster)
+            .into(binding.detailMoviePoster)
     }
 
     private fun setGenreRVAdapter(item: ArrayList<Genres>) {
         val genreRVAdapter = GenreRVAdapter(item)
-        genre_recyclerView.run {
+        includeBinding.genreRecyclerView.run {
             layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.HORIZONTAL, false)
             setHasFixedSize(true)
             adapter = genreRVAdapter
@@ -182,7 +187,7 @@ class DetailActivity : AppCompatActivity() {
 
     private fun setProductionRVAdapter(item: ArrayList<Production>) {
         val productionRVAdapter = ProductionRVAdapter(item)
-        production_recyclerView.run {
+        includeBinding.productionRecyclerView.run {
             layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.HORIZONTAL, false)
             setHasFixedSize(true)
             adapter = productionRVAdapter
@@ -191,7 +196,7 @@ class DetailActivity : AppCompatActivity() {
 
     private fun setCastRVAdapter(item: ArrayList<TMDBCast>) {
         val creditsRVAdapter = CreditsRVAdapter(item, this)
-        credits_recyclerView.run {
+        includeBinding.creditsRecyclerView.run {
             layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.HORIZONTAL, false)
             setHasFixedSize(true)
             adapter = creditsRVAdapter
@@ -200,7 +205,7 @@ class DetailActivity : AppCompatActivity() {
 
     private fun setCrewRVAdapter(item: ArrayList<TMDBCrew>) {
         val crewRVAdapter = CrewRVAdapter(item, this)
-        crew_recyclerView.run {
+        includeBinding.crewRecyclerView.run {
             layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.HORIZONTAL, false)
             setHasFixedSize(true)
             adapter = crewRVAdapter
@@ -209,7 +214,7 @@ class DetailActivity : AppCompatActivity() {
 
     private fun setVideosRVAdapter(item: ArrayList<TMDBTrailers>) {
         val videosRVAdapter = VideosRVAdapter(item, this)
-        videos_recyclerView.run {
+        includeBinding.videosRecyclerView.run {
             layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.HORIZONTAL, false)
             setHasFixedSize(true)
             adapter = videosRVAdapter

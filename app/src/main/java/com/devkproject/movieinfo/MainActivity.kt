@@ -75,6 +75,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         binding = MainDrawerBinding.inflate(layoutInflater)
         includeBinding = MainContentBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setContentView(includeBinding.root)
+
         MobileAds.initialize(this) {}
         mAdView = this.findViewById(R.id.adView_main)
         val adRequest = AdRequest.Builder().build()

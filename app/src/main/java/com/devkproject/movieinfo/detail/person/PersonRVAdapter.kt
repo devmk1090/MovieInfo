@@ -3,20 +3,18 @@ package com.devkproject.movieinfo.detail.person
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.devkproject.movieinfo.R
 import com.devkproject.movieinfo.api.POSTER_URL
+import com.devkproject.movieinfo.databinding.MovieItemBinding
 import com.devkproject.movieinfo.detail.DetailActivity
 import com.devkproject.movieinfo.model.TMDBPersonCast
-import kotlinx.android.synthetic.main.movie_item.view.*
 
 class PersonRVAdapter(private val item: ArrayList<TMDBPersonCast>, private val context: Context): RecyclerView.Adapter<PersonRVAdapter.ViewHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val v = LayoutInflater.from(parent.context).inflate(R.layout.movie_item, parent, false)
-        return ViewHolder(v)
+        val binding = MovieItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
     }
 
     override fun getItemCount(): Int {
@@ -27,16 +25,16 @@ class PersonRVAdapter(private val item: ArrayList<TMDBPersonCast>, private val c
         holder.bind(item[position], context)
     }
 
-    class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
+    class ViewHolder(private val binding: MovieItemBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(cast: TMDBPersonCast?, context: Context) {
-            itemView.popular_thumb_title.text = cast!!.title
-            itemView.popular_thumb_releaseDate.text = cast.releaseDate
-            itemView.popular_rating.text = cast.rating.toString()
+            binding.popularThumbTitle.text = cast!!.title
+            binding.popularThumbReleaseDate.text = cast.releaseDate
+            binding.popularRating.text = cast.rating.toString()
 
             val profileUrl: String = POSTER_URL + cast.posterPath
             Glide.with(itemView.context)
                 .load(profileUrl)
-                .into(itemView.popular_thumb_image)
+                .into(binding.popularThumbImage)
             itemView.setOnClickListener {
                 Intent(context, DetailActivity::class.java).apply {
                     putExtra("id", cast.id)

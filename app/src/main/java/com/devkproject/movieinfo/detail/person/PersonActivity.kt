@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -22,7 +21,6 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.appbar.AppBarLayout
-import kotlinx.android.synthetic.main.activity_person.*
 import kotlin.math.abs
 
 class PersonActivity : AppCompatActivity() {
@@ -35,7 +33,8 @@ class PersonActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_person)
+        binding = ActivityPersonBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         val apiService: TMDBInterface = TMDBClient.getClient()
         val personId: Int = intent.getIntExtra("id", 0)
@@ -55,17 +54,17 @@ class PersonActivity : AppCompatActivity() {
             setHomeAsUpIndicator(R.drawable.ic_arrow_back_black_24dp)
         }
 
-        person_appbar_layout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener{appBarLayout, verticalOffset ->
+        binding.personAppbarLayout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener{appBarLayout, verticalOffset ->
             when {
                 abs(verticalOffset) == appBarLayout!!.totalScrollRange -> {
-                    person_collapsing_toolbar.title = name
-                    person_collapsing_toolbar.setCollapsedTitleTextColor(Color.WHITE)
+                    binding.personCollapsingToolbar.title = name
+                    binding.personCollapsingToolbar.setCollapsedTitleTextColor(Color.WHITE)
                 }
                 verticalOffset == 0 -> {
-                    person_collapsing_toolbar.title = ""
+                    binding.personCollapsingToolbar.title = ""
                 }
                 else -> {
-                    person_collapsing_toolbar.title = ""
+                    binding.personCollapsingToolbar.title = ""
                 }
             }
         })
@@ -74,7 +73,7 @@ class PersonActivity : AppCompatActivity() {
         Glide.with(this)
             .load(profilePIC)
             .placeholder(R.drawable.ic_person_black_24dp)
-            .into(person_profile)
+            .into(binding.personProfile)
 
         personRepository = PersonRepository(apiService)
         personViewModel = ViewModelProvider(this, PersonViewModel.PersonViewModelFactory(personRepository, personId))
@@ -136,7 +135,7 @@ class PersonActivity : AppCompatActivity() {
     private fun setPersonCast(item: ArrayList<TMDBPersonCast>) {
         val actorCreditsRVAdapter = PersonRVAdapter(item, this)
         val gridLayoutManager = GridLayoutManager(this, 3)
-        person_recyclerView.run {
+        binding.personRecyclerView.run {
             layoutManager = gridLayoutManager
             setHasFixedSize(true)
             adapter = actorCreditsRVAdapter

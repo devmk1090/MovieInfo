@@ -1,17 +1,15 @@
 package com.devkproject.movieinfo.detail
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.devkproject.movieinfo.R
+import com.devkproject.movieinfo.databinding.GenreItemBinding
 import com.devkproject.movieinfo.model.Genres
-import kotlinx.android.synthetic.main.genre_item.view.*
 
 class GenreRVAdapter (private val item: ArrayList<Genres>): RecyclerView.Adapter<GenreRVAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val v = LayoutInflater.from(parent.context).inflate(R.layout.genre_item, parent, false)
-        return ViewHolder(v)
+        val binding = GenreItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
     }
 
     override fun getItemCount(): Int {
@@ -23,10 +21,10 @@ class GenreRVAdapter (private val item: ArrayList<Genres>): RecyclerView.Adapter
     }
 
 
-    class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
+    class ViewHolder(private val binding: GenreItemBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(it: Genres?) {
             val genre = " [ " + it!!.name + " ] "
-            itemView.genre_list.text = genre
+            binding.genreList.text = genre
         }
     }
 }
