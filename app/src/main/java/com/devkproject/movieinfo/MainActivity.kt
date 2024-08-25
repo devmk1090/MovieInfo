@@ -18,7 +18,6 @@ import com.devkproject.movieinfo.toprated.TopRatedRepository
 import com.devkproject.movieinfo.toprated.TopRatedViewModel
 import com.devkproject.movieinfo.api.TMDBInterface
 import com.devkproject.movieinfo.api.TMDBClient
-import com.devkproject.movieinfo.databinding.MainContentBinding
 import com.devkproject.movieinfo.databinding.MainDrawerBinding
 import com.devkproject.movieinfo.db.FavoriteRVAdapter
 import com.devkproject.movieinfo.db.FavoriteViewModel
@@ -37,7 +36,6 @@ import com.google.android.material.navigation.NavigationView
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var binding: MainDrawerBinding
-    private lateinit var includeBinding: MainContentBinding
 
     private val apiService: TMDBInterface = TMDBClient.getClient()
     private var movieAdapter = PagedListRVAdapter(this)
@@ -73,9 +71,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = MainDrawerBinding.inflate(layoutInflater)
-        includeBinding = MainContentBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setContentView(includeBinding.root)
 
         MobileAds.initialize(this) {}
         mAdView = this.findViewById(R.id.adView_main)
@@ -102,7 +98,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 return if(viewType == movieAdapter.MOVIE_TYPE) 1 else 3
             }
         }
-        includeBinding.movieRecyclerView.run {
+        binding.mainContentItem.movieRecyclerView.run {
             layoutManager = gridLayoutManager
             setHasFixedSize(true)
             adapter = movieAdapter
@@ -118,8 +114,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             movieAdapter.submitList(it)
         })
         nowPlayingViewModel.nowPlayingNetworkState().observe(this, Observer {
-            includeBinding.movieProgressBar.visibility = if(nowPlayingViewModel.listIsEmpty() && it == NetworkState.LOADING) View.VISIBLE else View.GONE
-            includeBinding.movieErrorText.visibility = if(nowPlayingViewModel.listIsEmpty() && it == NetworkState.ERROR) View.VISIBLE else View.GONE
+            binding.mainContentItem.movieProgressBar.visibility = if(nowPlayingViewModel.listIsEmpty() && it == NetworkState.LOADING) View.VISIBLE else View.GONE
+            binding.mainContentItem.movieErrorText.visibility = if(nowPlayingViewModel.listIsEmpty() && it == NetworkState.ERROR) View.VISIBLE else View.GONE
             if(!nowPlayingViewModel.listIsEmpty()) {
                 movieAdapter.setNetworkState(it)
             }
@@ -140,8 +136,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     movieAdapter.submitList(it)
                 })
                 popularViewModel.networkState.observe(this, Observer {
-                    includeBinding.movieProgressBar.visibility = if(popularViewModel.listIsEmpty() && it == NetworkState.LOADING) View.VISIBLE else View.GONE
-                    includeBinding.movieErrorText.visibility = if(popularViewModel.listIsEmpty() && it == NetworkState.ERROR) View.VISIBLE else View.GONE
+                    binding.mainContentItem.movieProgressBar.visibility = if(popularViewModel.listIsEmpty() && it == NetworkState.LOADING) View.VISIBLE else View.GONE
+                    binding.mainContentItem.movieErrorText.visibility = if(popularViewModel.listIsEmpty() && it == NetworkState.ERROR) View.VISIBLE else View.GONE
                     if(!popularViewModel.listIsEmpty()) {
                         movieAdapter.setNetworkState(it)
                     }
@@ -158,8 +154,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     movieAdapter.submitList(it)
                 })
                 topRatedViewModel.networkState.observe(this, Observer {
-                    includeBinding.movieProgressBar.visibility = if(topRatedViewModel.listIsEmpty() && it == NetworkState.LOADING) View.VISIBLE else View.GONE
-                    includeBinding.movieErrorText.visibility = if(topRatedViewModel.listIsEmpty() && it == NetworkState.ERROR) View.VISIBLE else View.GONE
+                    binding.mainContentItem.movieProgressBar.visibility = if(topRatedViewModel.listIsEmpty() && it == NetworkState.LOADING) View.VISIBLE else View.GONE
+                    binding.mainContentItem.movieErrorText.visibility = if(topRatedViewModel.listIsEmpty() && it == NetworkState.ERROR) View.VISIBLE else View.GONE
                     if(!topRatedViewModel.listIsEmpty()) {
                         movieAdapter.setNetworkState(it)
                     }
@@ -179,8 +175,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     movieAdapter.submitList(it)
                 })
                 upcomingViewModel.networkState.observe(this, Observer {
-                    includeBinding.movieProgressBar.visibility = if(upcomingViewModel.listIsEmpty() && it == NetworkState.LOADING) View.VISIBLE else View.GONE
-                    includeBinding.movieErrorText.visibility = if(upcomingViewModel.listIsEmpty() && it == NetworkState.ERROR) View.VISIBLE else View.GONE
+                    binding.mainContentItem.movieProgressBar.visibility = if(upcomingViewModel.listIsEmpty() && it == NetworkState.LOADING) View.VISIBLE else View.GONE
+                    binding.mainContentItem.movieErrorText.visibility = if(upcomingViewModel.listIsEmpty() && it == NetworkState.ERROR) View.VISIBLE else View.GONE
                     if(!upcomingViewModel.listIsEmpty()) {
                         movieAdapter.setNetworkState(it)
                     }
@@ -245,7 +241,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 supportActionBar!!.title = "찜 목록"
                 val favoriteRVAdapter = FavoriteRVAdapter(this)
                 val gridLayoutManager = GridLayoutManager(this, 3)
-                includeBinding.movieRecyclerView.run {
+                binding.mainContentItem.movieRecyclerView.run {
                     layoutManager = gridLayoutManager
                     setHasFixedSize(true)
                     adapter = favoriteRVAdapter
@@ -286,8 +282,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             movieAdapter.submitList(it)
         })
         genreViewModel.genreNetworkState().observe(this, Observer {
-            includeBinding.movieProgressBar.visibility = if(genreViewModel.listIsEmpty() && it == NetworkState.LOADING) View.VISIBLE else View.GONE
-            includeBinding.movieErrorText.visibility = if(genreViewModel.listIsEmpty() && it == NetworkState.ERROR) View.VISIBLE else View.GONE
+            binding.mainContentItem.movieProgressBar.visibility = if(genreViewModel.listIsEmpty() && it == NetworkState.LOADING) View.VISIBLE else View.GONE
+            binding.mainContentItem.movieErrorText.visibility = if(genreViewModel.listIsEmpty() && it == NetworkState.ERROR) View.VISIBLE else View.GONE
             if(!genreViewModel.listIsEmpty()) {
                 movieAdapter.setNetworkState(it)
             }
@@ -304,7 +300,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             movieAdapter.submitList(it)
         })
         searchViewModel.searchViewNetworkState().observe(this, Observer {
-            includeBinding.movieProgressBar.visibility = if(searchViewModel.listIsEmpty() && it == NetworkState.LOADING) View.VISIBLE else View.GONE
+            binding.mainContentItem.movieProgressBar.visibility = if(searchViewModel.listIsEmpty() && it == NetworkState.LOADING) View.VISIBLE else View.GONE
             if(!searchViewModel.listIsEmpty()) {
                 movieAdapter.setNetworkState(it)
             }

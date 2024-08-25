@@ -9,7 +9,6 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ShareCompat
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,7 +18,6 @@ import com.devkproject.movieinfo.R
 import com.devkproject.movieinfo.api.*
 import com.devkproject.movieinfo.databinding.ActivityDetailBinding
 import com.devkproject.movieinfo.databinding.DetailScrollBinding
-import com.devkproject.movieinfo.databinding.MainContentBinding
 import com.devkproject.movieinfo.db.Favorite
 import com.devkproject.movieinfo.db.FavoriteViewModel
 import com.devkproject.movieinfo.detail.credits.CreditsRVAdapter
@@ -31,7 +29,6 @@ import com.devkproject.movieinfo.detail.videos.VideosRepository
 import com.devkproject.movieinfo.detail.videos.VideosViewModel
 import com.devkproject.movieinfo.model.*
 import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.appbar.AppBarLayout
 import java.text.DecimalFormat
@@ -40,7 +37,6 @@ import kotlin.math.abs
 class DetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetailBinding
-    private lateinit var includeBinding: DetailScrollBinding
 
     private lateinit var detailViewModel: DetailViewModel
     private lateinit var detailRepository: DetailRepository
@@ -50,16 +46,12 @@ class DetailActivity : AppCompatActivity() {
     private lateinit var videosViewModel: VideosViewModel
     private lateinit var videosRepository: VideosRepository
 
-    private lateinit var mAdView: AdView
     private var isFavorite: Boolean? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBinding.inflate(layoutInflater)
-        includeBinding = DetailScrollBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setContentView(includeBinding.root)
-
 
         val toolbar: Toolbar = findViewById(R.id.detail_toolbar)
         setSupportActionBar(toolbar)
@@ -85,9 +77,8 @@ class DetailActivity : AppCompatActivity() {
         })
 
         MobileAds.initialize(this) {}
-        mAdView = this.findViewById(R.id.adView_detail)
         val adRequest = AdRequest.Builder().build()
-        mAdView.loadAd(adRequest)
+        binding.adViewDetail.loadAd(adRequest)
 
         val movieId: Int = intent.getIntExtra("id", 1)
         val title = intent.getStringExtra("title")
@@ -160,15 +151,15 @@ class DetailActivity : AppCompatActivity() {
         val runtime = it.runtime.toString() + " 분"
         val originalTitle = it.title + "\n(${it.original_title})"
 
-        includeBinding.detailMovieTitle.text = originalTitle
-        includeBinding.detailMovieTagline.text = it.tagline
-        includeBinding.detailMovieRelease.text = it.releaseDate
-        includeBinding.detailMovieVoteCount.text = it.vote_count.toString()
-        includeBinding.detailMovieRating.text = it.rating.toString()
-        includeBinding.detailMovieRuntime.text = runtime
-        includeBinding.detailMovieBudget.text = decimalBudget
-        includeBinding.detailMovieRevenue.text = decimalRevenue
-        includeBinding.detailMovieOverview.text = it.overview
+        binding.detailScrollItem.detailMovieTitle.text = originalTitle
+        binding.detailScrollItem.detailMovieTagline.text = it.tagline
+        binding.detailScrollItem.detailMovieRelease.text = it.releaseDate
+        binding.detailScrollItem.detailMovieVoteCount.text = it.vote_count.toString()
+        binding.detailScrollItem.detailMovieRating.text = it.rating.toString()
+        binding.detailScrollItem.detailMovieRuntime.text = runtime
+        binding.detailScrollItem.detailMovieBudget.text = decimalBudget
+        binding.detailScrollItem.detailMovieRevenue.text = decimalRevenue
+        binding.detailScrollItem.detailMovieOverview.text = it.overview
 
         val moviePosterURL: String = POSTER_URL + it.posterPath
         Glide.with(this)
@@ -178,7 +169,7 @@ class DetailActivity : AppCompatActivity() {
 
     private fun setGenreRVAdapter(item: ArrayList<Genres>) {
         val genreRVAdapter = GenreRVAdapter(item)
-        includeBinding.genreRecyclerView.run {
+        binding.detailScrollItem.genreRecyclerView.run {
             layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.HORIZONTAL, false)
             setHasFixedSize(true)
             adapter = genreRVAdapter
@@ -187,7 +178,7 @@ class DetailActivity : AppCompatActivity() {
 
     private fun setProductionRVAdapter(item: ArrayList<Production>) {
         val productionRVAdapter = ProductionRVAdapter(item)
-        includeBinding.productionRecyclerView.run {
+        binding.detailScrollItem.productionRecyclerView.run {
             layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.HORIZONTAL, false)
             setHasFixedSize(true)
             adapter = productionRVAdapter
@@ -196,7 +187,7 @@ class DetailActivity : AppCompatActivity() {
 
     private fun setCastRVAdapter(item: ArrayList<TMDBCast>) {
         val creditsRVAdapter = CreditsRVAdapter(item, this)
-        includeBinding.creditsRecyclerView.run {
+        binding.detailScrollItem.creditsRecyclerView.run {
             layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.HORIZONTAL, false)
             setHasFixedSize(true)
             adapter = creditsRVAdapter
@@ -205,7 +196,7 @@ class DetailActivity : AppCompatActivity() {
 
     private fun setCrewRVAdapter(item: ArrayList<TMDBCrew>) {
         val crewRVAdapter = CrewRVAdapter(item, this)
-        includeBinding.crewRecyclerView.run {
+        binding.detailScrollItem.crewRecyclerView.run {
             layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.HORIZONTAL, false)
             setHasFixedSize(true)
             adapter = crewRVAdapter
@@ -214,7 +205,7 @@ class DetailActivity : AppCompatActivity() {
 
     private fun setVideosRVAdapter(item: ArrayList<TMDBTrailers>) {
         val videosRVAdapter = VideosRVAdapter(item, this)
-        includeBinding.videosRecyclerView.run {
+        binding.detailScrollItem.videosRecyclerView.run {
             layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.HORIZONTAL, false)
             setHasFixedSize(true)
             adapter = videosRVAdapter
