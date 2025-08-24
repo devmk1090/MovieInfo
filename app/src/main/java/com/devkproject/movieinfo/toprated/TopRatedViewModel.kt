@@ -32,7 +32,7 @@ class TopRatedViewModel (private val topRatedRepository: TopRatedRepository)
     }
 
     class TopRatedViewModelFactory(private val topRatedRepository: TopRatedRepository): ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return if (modelClass.isAssignableFrom(TopRatedViewModel::class.java)) {
                 TopRatedViewModel(topRatedRepository) as T
             } else {

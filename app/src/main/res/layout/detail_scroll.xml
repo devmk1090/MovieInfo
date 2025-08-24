@@ -249,7 +249,7 @@
             </LinearLayout>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/crew_recyclerView"
-                android:layout_marginBottom="55dp"
+                android:layout_marginBottom="110dp"
                 android:layout_marginTop="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">

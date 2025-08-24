@@ -26,7 +26,7 @@ class DetailViewModel (private val detailRepository: DetailRepository, movieId: 
     }
 
     class DetailViewModelFactory(private val detailRepository: DetailRepository, private val movieId: Int): ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return if (modelClass.isAssignableFrom(DetailViewModel::class.java)) {
                 DetailViewModel(detailRepository, movieId) as T
             } else {
