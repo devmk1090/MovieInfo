@@ -21,7 +21,7 @@ class VideosViewModel (private val videosRepository: VideosRepository, movieId: 
     }
 
     class VideosViewModelFactory(private val videosRepository: VideosRepository, private val movieId: Int): ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return if (modelClass.isAssignableFrom(VideosViewModel::class.java)) {
                 VideosViewModel(videosRepository, movieId) as T
             } else {

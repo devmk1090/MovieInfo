@@ -1,9 +1,9 @@
 package com.devkproject.movieinfo.now_playing
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.switchMap
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.devkproject.movieinfo.NetworkState
@@ -31,8 +31,9 @@ class NowPlayingViewModel (private val apiService: TMDBInterface): ViewModel() {
     }
 
     fun nowPlayingNetworkState(): LiveData<NetworkState> {
-        return Transformations.switchMap<NowPlayingDataSource, NetworkState>(
-            nowPlayingDataSourceFactory.nowPlayingLiveDataSource, NowPlayingDataSource::networkState)
+        return nowPlayingDataSourceFactory.nowPlayingLiveDataSource.switchMap { dataSource ->
+            dataSource.networkState
+        }
     }
 
     fun listIsEmpty(): Boolean {
@@ -45,7 +46,7 @@ class NowPlayingViewModel (private val apiService: TMDBInterface): ViewModel() {
     }
 
     class NowPlayingViewModelFactory(private val apiService: TMDBInterface): ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return if (modelClass.isAssignableFrom(NowPlayingViewModel::class.java)) {
                 NowPlayingViewModel(apiService) as T
             } else {

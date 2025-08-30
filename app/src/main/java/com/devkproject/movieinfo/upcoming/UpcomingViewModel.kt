@@ -31,7 +31,7 @@ class UpcomingViewModel (private val upcomingRepository: UpcomingRepository)
     }
 
     class UpcomingViewModelFactory(private val upcomingRepository: UpcomingRepository): ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return if (modelClass.isAssignableFrom(UpcomingViewModel::class.java)) {
                 UpcomingViewModel(upcomingRepository) as T
             } else {

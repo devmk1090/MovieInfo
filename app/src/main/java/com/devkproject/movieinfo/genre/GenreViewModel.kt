@@ -1,9 +1,9 @@
 package com.devkproject.movieinfo.genre
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.switchMap
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.devkproject.movieinfo.NetworkState
@@ -31,8 +31,9 @@ class GenreViewModel (private val apiService: TMDBInterface): ViewModel() {
     }
 
     fun genreNetworkState(): LiveData<NetworkState> {
-        return Transformations.switchMap<GenreDataSource, NetworkState>(
-            genreDataSourceFactory.genreLiveDataSource, GenreDataSource::networkState)
+        return genreDataSourceFactory.genreLiveDataSource.switchMap { dataSource ->
+            dataSource.networkState
+        }
     }
 
     fun listIsEmpty(): Boolean {
@@ -45,7 +46,7 @@ class GenreViewModel (private val apiService: TMDBInterface): ViewModel() {
     }
 
     class GenreViewModelFactory(private val apiService: TMDBInterface): ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return if (modelClass.isAssignableFrom(GenreViewModel::class.java)) {
                 GenreViewModel(apiService)as T
             } else {

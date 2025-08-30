@@ -1,7 +1,7 @@
 package com.devkproject.movieinfo.upcoming
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.switchMap
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.devkproject.movieinfo.NetworkState
@@ -28,7 +28,8 @@ class UpcomingRepository (private val apiService: TMDBInterface) {
     }
 
     fun getNetworkState(): LiveData<NetworkState> {
-        return Transformations.switchMap<UpcomingDataSource, NetworkState>(
-            upcomingDataSourceFactory.upcomingLiveDataSource, UpcomingDataSource::networkState)
+        return upcomingDataSourceFactory.upcomingLiveDataSource.switchMap { dataSource ->
+            dataSource.networkState
+        }
     }
 }

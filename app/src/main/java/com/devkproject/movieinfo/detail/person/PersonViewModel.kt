@@ -26,7 +26,7 @@ class PersonViewModel(private val personRepository: PersonRepository, personId: 
     }
 
     class PersonViewModelFactory(private val personRepository: PersonRepository, private val personId: Int): ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return if (modelClass.isAssignableFrom(PersonViewModel::class.java)) {
                 PersonViewModel(personRepository, personId) as T
             } else {

@@ -17,7 +17,6 @@ import com.devkproject.movieinfo.NetworkState
 import com.devkproject.movieinfo.R
 import com.devkproject.movieinfo.api.*
 import com.devkproject.movieinfo.databinding.ActivityDetailBinding
-import com.devkproject.movieinfo.databinding.DetailScrollBinding
 import com.devkproject.movieinfo.db.Favorite
 import com.devkproject.movieinfo.db.FavoriteViewModel
 import com.devkproject.movieinfo.detail.credits.CreditsRVAdapter

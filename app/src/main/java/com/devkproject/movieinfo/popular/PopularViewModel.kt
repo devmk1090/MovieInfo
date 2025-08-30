@@ -32,7 +32,7 @@ class PopularViewModel (private val popularRepository: PopularRepository): ViewM
     }
 
     class PopularViewModelFactory(private val popularRepository: PopularRepository): ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return if (modelClass.isAssignableFrom(PopularViewModel::class.java)) {
                 PopularViewModel(popularRepository) as T
             } else {

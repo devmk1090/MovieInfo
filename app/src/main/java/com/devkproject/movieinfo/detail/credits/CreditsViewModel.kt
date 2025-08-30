@@ -21,7 +21,7 @@ class CreditsViewModel(private val creditsRepository: CreditsRepository, movieId
     }
 
     class CreditsViewModelFactory(private val creditsRepository: CreditsRepository, private val movieId: Int): ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return if (modelClass.isAssignableFrom(CreditsViewModel::class.java)) {
                 CreditsViewModel(creditsRepository, movieId) as T
             } else {

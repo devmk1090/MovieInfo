@@ -1,7 +1,7 @@
 package com.devkproject.movieinfo.toprated
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.switchMap
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.devkproject.movieinfo.NetworkState
@@ -29,7 +29,8 @@ class TopRatedRepository (private val apiService: TMDBInterface) {
     }
 
     fun getNetworkState(): LiveData<NetworkState> {
-        return Transformations.switchMap<TopRatedDataSource, NetworkState>(
-            topRatedDataSourceFactory.topRatedLiveDataSource, TopRatedDataSource::networkState)
+        return topRatedDataSourceFactory.topRatedLiveDataSource.switchMap { dataSource ->
+            dataSource.networkState
+        }
     }
 }
